@@ -1,8 +1,7 @@
-import React, {useMemo, useState} from 'react';
+import React, {useEffect,useMemo, useState} from 'react';
 import logo from './logo.svg';
 import Login from './paginas/Login/Login';
 import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
-import {CambiarEstados} from "./contexts/CambiarEstados";
 import Dashboard from './paginas/Dashboard/Dashboard';
 import Calendar from './paginas/Calendar/Calendar';
 import Oportunities from './paginas/Oportunities/Oportunities';
@@ -13,17 +12,48 @@ import Marketing from './paginas/Marketing/Marketing';
 import Agents from './paginas/Agents/Agents';
 import Reports from './paginas/Reports/Reports';
 import Settings from './paginas/Settings/Settings';
+import PxpClient from 'pxp-client';
+import {UserContext} from "./contexts/UserContext";
+import {CambiarEstados} from "./contexts/CambiarEstados";
+import {Redirect} from "react-router-dom";
+import PxpConfig from './Config/DatosGenerales';
+
+console.log("llamar variables",PxpConfig.config.active);
+
+PxpClient.init(PxpConfig.config.host,
+               PxpConfig.config.baseUrl,
+               PxpConfig.config.mode
+             );
 
 function App() {
-  const [cambiarEstados, setCambiarEstados] = useState('sb-nav-fixed');
+  /*Esta Variable es la que mandara el inicio de sesion*/
+  const [userContext, setUserContext] = useState();
+  const [cambiarEstados, setCambiarEstados] = useState();
+  const value = useMemo(()=> ({userContext, setUserContext}), [userContext, setUserContext]);
+  const menu = useMemo(()=> ({cambiarEstados, setCambiarEstados}), [cambiarEstados, setCambiarEstados]);
+  /*****************************************************/
+  useEffect(() => {
+    PxpClient.onAuthStateChanged((user) => {
+      if (user) {
+        setUserContext({user:user});
+        setCambiarEstados('sb-nav-fixed')
+      } else {
+        setUserContext(null);
+        setCambiarEstados('sb-nav-fixed')
+      }
 
-    const value = useMemo(()=> ({cambiarEstados, setCambiarEstados}), [cambiarEstados, setCambiarEstados])
+    });
+    }, []);
+
+
+
 
   return (
     <BrowserRouter>
   <div>
-      <CambiarEstados.Provider value={value}>
-      <Switch>
+  {userContext === null && <Redirect to="/" />}
+  <CambiarEstados.Provider value={menu}>
+  <UserContext.Provider value={value}>
           <Route path="/" component={Login} exact={true}/>
           <Route path="/Dashboard" component={Dashboard}/>
           <Route path="/Calendar" component={Calendar}/>
@@ -35,8 +65,8 @@ function App() {
           <Route path="/Agents" component={Agents}/>
           <Route path="/Reports" component={Reports}/>
           <Route path="/Settings" component={Settings}/>
-      </Switch>
-      </CambiarEstados.Provider>
+    </UserContext.Provider>
+    </CambiarEstados.Provider>
   </div>
   </BrowserRouter>
   );

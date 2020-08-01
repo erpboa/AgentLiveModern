@@ -10260,3 +10260,19 @@ body {
 .sb-sidenav-light .sb-sidenav-footer {
   background-color: #e9ecef;
 }
+
+#iconBoton {
+  color:white;
+  font-size: 20px;
+}
+
+#InputMenu{
+  width: 10%;
+}
+#submenuUser{
+  float: right;
+}
+#menusuperior{
+  float: left;
+  width: 100%;
+}
