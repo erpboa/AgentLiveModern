@@ -12,7 +12,7 @@ const MenuLateral = () => {
                 <div className="sb-sidenav-menu">
                     <div className="nav">
                         <div className="sb-sidenav-menu-heading">Menu</div>
-                        <NavLink className="nav-link" to="/Dashboard"><div><i className="fa fa-tachometer"></i> Dashboard</div></NavLink>
+                        <NavLink className="nav-link" to="/LeadCommandCenter"><div><i className="fa fa-tachometer"></i> Lead Command Center</div></NavLink>
                         <NavLink className="nav-link" to="/Calendar"><div><i className="fa fa-calendar"></i> Calendar</div></NavLink>
                         <NavLink className="nav-link" to="/Oportunities"><div><i className="fa fa-handshake-o"></i> Oportunities</div></NavLink>
                         <NavLink className="nav-link" to="/GreatSheet"><div><i className="fa fa-file-o"></i> Great Sheet</div></NavLink>

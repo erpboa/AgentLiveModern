@@ -20,17 +20,17 @@ const FormLogin = () => {
         setPassword(e.target.value);
     }
     const handleEnviar = e => {
-        e.preventDefault();      
+        e.preventDefault();
         PxpClient.login(cuenta, password);
         if (userContext != null) {
-          history.push("/Dashboard");
+          history.push("/LeadCommandCenter");
         } else {
           history.push("/");
         }
     }
   return (
     <div>
-    {userContext !== null && <Redirect to="/Dashboard" />}
+    {userContext !== null && <Redirect to="/LeadCommandCenter" />}
       <div className="container">
         <div className="d-flex justify-content-center h-100">
           <div className="card">

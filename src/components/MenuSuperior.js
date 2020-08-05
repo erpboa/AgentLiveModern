@@ -5,6 +5,9 @@ import './icon/font-awesome-4.7.0/css/font-awesome.min.css';
 import MenuLateral from './MenuLateral';
 import PxpClient from 'pxp-client';
 import {CambiarEstados} from "../contexts/CambiarEstados";
+import {ReloadComponent} from "../contexts/ReloadComponent";
+import {ServiceRest} from "../services/ServiceRest";
+import $ from "jquery";
 
 const MenuSuperior = (props) => {
   /**********************Menu Superior Lateral********************/
@@ -31,26 +34,21 @@ const MenuSuperior = (props) => {
   /***********************************************************/
   /*Funcion para llamar al Servicio del ERP y Listar el Combo*/
     const llamarComboLead = e => {
-    var listado =  PxpClient.doRequest({
-                            url: 'parametros/Catalogo/listarCatalogoCombo',
-                            params: {
-                                      start: 0,
-                                      limit: 1000,
-                                      codSubsistema:'AP',
-                                      catalogo_tipo:'tlead_types'
-                                    }
-                          });
+    var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_types'};
+    var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
      /*Formateamos el Promise de resultado para mandar el dato al combo*/
-          listado.then((value) => {
-                  setListaCombo(value.datos.map((comboLead) =>
-                              <option key={comboLead.descripcion}>{comboLead.descripcion}</option>
-                          ));
-          });
-        }
+        listado.then((value) => {
+                setListaCombo(value.datos.map((comboLead) =>
+                            <option key={comboLead.descripcion}>
+                              {comboLead.descripcion}
+                            </option>
+                        ));
+        });
+        document.getElementById("formularioLead").reset();
+      }
       /****************************************************************/
   /***********************************************************/
   /*****************************************************************************************/
-
 
   /****************Cerrar Sesion*****************/
     /*Funcion para Hacer Logout desde el Boton*/
@@ -59,6 +57,46 @@ const MenuSuperior = (props) => {
       }
     /******************************************/
   /********************************************/
+
+  /***************Insertar un nuevo Lead********************/
+    /*Creamos la variable que almacenara los Campos del Lead*/
+    const [dataLeadInsert, setLeadInsert] = useState();
+    const [paramLeadInsert, setParamLeadInsert] = useState();
+    /*******************************************************/
+    /*Creamos el contexto para actualizar la tabla*/
+    const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
+    /**********************************************/
+
+    /********Llamamos a la funcion para recuperar los datos de cada Campo cuando se cambie del input*****/
+    const enviarDatos = (e) => {
+        setLeadInsert({...dataLeadInsert,[e.target.name]: e.target.value,});
+    };
+    /****************************************************************************************************/
+
+    /*******Aqui llamamos al boton de Agregar un nuevo Lead y mandar los datos al ERP*******/
+    const insertLead = async (e) => {
+      if (reloadComponent == undefined || reloadComponent == false) {
+        setReloadComponent(true);
+      } else {
+        setReloadComponent(false);
+      }
+      e.preventDefault();
+      /*Llamamos al servicio ServiceRest para mandar la url y los parametros para hacer inserccion*/
+      var insertar = ServiceRest('agent_portal/Lead/insertarLead',dataLeadInsert);
+      insertar.then((resp) => {
+        if (!resp.error) {
+          $("#modalLead").modal("hide");
+        } else {
+          const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+          alert(msg);
+        }
+      })
+
+
+    };
+  /**************************************************************************************/
+  /************************************************************/
+
 
   return (
     <div>
@@ -72,7 +110,7 @@ const MenuSuperior = (props) => {
               <button className="btn btn-primary mr-0 mr-md-3 my-2 my-md-0" type="button"><i className="fa fa-search"></i></button>
           </div>
         </form>
-        <button className="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="botonMenu" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconBoton"></i> Add Lead</button>
+        <button className="btn btn-primary" data-toggle="modal" data-target="#modalLead" id="botonMenu" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconBoton"></i> Add Lead</button>
 
         <ul className="navbar-nav ml-auto ml-md-0" id="submenuUser">
             <li className="nav-item dropdown">
@@ -88,7 +126,7 @@ const MenuSuperior = (props) => {
         </div>
     </nav>
 
-    <div className="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div className="modal fade" id="modalLead" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
@@ -98,36 +136,37 @@ const MenuSuperior = (props) => {
             </button>
           </div>
           <div className="modal-body">
-          <form>
+          <form id="formularioLead">
           <div className="form-row">
              <div className="col">
                <label>First Name</label>
-               <input type="text" className="form-control" id="formGroupExampleInput"/>
+               <input type="text" className="form-control" id="formGroupExampleInput" name="first_name" onChange={enviarDatos}/>
              </div>
              <div className="col">
                <label>Last Name</label>
-               <input type="text" className="form-control" id="formGroupExampleInput2"/>
+               <input type="text" className="form-control" id="formGroupExampleInput2" name="last_name" onChange={enviarDatos}/>
              </div>
           </div>
           <div className="form-row">
              <div className="col">
                <label>Phone Number</label>
-               <input type="text" className="form-control" id="formGroupExampleInput2"/>
+               <input type="text" className="form-control" id="formGroupExampleInput2" name="phone" onChange={enviarDatos}/>
              </div>
              <div className="col">
                <label>Email Address</label>
-               <input type="email" className="form-control" id="formGroupExampleInput2"/>
+               <input type="email" className="form-control" id="formGroupExampleInput2" name="email" onChange={enviarDatos}/>
              </div>
           </div>
           <label>State</label>
-            <select id="inputState" className="form-control">
-              {listaCombo}
+            <select id="inputState" className="form-control" name="type_lead" onChange={enviarDatos}>
+            <option selected>Select Type Lead</option>
+            {listaCombo}
             </select>
           </form>
           </div>
           <div className="modal-footer">
             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" className="btn btn-primary">Save changes</button>
+            <button type="button" onClick={insertLead} className="btn btn-primary">Save changes</button>
           </div>
         </div>
       </div>

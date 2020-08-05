@@ -2,7 +2,7 @@ import React, {useEffect,useMemo, useState} from 'react';
 import logo from './logo.svg';
 import Login from './paginas/Login/Login';
 import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
-import Dashboard from './paginas/Dashboard/Dashboard';
+import LeadCommandCenter from './paginas/LeadCommandCenter/LeadCommandCenter';
 import Calendar from './paginas/Calendar/Calendar';
 import Oportunities from './paginas/Oportunities/Oportunities';
 import GreatSheet from './paginas/GreatSheet/GreatSheet';
@@ -15,10 +15,9 @@ import Settings from './paginas/Settings/Settings';
 import PxpClient from 'pxp-client';
 import {UserContext} from "./contexts/UserContext";
 import {CambiarEstados} from "./contexts/CambiarEstados";
+import {ReloadComponent} from "./contexts/ReloadComponent";
 import {Redirect} from "react-router-dom";
 import PxpConfig from './Config/DatosGenerales';
-
-console.log("llamar variables",PxpConfig.config.active);
 
 PxpClient.init(PxpConfig.config.host,
                PxpConfig.config.baseUrl,
@@ -27,10 +26,12 @@ PxpClient.init(PxpConfig.config.host,
 
 function App() {
   /*Esta Variable es la que mandara el inicio de sesion*/
+  const [reloadComponent, setReloadComponent] = useState();
   const [userContext, setUserContext] = useState();
   const [cambiarEstados, setCambiarEstados] = useState();
   const value = useMemo(()=> ({userContext, setUserContext}), [userContext, setUserContext]);
   const menu = useMemo(()=> ({cambiarEstados, setCambiarEstados}), [cambiarEstados, setCambiarEstados]);
+  const reload = useMemo(()=> ({reloadComponent, setReloadComponent}), [reloadComponent, setReloadComponent]);
   /*****************************************************/
   useEffect(() => {
     PxpClient.onAuthStateChanged((user) => {
@@ -52,10 +53,11 @@ function App() {
     <BrowserRouter>
   <div>
   {userContext === null && <Redirect to="/" />}
+  <ReloadComponent.Provider value={reload}>
   <CambiarEstados.Provider value={menu}>
   <UserContext.Provider value={value}>
           <Route path="/" component={Login} exact={true}/>
-          <Route path="/Dashboard" component={Dashboard}/>
+          <Route path="/LeadCommandCenter" component={LeadCommandCenter}/>
           <Route path="/Calendar" component={Calendar}/>
           <Route path="/Oportunities" component={Oportunities}/>
           <Route path="/GreatSheet" component={GreatSheet}/>
@@ -67,6 +69,7 @@ function App() {
           <Route path="/Settings" component={Settings}/>
     </UserContext.Provider>
     </CambiarEstados.Provider>
+    </ReloadComponent.Provider>
   </div>
   </BrowserRouter>
   );
