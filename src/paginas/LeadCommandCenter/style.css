@@ -1,0 +1,155 @@
+.container-fluid {
+    background-color: rgb(235, 235, 235);
+   
+  }
+.box {
+    border: 2px solid darkgray;
+    height: 350px;
+    width: 300px;
+    background-color: white;
+  }
+
+.box2 {
+    border: 2px solid darkgray;
+    height: 100px;
+    width: 300px;
+    background-color: white;
+  }
+.box3 {
+    border: 2px solid darkgray;
+    height: 800px;
+    width: 300px;
+    background-color: white;
+  }
+/**.info-section-menu {
+    float: right;
+    border: 2px solid darkgray;
+    height: 915px;
+    width: 670px;
+    background-color: white;
+  }**/
+.info-section-acticvities {
+    float: right;
+    border: 2px solid darkgray;
+    height: 915px;
+    width: 670px;
+    background-color: white;
+  }
+
+  /**.menu-activities {
+    border: 2px solid darkgray;
+    height: 250px;
+    width: 660px;
+    background-color: white;
+  }**/
+
+/**.nav-activities {
+    border: 2px solid darkgray;
+    background-color: white;
+  }**/
+
+ 
+  #menu-activities ul>li{
+    list-style: none;
+    background-color: white;
+    
+    color: black;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    min-width: 3px;
+  }
+  #menu-activitie>li{
+    border: 2px solid darkgray;
+    height: 915px;
+    float: left;
+    text-align:center
+  }
+
+
+  .input-group > .form-control {
+  position: relative;
+  flex: 1 1 auto;
+  width: 2%;
+  min-width: 0;
+  margin-bottom: 0;
+}
+  
+
+
+
+
+  
+  .avatar{    
+    width: 100x;
+  }
+
+  .avatar-img{
+    width: 120px;
+  }
+  .edit-img{
+    width: 20px;
+  }
+  .phone-img{
+    width: 30px;
+  }
+  .chat-img{
+    width: 40px;
+  }
+  .mensaje-img{
+    width: 40px;
+  }
+  .net-img{
+    width: 40px;
+  }
+
+
+  
+
+
+  .contenedor-text{
+    font-size: 80%;
+    color: #6a6b6d; 
+  }
+  .contenedor-addadress{
+    font-size: 80%;
+    color:#0011ff; 
+  }
+  .contenedor-phone{
+    font-size: 80%;
+    color:#0011ff; 
+  }
+  .contenedor-email{
+    font-size: 90%;
+    color: #0011ff; 
+  }
+
+
+
+
+  
+  ul{
+    list-style: none;
+  }
+  #menu li>a{
+    background-color: white;
+    color: black;
+    padding: 10px;
+    display: block;
+    text-decoration: none;
+    min-width: 3px;
+  }
+  #menu li>a:hover{
+    color: #000;
+    background-color: #eaeaea;
+  }
+  #menu>li{
+    float: left;
+    text-align:center
+  }
+  #menu>li>ul{
+    display: none;
+  }
+  #menu>li:hover>ul {
+    display:block;
+  }
