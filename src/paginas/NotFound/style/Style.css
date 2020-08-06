@@ -1,0 +1,24 @@
+#contenidoPrincipal {
+  width: 100%;
+  height: 100%;
+  position:absolute;
+
+}
+#botonNotFound{
+  font-size: 30px;
+}
+
+#titulo2 {
+  font-size: 4em;
+  font-weight: 900;
+}
+
+#titulo {
+  font-size: 15em;
+  font-weight: 900;
+}
+
+#Imagen{
+  margin-top: -45px;
+  margin-left: 5px;
+}

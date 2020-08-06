@@ -3,7 +3,9 @@ import logo from './logo.svg';
 import Login from './paginas/Login/Login';
 import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
 import LeadCommandCenter from './paginas/LeadCommandCenter/LeadCommandCenter';
+import CommandInfo from './paginas/LeadCommandCenter/CommandInfo';
 import Calendar from './paginas/Calendar/Calendar';
+import NotFound from './paginas/NotFound/NotFound';
 import Oportunities from './paginas/Oportunities/Oportunities';
 import GreatSheet from './paginas/GreatSheet/GreatSheet';
 import FeaturedListings from './paginas/FeaturedListings/FeaturedListings';
@@ -47,31 +49,34 @@ function App() {
     }, []);
 
 
-
-
   return (
-    <BrowserRouter>
-  <div>
-  {userContext === null && <Redirect to="/" />}
-  <ReloadComponent.Provider value={reload}>
-  <CambiarEstados.Provider value={menu}>
-  <UserContext.Provider value={value}>
-          <Route path="/" component={Login} exact={true}/>
-          <Route path="/LeadCommandCenter" component={LeadCommandCenter}/>
-          <Route path="/Calendar" component={Calendar}/>
-          <Route path="/Oportunities" component={Oportunities}/>
-          <Route path="/GreatSheet" component={GreatSheet}/>
-          <Route path="/FeaturedListings" component={FeaturedListings}/>
-          <Route path="/Import" component={Import}/>
-          <Route path="/Marketing" component={Marketing}/>
-          <Route path="/Agents" component={Agents}/>
-          <Route path="/Reports" component={Reports}/>
-          <Route path="/Settings" component={Settings}/>
-    </UserContext.Provider>
-    </CambiarEstados.Provider>
-    </ReloadComponent.Provider>
-  </div>
-  </BrowserRouter>
+      <BrowserRouter>
+    <div>
+    {userContext === null && <Redirect to="/" />}
+    <ReloadComponent.Provider value={reload}>
+    <CambiarEstados.Provider value={menu}>
+    <UserContext.Provider value={value}>
+    <Switch>
+            <Route path="/" component={Login} exact={true}/>
+            <Route path="/LeadCommandCenter" component={LeadCommandCenter}/>
+            <Route path="/CommandInfo" component={CommandInfo}/>
+            <Route path="/Calendar" component={Calendar}/>
+            <Route path="/Oportunities" component={Oportunities}/>
+            <Route path="/GreatSheet" component={GreatSheet}/>
+            <Route path="/FeaturedListings" component={FeaturedListings}/>
+            <Route path="/Import" component={Import}/>
+            <Route path="/Marketing" component={Marketing}/>
+            <Route path="/Agents" component={Agents}/>
+            <Route path="/Reports" component={Reports}/>
+            <Route path="/Settings" component={Settings}/>
+            <Route path="/NotFound" component={NotFound} />
+            <Route path="*" component={NotFound} />
+      </Switch>
+      </UserContext.Provider>
+      </CambiarEstados.Provider>
+      </ReloadComponent.Provider>
+    </div>
+    </BrowserRouter>
   );
 }
 

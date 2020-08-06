@@ -7,6 +7,7 @@ import Footer from '../../components/Footer';
 import PxpClient from 'pxp-client';
 import {ServiceRest} from "../../services/ServiceRest";
 import {ReloadComponent} from "../../contexts/ReloadComponent";
+import {NavLink} from 'react-router-dom';
 
 const ContenidoLeadCommandCenter = (props) => {
 
@@ -39,7 +40,7 @@ const {reloadComponent,setReloadComponent} = useContext(ReloadComponent);
                           {data.type_lead}
                         </td>
                         <td>
-                          <a href="www.youtube.com">{data.first_name}</a>
+                          <NavLink className="nav-link" to={`Calendar/Lead:${data.id_lead}`}><div>{data.first_name}</div></NavLink>
                         </td>
                         <td>
                           {data.phone}
@@ -116,7 +117,7 @@ cargar la pagina por lo tanto llamamos a la funcion del listado*/
 
 /************************************************************/
    useEffect(() => {
-       getData();       
+       getData();
     }, [reloadComponent]);
 /*************************************************************************/
 

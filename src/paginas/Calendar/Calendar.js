@@ -4,9 +4,8 @@ import MenuLateral from '../../components/MenuLateral';
 import ContenidoCalendar from './ContenidoCalendar';
 import {CambiarEstados} from "../../contexts/CambiarEstados";
 
-const Calendar = () => {
-  const {cambiarEstados} = useContext(CambiarEstados)
-
+const Calendar = (props) => {
+  const {cambiarEstados} = useContext(CambiarEstados);
   return (
 
         <div className={cambiarEstados}>
