@@ -1,8 +1,7 @@
-import React, {useEffect, useContext, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import './styles/formLogin.css';
 import './styles/stylesMenu.css';
 import './icon/font-awesome-4.7.0/css/font-awesome.min.css';
-import MenuLateral from './MenuLateral';
 import PxpClient from 'pxp-client';
 import {CambiarEstados} from "../contexts/CambiarEstados";
 import {ReloadComponent} from "../contexts/ReloadComponent";
@@ -39,7 +38,7 @@ const MenuSuperior = (props) => {
      /*Formateamos el Promise de resultado para mandar el dato al combo*/
         listado.then((value) => {
                 setListaCombo(value.datos.map((comboLead) =>
-                            <option key={comboLead.descripcion}>
+                            <option key={comboLead.descripcion} value = {comboLead.descripcion}>
                               {comboLead.descripcion}
                             </option>
                         ));
@@ -119,7 +118,7 @@ const MenuSuperior = (props) => {
                     <a className="dropdown-item" href="#">Settings</a>
                     <a className="dropdown-item" href="#">Activity Log</a>
                     <div className="dropdown-divider"></div>
-                    <a className="dropdown-item" onClick={cerrarSesion}>Logout</a>
+                    <a className="dropdown-item" href="#" onClick={cerrarSesion}>Logout</a>
                 </div>
             </li>
         </ul>
@@ -159,7 +158,7 @@ const MenuSuperior = (props) => {
           </div>
           <label>State</label>
             <select id="inputState" className="form-control" name="type_lead" onChange={enviarDatos}>
-            <option selected>Select Type Lead</option>
+            <option hidden defaultValue>Select type lead</option>
             {listaCombo}
             </select>
           </form>

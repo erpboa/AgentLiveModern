@@ -1,0 +1,51 @@
+#ImagenAvatar{
+  width: 100px;
+  float: left;
+  vertical-align: middle;
+}
+#TituloCard{
+  vertical-align: middle;
+}
+
+#ContenidoInfo{
+  padding: 0;
+  width: 100%;
+  padding-right: 2px;
+}
+#ContenidoInfoLead{
+  width: 100%;
+  height: 100%;
+  background: white !important;
+}
+#ContenidoCorrespondenciaGeneral{
+  width: 100%;
+  padding: 0;
+  padding-right: 2px;
+}
+#ContenidoCorrespondencia{
+  width: 100%;
+  background: white !important;
+}
+#ContenidoLeadInfo {
+  margin-top:10px;
+}
+#ContenidoCasas{
+  margin-top:5px;
+  width: 100%;
+  background: white !important;
+}
+#Botones{
+  width: 100%;
+  height: 50px;
+}
+#CuerpoCorrespondecia{
+  padding:0;
+}
+#ContenidoEstadosCorrespondencia{
+  padding-left:20px;
+  padding-top:20px;
+  padding-right:20px;
+}
+#CuerpoCasas{
+  padding:0;
+}

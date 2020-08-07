@@ -1,7 +1,6 @@
 import React, {useEffect,useMemo, useState} from 'react';
-import logo from './logo.svg';
 import Login from './paginas/Login/Login';
-import {BrowserRouter, Route, Switch, NavLink} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import LeadCommandCenter from './paginas/LeadCommandCenter/LeadCommandCenter';
 import CommandInfo from './paginas/LeadCommandCenter/CommandInfo';
 import Calendar from './paginas/Calendar/Calendar';
@@ -59,7 +58,7 @@ function App() {
     <Switch>
             <Route path="/" component={Login} exact={true}/>
             <Route path="/LeadCommandCenter" component={LeadCommandCenter}/>
-            <Route path="/CommandInfo" component={CommandInfo}/>
+            <Route path="/CommandInfo/Lead:id_lead" component={CommandInfo}/>
             <Route path="/Calendar" component={Calendar}/>
             <Route path="/Oportunities" component={Oportunities}/>
             <Route path="/GreatSheet" component={GreatSheet}/>

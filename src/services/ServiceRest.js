@@ -1,6 +1,6 @@
 import PxpClient from 'pxp-client';
 
-export function ServiceRest (url,params) {  
+export function ServiceRest (url,params) {
   /*Aqui ponemos la condicion de los params*/
   if (params == '' || params == null) {
     var respuesta = PxpClient.doRequest({

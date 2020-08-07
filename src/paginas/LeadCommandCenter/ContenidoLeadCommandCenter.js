@@ -29,7 +29,7 @@ const {reloadComponent,setReloadComponent} = useContext(ReloadComponent);
       listado.then((value) => {
         if (!value.error) {
           setData(value.datos.map((data) =>
-                      <tr>
+                      <tr key = {data.id_lead}>
                         <td>
                           1
                         </td>
@@ -40,7 +40,7 @@ const {reloadComponent,setReloadComponent} = useContext(ReloadComponent);
                           {data.type_lead}
                         </td>
                         <td>
-                          <NavLink className="nav-link" to={`Calendar/Lead:${data.id_lead}`}><div>{data.first_name}</div></NavLink>
+                          <NavLink className="nav-link" to={`CommandInfo/Lead${data.id_lead}`}><div>{data.first_name}</div></NavLink>
                         </td>
                         <td>
                           {data.phone}
