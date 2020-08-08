@@ -1,0 +1,35 @@
+/**********************Estilo General para cambiar en toda la pagina web******************/
+/*Cambiar colores a los nombres del Label*/
+#Letras{
+  color:white;
+  /* font-weight: 700; */
+}
+/****************************************/
+/*Cambia el Color de los Paneles*/
+#ColoresPaneles{
+  background: #10575C;
+  font-weight: 500;
+}
+/*********************************/
+/*Cambia el color del footer menu lateral*/
+#ColoresPanelesFooter{
+  background: #083F43;
+  font-weight: 500;
+  color: white;
+}
+/****************************************/
+/*Cambiamos el color de los iconos*/
+#iconos{
+  color: white;
+}
+/*********************************/
+/*Donde se realizara el hover*/
+#HoverMenu{
+  color: white;
+}
+#HoverMenu:hover {
+  background: #00BDCB;
+}
+/********************************/
+
+/***************************************************************************************/

@@ -1,4 +1,5 @@
 import React, {useEffect,useMemo, useState} from 'react';
+import './components/styles/styleGeneral.css';
 import Login from './paginas/Login/Login';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import LeadCommandCenter from './paginas/LeadCommandCenter/LeadCommandCenter';

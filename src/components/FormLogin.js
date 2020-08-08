@@ -33,23 +33,21 @@ const FormLogin = () => {
     {userContext !== null && <Redirect to="/LeadCommandCenter" />}
       <div className="container">
         <div className="d-flex justify-content-center h-100">
-          <div className="card">
+          <div className="card" id="ColoresPaneles">
             <div className="card-header">
               <center><h1>LIVE MOODERN</h1></center>
             </div>
-            <div className="card-body">
-              <form onSubmit={handleEnviar}>
-                <div className="input-group form-group">
-                  <i className="fa fa-user icon fa-2x"></i>
-                  <input type="text" className="input-field" value={cuenta} onChange={handleUser} placeholder="Cuenta"/>
-                </div>
-                <div className="input-group form-group">
-                  <i className="fa fa-key icon fa-2x"></i>
-                  <input type="password" className="input-field" value={password} onChange={handlePassword} placeholder="Contraseña" />
-                </div>
+            <div className="card-body" id="CardLogin">
+              <form onSubmit={handleEnviar} className="was-validated" noValidate>
                 <div className="form-group">
-                  <center><button id="login-boton" type="submit" className="btn btn-success">Login</button></center>
+                    <label className="h4 form-control-label" id="Letras">Cuenta <strong className="text-danger" title="This is required">*</strong></label>
+                  <input type="text" class="form-control" value={cuenta} onChange={handleUser} placeholder="Cuenta" required/>
                 </div>
+                <div class="form-group">
+                  <label className="h4 form-control-label" id="Letras">Password <strong className="text-danger" title="This is required">*</strong></label>
+                  <input type="password" className="form-control" value={password} onChange={handlePassword} placeholder="Password" required/>
+                </div>
+                <center><button type="submit" className="btn btn-success">Submit</button></center>
               </form>
             </div>
           </div>
