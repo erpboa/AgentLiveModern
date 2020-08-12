@@ -21,6 +21,9 @@ import {ReloadComponent} from "./contexts/ReloadComponent";
 import {Redirect} from "react-router-dom";
 import PxpConfig from './Config/DatosGenerales';
 
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
+
+
 PxpClient.init(PxpConfig.config.host,
                PxpConfig.config.baseUrl,
                PxpConfig.config.mode

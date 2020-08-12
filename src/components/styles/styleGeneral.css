@@ -6,9 +6,9 @@
 }
 /****************************************/
 /*Cambia el Color de los Paneles*/
-#ColoresPaneles{
+#ColoresPaneles {
   background: #10575C;
-  font-weight: 500;
+  font-weight: 100;
 }
 /*********************************/
 /*Cambia el color del footer menu lateral*/
@@ -31,5 +31,29 @@
   background: #00BDCB;
 }
 /********************************/
-
+.PiePagina {
+    height: 3%;
+    width: 100%;
+}
+/*La cabecera de la tabla no se distorcione*/
+.AnchoCabTabla{
+  white-space: nowrap;
+}
+/*********************************************/
+/*Para que la tabla tenga scroll y no se distorcione*/
+#TablaContenedor{
+  height: 100%;
+  overflow: scroll;
+  white-space: nowrap;
+}
+/******************************************/
+/*La paginacion de la tabla*/
+#paginacion{
+    height: 40px;
+}
+/**************************/
+/**********El contenedor que contiene el contenido principal***************/
+#contenedorPrincipal{
+  height: 100%;
+}
 /***************************************************************************************/

@@ -35,17 +35,19 @@ const FormLogin = () => {
         <div className="d-flex justify-content-center h-100">
           <div className="card" id="ColoresPaneles">
             <div className="card-header">
-              <center><h1>LIVE MOODERN</h1></center>
+              <center><h1>LIVE MODERN</h1></center>
             </div>
             <div className="card-body" id="CardLogin">
-              <form onSubmit={handleEnviar} className="was-validated" noValidate>
+              <form onSubmit={handleEnviar} className="was-validated" validate>
                 <div className="form-group">
                     <label className="h4 form-control-label" id="Letras">Cuenta <strong className="text-danger" title="This is required">*</strong></label>
-                  <input type="text" class="form-control" value={cuenta} onChange={handleUser} placeholder="Cuenta" required/>
+                  <input type="text" className="form-control" value={cuenta} onChange={handleUser} placeholder="Cuenta" required/>
+                  <div className="invalid-feedback">Please fill out this field.</div>
                 </div>
-                <div class="form-group">
+                <div className="form-group">
                   <label className="h4 form-control-label" id="Letras">Password <strong className="text-danger" title="This is required">*</strong></label>
                   <input type="password" className="form-control" value={password} onChange={handlePassword} placeholder="Password" required/>
+                  <div className="invalid-feedback">Please fill out this field.</div>
                 </div>
                 <center><button type="submit" className="btn btn-success">Submit</button></center>
               </form>

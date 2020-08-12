@@ -26,7 +26,7 @@ const MenuLateral = () => {
                 </div>
                 <div className="sb-sidenav-footer" id="ColoresPanelesFooter">
                     <div className="small"></div>
-                    Live Moodern
+                    Live Modern
                 </div>
             </nav>
         </div>

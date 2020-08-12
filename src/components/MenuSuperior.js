@@ -100,7 +100,7 @@ const MenuSuperior = (props) => {
   return (
     <div>
     <nav className="sb-topnav navbar navbar-expand" id="ColoresPaneles">
-        <a className="navbar-brand" href="index.html" id="Letras">Live Moodern</a>
+        <a className="navbar-brand" href="index.html" id="Letras">Live Modern</a>
         <button className="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"  onClick={botonEsconder}><i id="iconos" className="fa fa-bars"></i></button>
         <div id="menusuperior">
         <form className="d-none d-md-inline-block form-inline">
@@ -135,25 +135,29 @@ const MenuSuperior = (props) => {
             </button>
           </div>
           <div className="modal-body">
-          <form id="formularioLead" className="was-validated" noValidate>
+          <form id="formularioLead" onSubmit={insertLead} className="was-validated" Validate>
           <div className="form-row">
              <div className="col">
                <label id="Letras">First Name <strong className="text-danger" title="This is required">*</strong></label>
                <input type="text" className="form-control" id="formGroupExampleInput" name="first_name" onChange={enviarDatos} required/>
+               <div className="invalid-feedback">Please fill out this field.</div>
              </div>
              <div className="col">
                <label id="Letras">Last Name <strong className="text-danger" title="This is required">*</strong></label>
                <input type="text" className="form-control" id="formGroupExampleInput2" name="last_name" onChange={enviarDatos} required/>
+               <div className="invalid-feedback">Please fill out this field.</div>
              </div>
           </div>
           <div className="form-row">
              <div className="col">
                <label id="Letras">Phone Number <strong className="text-danger" title="This is required">*</strong></label>
                <input type="text" className="form-control" id="formGroupExampleInput2" name="phone" onChange={enviarDatos} required/>
+               <div className="invalid-feedback">Please fill out this field.</div>
              </div>
              <div className="col">
                <label id="Letras">Email Address <strong className="text-danger" title="This is required">*</strong></label>
                <input type="email" className="form-control" id="formGroupExampleInput2" name="email" onChange={enviarDatos} required/>
+               <div className="invalid-feedback">Please fill out this field.</div>
              </div>
           </div>
           <label id="Letras">State <strong className="text-danger" title="This is required">*</strong></label>
@@ -161,12 +165,15 @@ const MenuSuperior = (props) => {
             <option hidden defaultValue>Select type lead</option>
             {listaCombo}
             </select>
+              <div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" type="submit" className="btn btn-primary">Save changes</button>
+                </div>
+              </div>
           </form>
           </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" onClick={insertLead} className="btn btn-primary">Save changes</button>
-          </div>
+
         </div>
       </div>
     </div>
