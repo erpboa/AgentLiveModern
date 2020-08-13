@@ -12,8 +12,7 @@ const LeadCommandCenter = () => {
 
   if (userContext != null) {
     return (
-          <div className={cambiarEstados}>
-          {userContext === null && <Redirect to="/" />}
+          <div className={cambiarEstados}>          
           <MenuSuperior/>
           <div id="layoutSidenav">
             <MenuLateral/>

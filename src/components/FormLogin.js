@@ -38,7 +38,7 @@ const FormLogin = () => {
               <center><h1>LIVE MODERN</h1></center>
             </div>
             <div className="card-body" id="CardLogin">
-              <form onSubmit={handleEnviar} className="was-validated" validate>
+              <form onSubmit={handleEnviar} className="was-validated" validate="true">
                 <div className="form-group">
                     <label className="h4 form-control-label" id="Letras">Cuenta <strong className="text-danger" title="This is required">*</strong></label>
                   <input type="text" className="form-control" value={cuenta} onChange={handleUser} placeholder="Cuenta" required/>

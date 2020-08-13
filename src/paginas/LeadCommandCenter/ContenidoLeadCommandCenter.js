@@ -154,14 +154,14 @@ return (
 
     <div id="layoutSidenav_content">
         <main id="contenedorPrincipal">
-            <div className="container-fluid">
+            <div className="container-fluid" id="contenedorDetalle">
             <TablaLead posts={currentPosts} loading={loading}/>
-              <div id="paginacion" >
-              <Paginacion
-                  postsPerPage={postsPerPage}
-                  totalPosts={posts.length}
-                  paginate={paginate}
-                />
+              <div id="paginacion">
+                  <Paginacion
+                      postsPerPage={postsPerPage}
+                      totalPosts={posts.length}
+                      paginate={paginate}
+                    />                    
               </div>
             </div>
         </main>

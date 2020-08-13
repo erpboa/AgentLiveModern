@@ -55,7 +55,7 @@ function App() {
   return (
       <BrowserRouter>
     <div>
-    {userContext === null && <Redirect to="/" />}
+
     <ReloadComponent.Provider value={reload}>
     <CambiarEstados.Provider value={menu}>
     <UserContext.Provider value={value}>

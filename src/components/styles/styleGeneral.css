@@ -47,13 +47,32 @@
   white-space: nowrap;
 }
 /******************************************/
-/*La paginacion de la tabla*/
-#paginacion{
-    height: 40px;
-}
-/**************************/
+
 /**********El contenedor que contiene el contenido principal***************/
 #contenedorPrincipal{
   height: 100%;
 }
 /***************************************************************************************/
+#ContenidoIcono{
+  position: relative;
+  left: -12px;
+  padding: 6px 12px;
+  color: white;
+  background:rgba(0,0,0,0.15);
+}
+#BotonContenedor{
+  height: 100%;
+  width: 70px;
+  padding: 0;
+  color: white;
+  font-weight: 600;
+}
+#contenedorDetalle{
+  padding: 0;
+}
+#contenedorPrincipal{
+  background: #ECECEC;
+}
+#paginacion{    
+  display: inline-block;
+}

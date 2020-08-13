@@ -135,7 +135,7 @@ const MenuSuperior = (props) => {
             </button>
           </div>
           <div className="modal-body">
-          <form id="formularioLead" onSubmit={insertLead} className="was-validated" Validate>
+          <form id="formularioLead" onSubmit={insertLead} className="was-validated" validate="true">
           <div className="form-row">
              <div className="col">
                <label id="Letras">First Name <strong className="text-danger" title="This is required">*</strong></label>
@@ -150,16 +150,19 @@ const MenuSuperior = (props) => {
           </div>
           <div className="form-row">
              <div className="col">
-               <label id="Letras">Phone Number <strong className="text-danger" title="This is required">*</strong></label>
-               <input type="text" className="form-control" id="formGroupExampleInput2" name="phone" onChange={enviarDatos} required/>
+               <label id="Letras">Code Country <strong className="text-danger" title="This is required">*</strong></label>
+               <input type="number" className="form-control" id="formGroupExampleInput2" name="code_country" onChange={enviarDatos} required/>
                <div className="invalid-feedback">Please fill out this field.</div>
              </div>
              <div className="col">
-               <label id="Letras">Email Address <strong className="text-danger" title="This is required">*</strong></label>
-               <input type="email" className="form-control" id="formGroupExampleInput2" name="email" onChange={enviarDatos} required/>
+               <label id="Letras">Phone Number <strong className="text-danger" title="This is required">*</strong></label>
+               <input type="number" className="form-control" id="formGroupExampleInput2" name="phone" onChange={enviarDatos} required/>
                <div className="invalid-feedback">Please fill out this field.</div>
              </div>
           </div>
+          <label id="Letras">Email Address <strong className="text-danger" title="This is required">*</strong></label>
+          <input type="email" className="form-control" id="formGroupExampleInput2" name="email" onChange={enviarDatos} required/>
+          <div className="invalid-feedback">Please fill out this field.</div>
           <label id="Letras">State <strong className="text-danger" title="This is required">*</strong></label>
             <select id="inputState" className="form-control" name="type_lead" onChange={enviarDatos}>
             <option hidden defaultValue>Select type lead</option>

@@ -8,7 +8,7 @@ const MenuLateral = () => {
   return (
 
         <div id="layoutSidenav_nav">
-            <nav className="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <nav className="sb-sidenav accordion" id="sidenavAccordion">
                 <div className="sb-sidenav-menu" id="ColoresPaneles">
                     <div className="nav">
                         <div className="sb-sidenav-menu-heading" id="ColoresPanelesFooter">Menu</div>

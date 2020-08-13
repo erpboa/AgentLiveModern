@@ -8,7 +8,13 @@ const TablaLead = ({ posts, loading }) => {
     <Table className="table table-responsive table-bordered" id="TablaContenedor">
         <Thead id="ColoresPaneles" >
           <Tr>
-            <Th className="AnchoCabTabla" id="Letras">#</Th>
+            <Th className="AnchoCabTabla" id="Letras">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+                  <label class="form-check-label" for="defaultCheck1">
+                  </label>
+              </div>
+            </Th>
             <Th className="AnchoCabTabla" id="Letras">Stage</Th>
             <Th className="AnchoCabTabla" id="Letras">Type</Th>
             <Th className="AnchoCabTabla" id="Letras">Name</Th>
@@ -17,8 +23,6 @@ const TablaLead = ({ posts, loading }) => {
             <Th className="AnchoCabTabla" id="Letras">Tasks</Th>
             <Th className="AnchoCabTabla" id="Letras">Calls</Th>
             <Th className="AnchoCabTabla" id="Letras">Emails</Th>
-            <Th className="AnchoCabTabla" id="Letras">Texts</Th>
-            <Th className="AnchoCabTabla" id="Letras">E-Alerts</Th>
             <Th className="AnchoCabTabla" id="Letras"><i className="fa fa-bolt" aria-hidden="true">A</i></Th>
             <Th className="AnchoCabTabla" id="Letras">LastVisit</Th>
             <Th className="AnchoCabTabla" id="Letras"><i className="fa fa-eye" aria-hidden="true"></i></Th>
@@ -38,7 +42,11 @@ const TablaLead = ({ posts, loading }) => {
         {posts.map(post => (
           <Tr key = {post.id_lead}>
               <Td>
-                1
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+                  <label class="form-check-label" for="defaultCheck1">
+                  </label>
+              </div>
               </Td>
               <Td>
                 stage
@@ -47,46 +55,40 @@ const TablaLead = ({ posts, loading }) => {
                 {post.type_lead}
               </Td>
               <Td>
-                <NavLink className="nav-link" to={`CommandInfo/Lead${post.id_lead}`}><div>{post.first_name}</div></NavLink>
+                <NavLink data-toggle="tooltip" data-placement="top" title={`${post.first_name} ${post.last_name}`} className="nav-link" to={`CommandInfo/Lead${post.id_lead}`}><div>{post.first_name} {post.last_name}</div></NavLink>
               </Td>
               <Td>
-                {post.phone}
+                (+{post.code_country}) {post.phone}
               </Td>
               <Td>
                 call goal
               </Td>
               <Td>
-                task
+                <NavLink data-toggle="tooltip" data-placement="top" className="nav-link" to="#"><div>+ add</div></NavLink>
               </Td>
               <Td>
-                calls
+                <button type="button" id="BotonContenedor" className="btn btn-success"><i className="fa fa-phone" id="ContenidoIcono"></i>0</button>
               </Td>
               <Td>
-                emails
+              <button type="button" id="BotonContenedor" className="btn btn-warning"><i className="fa fa-share" id="ContenidoIcono"></i>0</button>
               </Td>
               <Td>
-                texts
+                Action plans
               </Td>
               <Td>
-                1 sent
+                 Last Visit
               </Td>
               <Td>
-                A
+              <i className="fa fa-eye" aria-hidden="true"></i> 2
               </Td>
               <Td>
-                Last Visit
+              <i className="fa fa-home" aria-hidden="true"></i> 3
               </Td>
               <Td>
-                eye
+              <i className="fa fa-heart" aria-hidden="true"></i> 1
               </Td>
               <Td>
-                home
-              </Td>
-              <Td>
-                heart
-              </Td>
-              <Td>
-                Price
+                $4k
               </Td>
               <Td>
                 registered
@@ -98,13 +100,13 @@ const TablaLead = ({ posts, loading }) => {
                 lead activity
               </Td>
               <Td>
-                close date
+                <button type="button" className="btn btn-link">Add</button>
               </Td>
               <Td>
-                Birthday
+                <button type="button" className="btn btn-link">Add</button>
               </Td>
               <Td>
-                Address
+                --
               </Td>
               <Td>
                 tags
