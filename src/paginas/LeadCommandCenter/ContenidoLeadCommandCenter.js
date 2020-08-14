@@ -161,7 +161,7 @@ return (
                       postsPerPage={postsPerPage}
                       totalPosts={posts.length}
                       paginate={paginate}
-                    />                    
+                    />
               </div>
             </div>
         </main>

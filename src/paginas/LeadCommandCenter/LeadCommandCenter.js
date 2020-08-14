@@ -12,7 +12,7 @@ const LeadCommandCenter = () => {
 
   if (userContext != null) {
     return (
-          <div className={cambiarEstados}>          
+          <div className={cambiarEstados}>
           <MenuSuperior/>
           <div id="layoutSidenav">
             <MenuLateral/>

@@ -9,9 +9,9 @@ const TablaLead = ({ posts, loading }) => {
         <Thead id="ColoresPaneles" >
           <Tr>
             <Th className="AnchoCabTabla" id="Letras">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-                  <label class="form-check-label" for="defaultCheck1">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
+                  <label className="form-check-label">
                   </label>
               </div>
             </Th>
