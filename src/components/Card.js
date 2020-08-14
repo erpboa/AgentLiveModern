@@ -1,6 +1,7 @@
 import React from 'react';
 import './styles/card.css';
 import {NavLink} from 'react-router-dom';
+import ActivityList from "./ActivityList";
 
 const Card = (props) => {
   return (
@@ -66,6 +67,9 @@ const Card = (props) => {
                             </div>
                             <div id="ContenidoEstadosCorrespondencia">
                               <h5 class="card-title">Aqui el contenido de las Casas</h5>
+                                <ActivityList
+                                    id_lead = {props.id_lead}
+                                />
                             </div>
                           </div>
                         </div>

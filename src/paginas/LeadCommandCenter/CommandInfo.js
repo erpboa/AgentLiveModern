@@ -65,7 +65,13 @@ const CommandInfo = (props) => {
       <MenuLateral/>
         <div id="layoutSidenav_content">
             <main>
-              <Card foto={AvatarEjemplo} nombre={nombre_lead} telefono={`Phone: ${telefono}`} correo={`Email: ${correo}`} type_lead={`Type: ${type_lead}`}/>              
+              <Card foto={AvatarEjemplo}
+                    nombre={nombre_lead}
+                    telefono={`Phone: ${telefono}`}
+                    correo={`Email: ${correo}`}
+                    type_lead={`Type: ${type_lead}`}
+                    id_lead = {id_lead}
+              />
             </main>
             <Footer/>
         </div>
