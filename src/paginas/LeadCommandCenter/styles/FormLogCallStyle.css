@@ -1,0 +1,39 @@
+#container-logCall{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 8px;
+}
+#container-all-logCall{
+  height: 100%;
+  width: 100%;
+}
+#bn-container-logCall{
+  margin: 0px 12px 0px 10px;
+  padding:1px;
+  border-color:rgb(231, 228, 228);  
+  text-align: center;
+  height: 35px;
+  width: 300px;
+}
+#container-logCall-det{
+  margin: 20px 20px 10px 20px;
+}
+#container-logCall-footer{
+  margin: 20px 20px 10px 20px;
+}
+#text-phone{
+  text-align: left;
+  padding:1px;
+  height: 30px;
+  width: 200px;}
+
+#bn-logCall-footer{
+  /*position: static; right: 0px; top: 300px;*/
+  
+  /*float: right;*/
+  text-align: center;
+  padding:1px;
+  height: 30px;
+  width: 200px;
+}
