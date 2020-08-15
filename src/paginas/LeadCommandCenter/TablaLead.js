@@ -135,7 +135,7 @@ return (
               </Td>
               <Td>
                 {post.activity_agent}<br/>
-                {post.agent_name}
+                <b id="nombreAgent">{post.agent_name}</b>
               </Td>
               <Td>
                 {post.lead_activity}
