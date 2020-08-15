@@ -1,10 +1,47 @@
-import React, {useContext} from 'react';
+import React, {useEffect,useState} from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import {NavLink} from 'react-router-dom';
+import Modal from '../../components/Modal';
 
 const TablaLead = ({ posts, loading }) => {
-  return (
 
+  const [estadoCheck, setEstadoCheck] = useState(false);
+  const [id_lead,setIdLead] = useState([]);
+
+  /*Aqui llamamos el id Modal para tener un modal dianmico*/
+  var formularioCalled = <form id="formularioLead">
+                            <div className="form-group">
+                              <label id="Letras" for="exampleFormControlTextarea1">Add Call Notes</label>
+                              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                          </form>;
+  var formularioMails = <form id="formularioLead">
+                            <div class="form-group row">
+                              <label id="Letras" class="col-sm-2 col-form-label">For</label>
+                              <div class="col-sm-10">
+                                <input type="text" className="form-control" id="formGroupExampleInput" value="email@example.com"/>
+                              </div>
+                            </div>
+                            <div className="form-group">
+                              <label id="Letras" for="exampleFormControlTextarea1">Mail</label>
+                              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            </div>
+                          </form>;
+
+  const [idModalCalled,setIdModalCalled] = useState("modalLlamadas");
+  const [idModalEmails,setIdModalEmails] = useState("modalEmails");
+  const [datosModalCalled,setDatosModalCalled] = useState({id_modal:idModalCalled,titulo:"Called",contenido:formularioCalled});
+  const [datosModalEmails,setDatosModalEmails] = useState({id_modal:idModalEmails,titulo:"Emails",contenido:formularioMails});
+  /********************************************************/
+
+/*Pendiente para hacer los modCheckboxAgent*/
+  const cambiar = (id_leads) => {
+    setIdLead([...id_lead,id_leads]);
+  }
+  /*******************************************/
+
+return (
+    <div>
     <Table className="table table-responsive table-bordered" id="TablaContenedor">
         <Thead id="ColoresPaneles" >
           <Tr>
@@ -42,9 +79,12 @@ const TablaLead = ({ posts, loading }) => {
         {posts.map(post => (
           <Tr key = {post.id_lead}>
               <Td>
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-                  <label class="form-check-label" for="defaultCheck1">
+              <div className="form-check">
+                <input className="form-check-input" type="checkbox"
+                value={estadoCheck}
+                name={post.id_lead}
+                onClick={(value) => cambiar(post.id_lead)} id="defaultUnchecked"/>
+                  <label className="form-check-label">
                   </label>
               </div>
               </Td>
@@ -55,49 +95,50 @@ const TablaLead = ({ posts, loading }) => {
                 {post.type_lead}
               </Td>
               <Td>
-                <NavLink data-toggle="tooltip" data-placement="top" title={`${post.first_name} ${post.last_name}`} className="nav-link" to={`CommandInfo/Lead${post.id_lead}`}><div>{post.first_name} {post.last_name}</div></NavLink>
+                <NavLink data-toggle="tooltip" data-placement="top" title={`${post.full_name}`} className="nav-link" to={`CommandInfo/Lead${post.id_lead}`}><div>{post.full_name}</div></NavLink>
               </Td>
               <Td>
-                (+{post.code_country}) {post.phone}
+                {post.phone}
               </Td>
               <Td>
                 call goal
               </Td>
               <Td>
-                <NavLink data-toggle="tooltip" data-placement="top" className="nav-link" to="#"><div>+ add</div></NavLink>
+                <NavLink data-toggle="tooltip" data-placement="top" className="nav-link" to="#"><div>+ add {post.descripcion_tarea}</div></NavLink>
               </Td>
               <Td>
-                <button type="button" id="BotonContenedor" className="btn btn-success"><i className="fa fa-phone" id="ContenidoIcono"></i>0</button>
+                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => setDatosModalCalled(datosModalCalled)}><i className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
               </Td>
               <Td>
-              <button type="button" id="BotonContenedor" className="btn btn-warning"><i className="fa fa-share" id="ContenidoIcono"></i>0</button>
+              <button type="button" id="BotonContenedor" className="btn btn-warning" data-toggle="modal" data-target="#modalEmails" name="modalEmails" onClick={(value) => setDatosModalEmails(datosModalEmails)}><i className="fa fa-share" id="ContenidoIcono" ></i>{post.emails}</button>
               </Td>
               <Td>
-                Action plans
+                <i className="fa fa-bolt" aria-hidden="true">{post.action_plan}</i>
               </Td>
               <Td>
-                 Last Visit
+                 {post.ultima_visita}
               </Td>
               <Td>
-              <i className="fa fa-eye" aria-hidden="true"></i> 2
+              <i className="fa fa-eye" aria-hidden="true"></i> {post.vistas}
               </Td>
               <Td>
-              <i className="fa fa-home" aria-hidden="true"></i> 3
+              <i className="fa fa-home" aria-hidden="true"></i> {post.casas}
               </Td>
               <Td>
-              <i className="fa fa-heart" aria-hidden="true"></i> 1
+              <i className="fa fa-heart" aria-hidden="true"></i> {post.likes}
               </Td>
               <Td>
-                $4k
+                {post.price}
               </Td>
               <Td>
-                registered
+                {post.fecha_reg}
               </Td>
               <Td>
-                agent activity
+                {post.activity_agent}<br/>
+                {post.agent_name}
               </Td>
               <Td>
-                lead activity
+                {post.lead_activity}
               </Td>
               <Td>
                 <button type="button" className="btn btn-link">Add</button>
@@ -106,16 +147,18 @@ const TablaLead = ({ posts, loading }) => {
                 <button type="button" className="btn btn-link">Add</button>
               </Td>
               <Td>
-                --
+                {post.address}
               </Td>
               <Td>
-                tags
+                {post.tags}
               </Td>
             </Tr>
         ))}
         </Tbody>
       </Table>
-
+      <Modal datos={datosModalCalled}/>
+      <Modal datos={datosModalEmails}/>
+      </div>
   );
 
 }
