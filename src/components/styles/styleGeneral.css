@@ -73,6 +73,9 @@
 #contenedorPrincipal{
   background: #ECECEC;
 }
-#paginacion{    
+#paginacion{
   display: inline-block;
+}
+#nombreAgent{
+  color:blue;
 }

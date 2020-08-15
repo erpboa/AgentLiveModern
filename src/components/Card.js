@@ -3,6 +3,14 @@ import './styles/card.css';
 import {NavLink} from 'react-router-dom';
 import ActivityList from "./ActivityList";
 
+import edit_icon from '../image/edit_icon.png';
+import phone_icon from '../image/phone.png';
+import mensaje_icon from '../image/mensaje.png';
+import chat_icon from '../image/chat.png';
+import net_icon from '../image/net.png';
+
+import ContenidoCorrespondencia from '../paginas/LeadCommandCenter/ContenidoCorrespondencia';
+
 const Card = (props) => {
   return (
 
@@ -35,17 +43,7 @@ const Card = (props) => {
                       <div class="col-sm-12">
                         <div class="card" id="ContenidoCorrespondencia">
                           <div class="card-body" id="CuerpoCorrespondecia">
-                              <div class="btn-group" role="group" aria-label="Basic example" id="Botones">
-                                <button type="button" class="btn btn-secondary" id= "btn-box4" >Log Call</button>
-                                <button type="button" class="btn btn-secondary" id= "btn-box4">Send taxt</button>
-                                <button type="button" class="btn btn-secondary" id= "btn-box4">Send Email</button>
-                                <button type="button" class="btn btn-secondary" id= "btn-box4">Add Note</button>
-                                <button type="button" class="btn btn-secondary" id= "btn-box4">E-Alerts</button>
-                                <button type="button" class="btn btn-secondary" id= "btn-box4">Action Plans</button>
-                              </div>
-                              <div id="ContenidoEstadosCorrespondencia">
-                                <h5 class="card-title">Aqui el contenido de Correspondencia</h5>
-                              </div>
+                              <ContenidoCorrespondencia/>                               
                           </div>
                         </div>
                         <div class="card" id="ContenidoCasas">
