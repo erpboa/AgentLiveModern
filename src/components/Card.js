@@ -133,6 +133,7 @@ const Card = (props) => {
                               <h5 className="card-title">Aqui el contenido de las Casas</h5>
                                 <ActivityList
                                     id_lead = {props.id_lead}
+                                    lead_name = {props.nombre}
                                 />
                             </div>
                           </div>

@@ -20,7 +20,7 @@ const ActivityList = (props) => {
     return (
         <div>
             { property != null ?
-              (property.map(prop => (<Activity key={prop.id_great_sheet} activity={prop}/>))):
+              (property.map(prop => (<Activity key={prop.id_great_sheet} activity={prop} lead_name={props.lead_name}/>))):
               (<div>Nothing Propertys</div>)
             }
         </div>
