@@ -98,5 +98,6 @@
   padding-bottom: 0;
 }
 .contenedorCommadInfo{
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }

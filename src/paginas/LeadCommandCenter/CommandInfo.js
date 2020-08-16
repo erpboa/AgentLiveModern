@@ -76,7 +76,7 @@ const CommandInfo = (props) => {
               />
               </div>
             </main>
-            <Footer/>
+            <Footer className="PiePagina"/>
         </div>
       </div>
     </div>
