@@ -79,3 +79,24 @@
 #nombreAgent{
   color:blue;
 }
+#CuerpoCard{
+  padding: 2px;
+}
+#InputForm{
+  padding:2px;
+}
+#CardPesonal{
+  background: #BFF0FF;
+}
+#contenedorPrincipalCardPersonal{
+  width: 100%;
+  height: 100%;
+}
+#TextPesonalCard{
+  font-size: 20px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+.contenedorCommadInfo{
+  overflow: hidden;
+}

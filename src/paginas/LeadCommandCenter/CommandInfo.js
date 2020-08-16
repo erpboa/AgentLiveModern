@@ -61,17 +61,20 @@ const CommandInfo = (props) => {
     <div className={cambiarEstados}>
     {userContext === null && <Redirect to="/" />}
     <MenuSuperior/>
-      <div id="layoutSidenav">
+      <div id="layoutSidenav" >
       <MenuLateral/>
-        <div id="layoutSidenav_content">
+        <div id="layoutSidenav_content" className="contenedorCommadInfo">
             <main>
+            <div className="container-fluid" id="contenedorDetalle">
+
               <Card foto={AvatarEjemplo}
                     nombre={nombre_lead}
-                    telefono={`Phone: ${telefono}`}
-                    correo={`Email: ${correo}`}
-                    type_lead={`Type: ${type_lead}`}
+                    telefono={telefono}
+                    correo={correo}
+                    type_lead={type_lead}
                     id_lead = {id_lead}
               />
+              </div>
             </main>
             <Footer/>
         </div>
