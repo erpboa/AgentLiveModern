@@ -39,9 +39,9 @@ const CommandInfo = (props) => {
   const getDataLead = e => {
     var params = { start: 0, limit: 50, id_lead:id_lead};
     var listado = ServiceRest('agent_portal/Lead/listarLead',params);
-    listado.then((value) => {
+    listado.then((value) => {                
                 /*Enviamos el Valor a las variables para mostrar en el componente Card*/
-                setNombreLead(value.datos[0].first_name);
+                setNombreLead(value.datos[0].first_name+' '+value.datos[0].last_name);
                 setTelefono(value.datos[0].phone);
                 setCorreo(value.datos[0].email);
                 setTypeLead(value.datos[0].type_lead);

@@ -99,6 +99,97 @@ const Card = (props) => {
                                 </div>
                               </div>
                             </div>
+                            <div className="card">
+                              <div className="card-header" id="headingFour">
+                                <h2 className="mb-0">
+                                  <button className="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseThree">
+                                    APPOINTMENTS
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseFour" className="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+                                <div className="card-body">
+                                  Add appoinment
+                                </div>
+                              </div>
+                            </div>
+                            <div className="card">
+                              <div className="card-header" id="headingThree">
+                                <h2 className="mb-0">
+                                  <button className="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseFive" aria-expanded="false" aria-controls="collapseThree">
+                                    DETAILS
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseFive" className="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+                                <div className="card-body">                               
+                                Registered:06/18/2020
+                                Source: Great Agent Lead Package
+                                Primary Agent: Mariah Gonzales
+                                Listing Agent: Jonathan Santiago
+                                Lender: Assign
+                                Close Date: Add
+                                Birthday: Add
+
+                                </div>
+                              </div>
+                            </div>
+                            <div className="card">
+                              <div className="card-header" id="headingSix">
+                                <h2 className="mb-0">
+                                  <button className="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSix" aria-expanded="false" aria-controls="collapseThree">
+                                    TAGS
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseSix" className="collapse" aria-labelledby="headingSix" data-parent="#accordionExample">
+                                <div className="card-body">
+                                + Add New Tag
+                                </div>
+                              </div>
+                            </div>
+                            <div className="card">
+                              <div className="card-header" id="headingSeven">
+                                <h2 className="mb-0">
+                                  <button className="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseSeven" aria-expanded="false" aria-controls="collapseThree">
+                                    OPPORTUNITIES
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseSeven" className="collapse" aria-labelledby="headingSeven" data-parent="#accordionExample">
+                                <div className="card-body">
+                                  Add New Opportunity
+                                </div>
+                              </div>
+                            </div>
+                            <div className="card">
+                              <div className="card-header" id="headingEight">
+                                <h2 className="mb-0">
+                                  <button className="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseEight" aria-expanded="false" aria-controls="collapseThree">
+                                    FILES
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseEight" className="collapse" aria-labelledby="headingEight" data-parent="#accordionExample">
+                                <div className="card-body">
+                                  Add New Files
+                                </div>
+                              </div>
+                            </div>
+                            <div className="card">
+                              <div className="card-header" id="headingNine">
+                                <h2 className="mb-0">
+                                  <button className="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapseNine" aria-expanded="false" aria-controls="collapseThree">
+                                    CUSTOM FIELDS
+                                  </button>
+                                </h2>
+                              </div>
+                              <div id="collapseNine" className="collapse" aria-labelledby="headingNine" data-parent="#accordionExample">
+                                <div className="card-body">
+                                CUSTOM FIELDS
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
