@@ -38,7 +38,7 @@ const ContenidoAgents = () => {
     <div id="layoutSidenav_content" >
       <div className="navbar">
       <div className="col-6"><span style={mystyle}>Agent Management </span>
-      <a href="http://success.greatagentusa.com//hc/en-us/articles/360010934433-Turning-On-Off-Leads" alt="greatagentusa.com">Learn more about Agent Managemen</a>
+      <a href="http://success.greatagentusa.com//hc/en-us/articles/360010934433-Turning-On-Off-Leads" target="_blank" alt="greatagentusa.com">Learn more about Agent Managemen</a>
       </div>
       { (buttonType === 'agent')? <AddUser /> : (buttonType === 'team')?<AddTeam /> :''}
       </div>

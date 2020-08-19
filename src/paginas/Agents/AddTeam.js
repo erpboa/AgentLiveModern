@@ -9,23 +9,20 @@ import React, { useContext, useState } from "react";
 import { ServiceRest } from "../../services/ServiceRest";
 import { ReloadComponent } from "../../contexts/ReloadComponent";
 import $ from "jquery";
+import { SelectAgent } from "./SelectAgent";
+import { dataTeam } from "./team.json";
 
 export const AddTeam = () => {
+  
   const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
   const [listaCombo, setListaCombo] = useState("Select");
-  const [dataLeadRound, setLeadRound] = useState(false);
-  let agents = [];
-  const [dataTeam, setTeam] = useState({
-    name: "",
-    distribution_type: "",
-    id_agent: null,
-  });
+  
+  const handleInputName = (e) => {
+    dataTeam.name = e.target.value
+  };
 
-  const handleInputChange = (e) => {
-    setTeam({
-      ...dataTeam,
-      [e.target.name]: e.target.value,
-    });
+  const handleInputDist = (e) => {
+    dataTeam.distribution_type = e.target.value
   };
 
   const insertTeam = async (e) => {
@@ -36,13 +33,14 @@ export const AddTeam = () => {
     }
     e.preventDefault();
 
-     
+    // console.log(dataTeam);
+      
       ServiceRest("agent_portal/Team/insertarTeam", dataTeam)
         .then((resp) => {
           if (!resp.error) {
             $("#modalTeam").modal("hide");
           } else {
-            const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+            const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
             alert(msg);
           }
         })
@@ -51,6 +49,7 @@ export const AddTeam = () => {
   };
 
   const llamarComboAgent = (e) => {
+      
     const listado = ServiceRest("agent_portal/Agent/listarAgent");
     listado.then((value) => {
       setListaCombo(
@@ -62,66 +61,16 @@ export const AddTeam = () => {
           );
         })
       );
+        
     });
-    document.getElementById("formularioTeam").reset();
+  
+    document.getElementById("formularioTeam").reset();    
   };
 
-  const LeadPeRound = () => {
-    return (
-      <div className="row">
-        <div className="col-sm-3">
-        <select
-          className="form-control"
-          name="lead_per_round"
-          placeholder="Name"
-          onChange={handleInputChange}
-        >
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>       
-        </div>
-        <div className="col-sm">
-        lead per round (100)%
-        <button type="button" className="btn btn-sm">
-          <i className="fa fa-trash-o fa-2x" aria-hidden="true"></i>
-        </button>        
-        </div>
-      </div>
-    );
-  };
+  const onCancelTeam = () => {
+    dataTeam.agents = []
+  }
 
-  const onAddAgent = (e) => {
-    if (e.target.value > 0) {
-      setLeadRound(true);
-      agents.push(e.target.value);
-    }
-  };
-
-  const AddAgent = () => {
-    return (
-      <div className="form-row">
-        <div className="col-4">
-          <label>Agents *</label>
-          <select
-            id="inputState"
-            className="form-control"
-            name="id_agent"
-            onChange={onAddAgent}
-          >
-            <option hidden defaultValue>Select</option>
-            {listaCombo}
-          </select>
-        </div>
-        <div className="col-6">          
-          <label>&nbsp;&nbsp;&nbsp;</label>
-          {/* {dataLeadRound && <LeadPeRound />} */}
-        </div>
-      </div>
-    );
-  };
   return (
     <div>
       <button
@@ -144,9 +93,9 @@ export const AddTeam = () => {
         aria-hidden="true"
       >
         <div className="modal-dialog modal-lg">
-          <div className="modal-content">
+          <div className="modal-content" id="ColoresPaneles">
             <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
+              <h5 className="modal-title" id="Letras">
                 Add New Team
               </h5>
               <button
@@ -155,53 +104,40 @@ export const AddTeam = () => {
                 data-dismiss="modal"
                 aria-label="Close"
               >
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" id="Letras">&times;</span>
               </button>
             </div>
             <div className="modal-body">
               <form id="formularioTeam">
                 <div className="form-row">
-                  <div className="col-4">
-                    <label>Name *</label>
+                  <div className="col-3">
+                    <label id="Letras">Name  <strong className="text-danger" title="This is required">*</strong></label>
                     <input
                       type="text"
                       className="form-control"
                       name="name"
                       placeholder="Name"
-                      onChange={handleInputChange}
+                      onChange={handleInputName}
                     />
                   </div>
-                </div>
+                </div>                
+                  
+                  <SelectAgent combo={listaCombo} />
+                
                 <div className="form-row">
-                  <div className="col-4">
-                    <label>Agents *</label>
-                    <select
-                      id="inputState"
-                      className="form-control"
-                      name="id_agent"
-                      onChange={onAddAgent}
-                    >
-                      <option hidden defaultValue>Select</option>
-                      {listaCombo}
-                    </select>
-                  </div>
-                  <div className="col-6">
-                    <label>&nbsp;&nbsp;&nbsp;</label>
-                    {dataLeadRound && <LeadPeRound />}
-                  </div>
-                </div>
-                {dataLeadRound && <AddAgent />}
-                <div className="form-row">
-                  <label>Distribution *</label>
+                  <div className="col">
+                  <label id="Letras">Distribution  <strong className="text-danger" title="This is required">*</strong></label>
                   <select
                     className="form-control"
-                    onChange={handleInputChange}
+                    onChange={handleInputDist}
                     name="distribution_type"
                   >
                      <option hidden defaultValue>Select</option>
-                    <option value="round_robin">Round Robin</option>
-                    <option value="claim_lead">Claim Lead</option>
+                     <option></option>
+                    <option value="round_robin">Round Robin: Weighted distribution of leads to agents in sequential order</option>
+                    <option value="claim_lead">Claim Lead: Multiple agents contacted, first one who claims lead gets it</option>
                   </select>
+                </div>
                 </div>
               </form>
             </div>
@@ -210,6 +146,7 @@ export const AddTeam = () => {
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                onClick={onCancelTeam}
               >
                 Cancel
               </button>

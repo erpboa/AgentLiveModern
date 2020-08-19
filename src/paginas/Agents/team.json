@@ -1,0 +1,15 @@
+{
+    "dataTeam": {
+    "name": "",
+    "distribution_type": "",
+    "agents": []    
+    },
+
+    "listData": [{
+        "id_agent": 0,
+        "quantity": 1,
+        "lead_per_round": 0.00
+    }
+]
+
+}
