@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles/card.css';
-import {NavLink} from 'react-router-dom';
+import {BrowserRouter as Router, NavLink, Link, Route, Switch} from 'react-router-dom';
 import ActivityList from "./ActivityList";
 
 import edit_icon from '../image/edit_icon.png';
@@ -9,7 +9,13 @@ import mensaje_icon from '../image/mensaje.png';
 import chat_icon from '../image/chat.png';
 import net_icon from '../image/net.png';
 
-import ContenidoCorrespondencia from '../paginas/LeadCommandCenter/ContenidoCorrespondencia';
+
+import FormLogCall from "../paginas/LeadCommandCenter/FormLogCall";
+import FormSendText from "../paginas/LeadCommandCenter/FormSendText";
+import FormSendEmail from "../paginas/LeadCommandCenter/FormSendEmail";
+import FormAddNote from "../paginas/LeadCommandCenter/FormAddNote";
+import FormEAlerts from "../paginas/LeadCommandCenter/FormEAlerts";
+import FormActionPlants from "../paginas/LeadCommandCenter/FormActionPlants";
 
 const Card = (props) => {
   return (
@@ -200,7 +206,54 @@ const Card = (props) => {
                       <div className="col-sm-12">
                         <div className="card" id="ContenidoCorrespondencia">
                           <div className="card-body" id="CuerpoCorrespondecia">
-                              <ContenidoCorrespondencia/>
+                            <div>
+
+                              <Router>
+                                <div>
+                                  <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                                    {/* <div className="collapse navbar-collapse" id="navbarText"> */}
+                                    <ul className="nav nav-tabs">
+                                      <li className="nav-item active">
+                                        <Link to="/LeadCommandCenter/FormLogCall" className="nav-link" aria-selected="true" name="logCall">Log Call</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormSendText" className="nav-link" aria-selected="false" name="sendText">Send Text</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormSendEmail" className="nav-link"  aria-selected="false" name="SedEmail">Send Email</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormAddNote" className="nav-link" name="addNote">Add Note</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormEAlerts" className="nav-link" name="Alerts">E-Alerts</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormActionPlants" className="nav-link" name="actionPlants">Action Plants</Link>
+                                      </li>
+                                    </ul>
+
+                                    {/* </div>             */}
+                                  </nav>
+                                  <div>
+                                  </div>
+
+                                  <Switch>
+                                    {/* <Route path="/LeadCommandCenter/FormLogCall" component={FormLogCall} exact={true}/> */}
+                                    <Route path="./Componets/Card" component={FormLogCall} exact={true}/>
+                                    <Route path="/LeadCommandCenter/FormSendText" component={FormSendText}/>
+                                    <Route path="/LeadCommandCenter/FormSendEmail" component={FormSendEmail}/>
+                                    <Route path="/LeadCommandCenter/FormAddNote" component={FormAddNote}/>
+                                    <Route path="/LeadCommandCenter/FormEAlerts" component={FormEAlerts}/>
+                                    <Route path="/LeadCommandCenter/FormActionPlants" component={FormActionPlants}/>
+                                    <FormLogCall telefono={props.telefono} />
+                                  </Switch>
+                                </div>
+                              </Router>
+
+
+                            </div>
+
                           </div>
                         </div>
                         <div className="card" id="ContenidoCasas">

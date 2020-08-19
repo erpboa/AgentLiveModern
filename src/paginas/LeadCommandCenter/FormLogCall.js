@@ -44,7 +44,7 @@ const FormLogCall = (props) => {
   return (
     <div id="container-all-logCall">
         
-        <div >        
+        <div class="tab-content">        
             <div id="container-logCall">
                 <button type="button" className="btn btn-outline-success" id="bn-container-logCall"> Talked to Lead</button>
                 <button type="button" className="btn btn-outline-secondary" id="bn-container-logCall">Left Voicemail</button>
@@ -69,7 +69,7 @@ const FormLogCall = (props) => {
                 <div class="row">
                     <div class="col">
                         <div className="alert alert-secondary" role="alert" id= "text-phone">
-                            to: 
+                            to: {props.telefono}
                         </div>
                     </div>
                     <div class="col">                        
