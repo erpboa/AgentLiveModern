@@ -39,9 +39,9 @@ const CommandInfo = (props) => {
   const getDataLead = e => {
     var params = { start: 0, limit: 50, id_lead:id_lead};
     var listado = ServiceRest('agent_portal/Lead/listarLead',params);
-    listado.then((value) => {
+    listado.then((value) => {                
                 /*Enviamos el Valor a las variables para mostrar en el componente Card*/
-                setNombreLead(value.datos[0].first_name);
+                setNombreLead(value.datos[0].first_name+' '+value.datos[0].last_name);
                 setTelefono(value.datos[0].phone);
                 setCorreo(value.datos[0].email);
                 setTypeLead(value.datos[0].type_lead);
@@ -61,19 +61,22 @@ const CommandInfo = (props) => {
     <div className={cambiarEstados}>
     {userContext === null && <Redirect to="/" />}
     <MenuSuperior/>
-      <div id="layoutSidenav">
+      <div id="layoutSidenav" >
       <MenuLateral/>
-        <div id="layoutSidenav_content">
+        <div id="layoutSidenav_content" className="contenedorCommadInfo">
             <main>
+            <div className="container-fluid" id="contenedorDetalle">
+
               <Card foto={AvatarEjemplo}
                     nombre={nombre_lead}
-                    telefono={`Phone: ${telefono}`}
-                    correo={`Email: ${correo}`}
-                    type_lead={`Type: ${type_lead}`}
+                    telefono={telefono}
+                    correo={correo}
+                    type_lead={type_lead}
                     id_lead = {id_lead}
               />
+              </div>
             </main>
-            <Footer/>
+            <Footer className="PiePagina"/>
         </div>
       </div>
     </div>

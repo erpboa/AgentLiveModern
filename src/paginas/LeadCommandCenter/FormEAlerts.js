@@ -12,10 +12,17 @@ import { ReloadComponent } from "../../contexts/ReloadComponent";
 
 import './styles/FormEAlertsStyle.css';
 
+import {Redirect,useHistory} from "react-router-dom";
+
+
 const FormEAlerts = (props) => {
   const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
   const [dataTeam, setDataTeam] = useState();
+
+  //nueva ventana añadir
+//  const { onFormEAlertsRegistro } = FormEAlertsRegistro();
+
 
   // List data table
   const getData = async () => {
@@ -41,53 +48,82 @@ const FormEAlerts = (props) => {
       }
     });
   };
+
+   /* const [show, setShow] = useState(false);
+    const handleShow = () => setShow(true);*/
+  let history = useHistory();
+
+  const handleShow = e => {
+    e.preventDefault();
+      history.push("./paginas/LeadCommandCenter/FormEAlertsRegistro");
+  }
+
   return (
     <div>
-      {dataTeam && (  
-        <div className="container-fluid">        
-        <div className="table-responsive">
-          <table className="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Subject</th>
-                <th scope="col">Price Range</th>
-                <th scope="col">Frequency</th>
-                <th scope="col">Last Sent</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataTeam.map((e, i) => (
-                <tr key={i}>
-                  <td>{e.name}</td>
-                  <td>{e.distribution_type}</td>
-                  <td></td>
-                  <td></td>
-                  <td>
-                    <div>                    
-                      <button type="button" className="btn btn-sm">
-                        <i clFormLogCallassName="fa fa-edit fa-2x"></i>
-                      </button>
-                      <button
-                        type="button"
-                        className="btn btn-sm"
-                        onClick={(value) => deleteTeam(e.id_team)}
-                      >
-                        <i
-                          style={{ color: "#DC143C" }}
-                          className="fa fa-trash-o fa-2x"
-                          aria-hidden="true"
-                        ></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>        
+
+        <div>
+          {dataTeam && (
+            <div className="container-fluid">
+              <div>
+
+                <button  type="button"   className="btn btn-primary" id="chooseActionPlan" onClick={handleShow}>Add E-Alert </button>
+
+              </div>
+
+                <div >
+
+
+                </div>
+
+
+              <div className="table-responsive">
+                <table className="table table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Subject</th>
+                      <th scope="col">Price Range</th>
+                      <th scope="col">Frequency</th>
+                      <th scope="col">Last Sent</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataTeam.map((e, i) => (
+                      <tr key={i}>
+                        <td>{e.name}</td>
+                        <td>{e.distribution_type}</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                          <div>
+                            <button type="button" className="btn btn-sm">
+                              <i clFormLogCallassName="fa fa-edit fa-2x"></i>
+                            </button>
+                            <button
+                              type="button"
+                              className="btn btn-sm"
+                              onClick={(value) => deleteTeam(e.id_team)}
+                            >
+                              <i
+                                style={{ color: "#DC143C" }}
+                                className="fa fa-trash-o fa-2x"
+                                aria-hidden="true"
+                              ></i>
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
-        </div>
-      )}
+
+
+
+
     </div>
   );
 };

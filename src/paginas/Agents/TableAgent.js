@@ -28,7 +28,7 @@ export const TableAgent = (props) => {
           setReloadComponent(false);
         }         
       } else {
-        const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+        const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
         setErrors(msg);
         alert(hasError);
       }

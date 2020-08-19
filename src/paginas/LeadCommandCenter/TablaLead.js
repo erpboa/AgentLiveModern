@@ -11,19 +11,19 @@ const TablaLead = ({ posts, loading }) => {
   /*Aqui llamamos el id Modal para tener un modal dianmico*/
   var formularioCalled = <form id="formularioLead">
                             <div className="form-group">
-                              <label id="Letras" for="exampleFormControlTextarea1">Add Call Notes</label>
+                              <label id="Letras">Add Call Notes</label>
                               <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                           </form>;
   var formularioMails = <form id="formularioLead">
-                            <div class="form-group row">
-                              <label id="Letras" class="col-sm-2 col-form-label">For</label>
-                              <div class="col-sm-10">
-                                <input type="text" className="form-control" id="formGroupExampleInput" value="email@example.com"/>
+                            <div className="form-group row">
+                              <label id="Letras" className="col-sm-2 col-form-label">For</label>
+                              <div className="col-sm-10">
+                                <input type="text" className="form-control" id="formGroupExampleInput" defaultValue="email@example.com"/>
                               </div>
                             </div>
                             <div className="form-group">
-                              <label id="Letras" for="exampleFormControlTextarea1">Mail</label>
+                              <label id="Letras">Mail</label>
                               <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
                             </div>
                           </form>;

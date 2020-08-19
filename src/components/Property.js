@@ -19,18 +19,19 @@ const Property = ({property, lead_name}) => {
                       aria-hidden="true"
                       class="phone circular icon icon_timeline icon_dark"
                 />
-                <p class="summary_main__content expanded-summary-main">
-
-                    <span>
-                    <span className="name">{lead_name} </span> viewed
-                      <strong> a
-                        <a target="_blank" href={property.ffd_guid}> Property Search</a>
-                      </strong>
-                    </span>
-                </p>
-                <p>
-                  <span data-testid="activity-updated-at">{property.time_page} ago</span>
-                </p>
+                <div class="summary_main__content expanded-summary-main">
+                  <p>
+                      <span>
+                      <span className="name">{lead_name} </span> viewed
+                        <strong> a
+                          <a target="_blank" href={property.ffd_guid}> Property Search</a>
+                        </strong>
+                      </span>
+                  </p>
+                  <p>
+                    <span data-testid="activity-updated-at">{property.time_page} ago</span>
+                  </p>
+                </div>
               </div>
             </div>
 

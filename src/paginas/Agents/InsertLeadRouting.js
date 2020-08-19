@@ -41,7 +41,8 @@ const InsertLeadRouting = ({ isShowing, hide }) => {
 
   if (isShowing) {
     return (
-      <Fragment>
+      <Fragment>        
+
         <div className="container-sm p-2 my-1 border" >
           <div className="header_0">
             <div className="row">
@@ -58,6 +59,9 @@ const InsertLeadRouting = ({ isShowing, hide }) => {
                 <button type="button" className="btn btn-sm">
                   <i className="fa fa-trash-o fa-3x" aria-hidden="true"></i>
                 </button>
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
               </div>
             </div>
             <hr />
@@ -137,6 +141,7 @@ const InsertLeadRouting = ({ isShowing, hide }) => {
             </div>
           </div>
         </div>
+    
       </Fragment>
     );
   } else {

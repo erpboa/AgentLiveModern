@@ -34,7 +34,7 @@ export const AddUser = () => {
   };
 
   const insertAgent = async (e) => {
-    document.getElementById("formularioUser").reset();
+    
     if (reloadComponent === undefined || reloadComponent === false) {
       setReloadComponent(true);
     } else {
@@ -50,12 +50,15 @@ export const AddUser = () => {
           if (!resp.error) {
             $("#modalUser").modal("hide");
           } else {
-            const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+            const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
             alert(msg);
           }
         })
         .catch((e) => console.error(e));
     }
+  }
+  const onCancel = () => {
+    document.getElementById("formularioUser").reset();
   }
 
   return (
@@ -79,9 +82,9 @@ export const AddUser = () => {
         aria-hidden="true"
       >
         <div className="modal-dialog">
-          <div className="modal-content">
+          <div className="modal-content" id="ColoresPaneles">
             <div className="modal-header">
-              <h5 className="modal-title" id="exampleModalLabel">
+              <h5 className="modal-title" id="Letras">
                 Add New User
               </h5>
               <button
@@ -90,14 +93,14 @@ export const AddUser = () => {
                 data-dismiss="modal"
                 aria-label="Close"
               >
-                <span aria-hidden="true">&times;</span>
+                <span aria-hidden="true" id="Letras">&times;</span>
               </button>
             </div>
             <div className="modal-body">
               <form id="formularioUser">
                 <div className="form-row">
                   <div className="col">
-                    <label>Agent Name *</label>
+                    <label id="Letras">Agent Name <strong className="text-danger" title="This is required">*</strong></label>
                     <input
                       type="text"
                       className="form-control"
@@ -106,7 +109,7 @@ export const AddUser = () => {
                     />
                   </div>
                   <div className="col">
-                    <label>Email Adress *</label>
+                    <label id="Letras">Email Adress <strong className="text-danger" title="This is required">*</strong></label>
                     <input
                       type="text"
                       className="form-control"
@@ -117,7 +120,7 @@ export const AddUser = () => {
                 </div>
                 <div className="form-row">
                   <div className="col">
-                    <label>Cell Number *</label>
+                    <label id="Letras">Cell Number <strong className="text-danger" title="This is required">*</strong></label>
                     <input
                       type="text"
                       className="form-control"
@@ -126,7 +129,7 @@ export const AddUser = () => {
                     />
                   </div>
                   <div className="col">
-                    <label>Office Number *</label>
+                    <label id="Letras">Office Number <strong className="text-danger" title="This is required">*</strong></label>
                     <input
                       type="text"
                       className="form-control"
@@ -135,7 +138,7 @@ export const AddUser = () => {
                     />
                   </div>
                 </div>
-                <label>Agent Type *</label>
+                <label id="Letras">Agent Type <strong className="text-danger" title="This is required">*</strong></label>
                 <select className="form-control" name="agent_type" onChange={handleInputChange}>
                 <option></option>
                   <option value="agent">Agent</option>
@@ -149,6 +152,7 @@ export const AddUser = () => {
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
+                onClick={onCancel}
               >
                 Cancel
               </button>

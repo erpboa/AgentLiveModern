@@ -33,7 +33,7 @@ const Teams = (props) => {
       if (!resp.error) {
         getData()
       } else {
-        const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+        const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
         setErrors(msg);
         alert(hasError);
       }
@@ -57,8 +57,8 @@ const Teams = (props) => {
               {dataTeam.map((e, i) => (
                 <tr key={i}>
                   <td>{e.name}</td>
-                  <td>{e.distribution_type}</td>
-                  <td></td>
+                  <td>{(e.distribution_type)}</td>
+                  <td>{' ' + e.agents}</td>
                   <td>
                     <div>                    
                       <button type="button" className="btn btn-sm">
@@ -67,7 +67,7 @@ const Teams = (props) => {
                       <button
                         type="button"
                         className="btn btn-sm"
-                        onClick={(value) => deleteTeam(e.id_team)}
+                        onClick={() => deleteTeam(e.id_team)}
                       >
                         <i
                           style={{ color: "#DC143C" }}
