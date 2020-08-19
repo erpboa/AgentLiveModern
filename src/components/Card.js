@@ -1,7 +1,12 @@
 import React from 'react';
 import './styles/card.css';
 import {NavLink} from 'react-router-dom';
-import ActivityList from "./ActivityList";
+import AllActivityList from "./AllActivityList";
+import CallList from "./CallList";
+import TextList from "./TextList";
+import EmailList from "./EmailList";
+import PropertyList from "./PropertyList";
+import { Tab, Icon, Menu, Label, Input } from 'semantic-ui-react'
 
 import edit_icon from '../image/edit_icon.png';
 import phone_icon from '../image/phone.png';
@@ -12,6 +17,84 @@ import net_icon from '../image/net.png';
 import ContenidoCorrespondencia from '../paginas/LeadCommandCenter/ContenidoCorrespondencia';
 
 const Card = (props) => {
+
+  const panes = [
+    {
+      menuItem: 'All Activities',
+      render: () => <Tab.Pane attached={false}>
+        <AllActivityList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem: (
+        <Menu.Item key='call'>
+          <Icon name="call"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <CallList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem: (
+        <Menu.Item key='text'>
+          <Icon name="comment"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <TextList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem: (
+        <Menu.Item key='email'>
+          <Icon name="mail"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <EmailList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem:  (
+        <Menu.Item key='property'>
+          <Icon name="world"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <PropertyList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+      {
+          menuItem:  (
+              <Menu.Item key='search'>
+                  <Input icon='search' placeholder='Search...' />
+              </Menu.Item>
+          ),
+          render: () => <Tab.Pane attached={false}>
+              <PropertyList
+                  id_lead = {props.id_lead}
+                  lead_name = {props.nombre}
+              />
+          </Tab.Pane>,
+      }
+  ];
+
   return (
 
             <div className="container-fluid" id="ContenidoLeadInfo">
@@ -46,31 +129,8 @@ const Card = (props) => {
                               <ContenidoCorrespondencia/>                               
                           </div>
                         </div>
-                        <div class="card" id="ContenidoCasas">
-                          <div class="card-body" id="CuerpoCasas">
-                              <div class="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                                <div class="btn-group mr-2" role="group" aria-label="First group">
-                                  <button type="button" class="btn btn-secondary">All Activities</button>
-                                  <button type="button" class="btn btn-secondary">1 </button>
-                                  <button type="button" class="btn btn-secondary">2</button>
-                                  <button type="button" class="btn btn-secondary">3</button>
-                                  <button type="button" class="btn btn-secondary">4</button>
-                                </div>
-                                <form className="d-none d-md-inline-block form-inline">
-                                    <div className="input-group">
-                                        <input className="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-                                        <button className="btn btn-primary mr-0 mr-md-3 my-2 my-md-0" type="button"><i className="fa fa-search"></i></button>
-                                    </div>
-                                 </form>
-                            </div>
-                            <div id="ContenidoEstadosCorrespondencia">
-                              <h5 class="card-title">Aqui el contenido de las Casas</h5>
-                                <ActivityList
-                                    id_lead = {props.id_lead}
-                                    lead_name = {props.nombre}
-                                />
-                            </div>
-                          </div>
+                        <div className="activity-content">
+                          <Tab menu={{ attached: false }} panes={panes} />
                         </div>
                       </div>
                   </div>
