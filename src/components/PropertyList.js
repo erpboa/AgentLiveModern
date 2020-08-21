@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {ServiceRest} from "../services/ServiceRest";
-import Activity from './Activity';
+import Property from './Property';
 
-const ActivityList = (props) => {
+const PropertyList = (props) => {
 
     const [property, loadProperty] = useState([]);
 
@@ -20,11 +20,11 @@ const ActivityList = (props) => {
     return (
         <div>
             { property != null ?
-              (property.map(prop => (<Activity key={prop.id_great_sheet} activity={prop} lead_name={props.lead_name}/>))):
+              (property.map(prop => (<Property key={prop.id_great_sheet} property={prop} lead_name={props.lead_name}/>))):
               (<div>Nothing Propertys</div>)
             }
         </div>
     );
 };
 
-export default ActivityList;
+export default PropertyList;

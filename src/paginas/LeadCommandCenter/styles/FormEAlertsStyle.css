@@ -1,0 +1,41 @@
+#chooseEAlerts{
+    float: right;
+    margin: 5px 10px 10px 0px;
+}
+#Formulario_EAlert{
+    font-size: small;
+}
+#style_subtitulos{
+    color: #007bff;
+}
+#formatoform_city{
+    margin: 0px 0px 0px 118px;
+}#formato_zip{
+    margin: 0px 0px 0px 133px;
+}
+#formatoform_neigh{
+    margin: 0px 0px 0px 65px;
+}
+#formatoform_location{
+    margin: 0px 0px 0px 46px;
+}
+#formatoform_county{
+    margin: 0px 0px 0px 110px;
+}
+#formatoform_school{
+    margin: 0px 0px 0px 110px;
+}
+#style-position-right{
+    width: 300px;
+    float: right;
+    /*background: #00BDCB;*/
+}
+#style-position-left{
+    width: 180px;
+    float: left;
+
+    /*background: #4e555b;*/
+}
+#size_option{
+    width: 220px;
+}

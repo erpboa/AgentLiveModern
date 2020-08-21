@@ -10,6 +10,8 @@ import React, { useState, useEffect, useContext } from "react";
 import { ServiceRest } from "../../services/ServiceRest";
 import { ReloadComponent } from "../../contexts/ReloadComponent";
 
+import './styles/FormActionPlants.css';
+
 const FormActionPlants = (props) => {
   const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
@@ -42,27 +44,91 @@ const FormActionPlants = (props) => {
   return (
     <div>
       {dataTeam && (  
-        <div className="container-fluid">        
-        <div className="table-responsive">
-          <table className="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th scope="col">Plans Already Activated</th>
-                <th scope="col">Activated</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dataTeam.map((e, i) => (
-                <tr key={i}>
-                  <td>{e.name}</td>
-                  <td>{e.distribution_type}</td>
-                  <td></td>
+        <div className="container-fluid">   
+             
+          <div>
+            <button data-toggle="modal" className="btn btn-primary" data-target="#chooseActionPlanForm" id="chooseActionPlan" type="button">Choose Action Plan</button>                                    
+            
+            <div className="modal fade" data-backdrop="static" data-keyboard="false" id="chooseActionPlanForm" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+              <div className="modal-dialog modal-lg">
+                <div className="modal-content">
+
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">
+                      Action Plan
+                    </h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div className="modal-body">
+                    <form id="formularioTeam">
+                      <div className="form-row">
+                        
+                        <div className="col">
+                          <nav class="navbar navbar-light bg-light">
+                            <form class="form-inline">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
+                            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                            </form>
+                          </nav>
+
+                          <div>
+
+                          </div>
+
+                          
+                        </div>
+                        
+                      </div>
+                    </form>
+                  </div>
+
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      data-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button
+                      type="button"
+                      //onClick={insertTeam}
+                      className="btn btn-primary"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+          </div> 
+
+
+
+          <div className="table-responsive">
+            <table className="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th scope="col">Plans Already Activated</th>
+                  <th scope="col">Activated</th>
+                  <th scope="col">Status</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>        
-        </div>
+              </thead>
+              <tbody>
+                {dataTeam.map((e, i) => (
+                  <tr key={i}>
+                    <td>{e.name}</td>
+                    <td>{e.distribution_type}</td>
+                    <td></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>        
+          </div>
         </div>
       )}
     </div>

@@ -1,7 +1,12 @@
 import React from 'react';
 import './styles/card.css';
-import {NavLink} from 'react-router-dom';
-import ActivityList from "./ActivityList";
+import {BrowserRouter as Router, NavLink, Link, Route, Switch} from 'react-router-dom';
+import AllActivityList from "./AllActivityList";
+import CallList from "./CallList";
+import TextList from "./TextList";
+import EmailList from "./EmailList";
+import PropertyList from "./PropertyList";
+import { Tab, Icon, Menu, Label, Input } from 'semantic-ui-react';
 
 import edit_icon from '../image/edit_icon.png';
 import phone_icon from '../image/phone.png';
@@ -9,9 +14,92 @@ import mensaje_icon from '../image/mensaje.png';
 import chat_icon from '../image/chat.png';
 import net_icon from '../image/net.png';
 
-import ContenidoCorrespondencia from '../paginas/LeadCommandCenter/ContenidoCorrespondencia';
+import FormLogCall from "../paginas/LeadCommandCenter/FormLogCall";
+import FormSendText from "../paginas/LeadCommandCenter/FormSendText";
+import FormSendEmail from "../paginas/LeadCommandCenter/FormSendEmail";
+import FormAddNote from "../paginas/LeadCommandCenter/FormAddNote";
+import FormEAlerts from "../paginas/LeadCommandCenter/FormEAlerts";
+import FormActionPlants from "../paginas/LeadCommandCenter/FormActionPlants";
 
 const Card = (props) => {
+
+  const panes = [
+    {
+      menuItem: 'All Activities',
+      render: () => <Tab.Pane attached={false}>
+        <AllActivityList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem: (
+        <Menu.Item key='call'>
+          <Icon name="call"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <CallList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem: (
+        <Menu.Item key='text'>
+          <Icon name="comment"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <TextList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem: (
+        <Menu.Item key='email'>
+          <Icon name="mail"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <EmailList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+    {
+      menuItem:  (
+        <Menu.Item key='property'>
+          <Icon name="world"></Icon><Label>3</Label>
+        </Menu.Item>
+      ),
+      render: () => <Tab.Pane attached={false}>
+        <PropertyList
+            id_lead = {props.id_lead}
+            lead_name = {props.nombre}
+        />
+      </Tab.Pane>,
+    },
+      {
+          menuItem:  (
+              <Menu.Item key='search'>
+                  <Input icon='search' placeholder='Search...' />
+              </Menu.Item>
+          ),
+          render: () => <Tab.Pane attached={false}>
+              <PropertyList
+                  id_lead = {props.id_lead}
+                  lead_name = {props.nombre}
+              />
+          </Tab.Pane>,
+      }
+  ];
+
   return (
 
             <div className="container-fluid" id="contenedorPrincipalCardPersonal">
@@ -421,34 +509,58 @@ const Card = (props) => {
                       <div className="col-sm-12">
                         <div className="card" id="ContenidoCorrespondencia">
                           <div className="card-body" id="CuerpoCorrespondecia">
-                              <ContenidoCorrespondencia/>
+                            <div>
+
+                              <Router>
+                                <div>
+                                  <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                                    {/* <div className="collapse navbar-collapse" id="navbarText"> */}
+                                    <ul className="nav nav-tabs">
+                                      <li className="nav-item active">
+                                        <Link to="/LeadCommandCenter/FormLogCall" className="nav-link" aria-selected="true" name="logCall">Log Call</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormSendText" className="nav-link" aria-selected="false" name="sendText">Send Text</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormSendEmail" className="nav-link"  aria-selected="false" name="SedEmail">Send Email</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormAddNote" className="nav-link" name="addNote">Add Note</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormEAlerts" className="nav-link" name="Alerts">E-Alerts</Link>
+                                      </li>
+                                      <li className="nav-item">
+                                        <Link to="/LeadCommandCenter/FormActionPlants" className="nav-link" name="actionPlants">Action Plants</Link>
+                                      </li>
+                                    </ul>
+
+                                    {/* </div>             */}
+                                  </nav>
+                                  <div>
+                                  </div>
+
+                                  <Switch>
+                                    {/* <Route path="/LeadCommandCenter/FormLogCall" component={FormLogCall} exact={true}/> */}
+                                    <Route path="./Componets/Card" component={FormLogCall} exact={true}/>
+                                    <Route path="/LeadCommandCenter/FormSendText" component={FormSendText}/>
+                                    <Route path="/LeadCommandCenter/FormSendEmail" component={FormSendEmail}/>
+                                    <Route path="/LeadCommandCenter/FormAddNote" component={FormAddNote}/>
+                                    <Route path="/LeadCommandCenter/FormEAlerts" component={FormEAlerts}/>
+                                    <Route path="/LeadCommandCenter/FormActionPlants" component={FormActionPlants}/>
+                                    <FormLogCall telefono={props.telefono} />
+                                  </Switch>
+                                </div>
+                              </Router>
+
+
+                            </div>
+
                           </div>
                         </div>
-                        <div className="card" id="ContenidoCasas">
-                          <div className="card-body" id="CuerpoCasas">
-                              <div className="btn-toolbar mb-3" role="toolbar" aria-label="Toolbar with button groups">
-                                <div className="btn-group mr-2" role="group" aria-label="First group">
-                                  <button type="button" className="btn btn-secondary">All Activities</button>
-                                  <button type="button" className="btn btn-secondary">1 </button>
-                                  <button type="button" className="btn btn-secondary">2</button>
-                                  <button type="button" className="btn btn-secondary">3</button>
-                                  <button type="button" className="btn btn-secondary">4</button>
-                                </div>
-                                <form className="d-none d-md-inline-block form-inline">
-                                    <div className="input-group">
-                                        <input className="form-control" type="text" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" />
-                                        <button className="btn btn-primary mr-0 mr-md-3 my-2 my-md-0" type="button"><i className="fa fa-search"></i></button>
-                                    </div>
-                                 </form>
-                            </div>
-                            <div id="ContenidoEstadosCorrespondencia">
-                              <h5 className="card-title">Aqui el contenido de las Casas</h5>
-                                <ActivityList
-                                    id_lead = {props.id_lead}
-                                    lead_name = {props.nombre}
-                                />
-                            </div>
-                          </div>
+                        <div className="activity-content">
+                          <Tab menu={{ attached: false }} panes={panes} />
                         </div>
                       </div>
                   </div>
