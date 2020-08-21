@@ -41,7 +41,7 @@ cargar la pagina por lo tanto llamamos a la funcion del listado*/
 
 /************************************************************/
    useEffect(() => {
-     const getData = async () => {
+     const getData = () => {
         setLoading(true);
         const res = ServiceRest('agent_portal/Lead/listarLeadCommandCenter');
         res.then((value) => {
@@ -67,9 +67,7 @@ return (
                     />
               </div>
             </div>
-        </main>
-        <Footer/>
-
+        </main>   
     </div>
 
   );

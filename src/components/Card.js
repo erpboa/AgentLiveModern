@@ -19,7 +19,228 @@ const Card = (props) => {
                 <div className="col-sm-4" id="ContenidoInfo">
                   <div className="row" id="contenido">
                       <div className="col-sm-12">
-                        <div className="card" id="CardPesonal">
+                      <div className="card card-primary card-outline">
+
+                        <div className="card-body box-profile">
+                          <div className="text-center">
+                              <div className="position-relative">
+                                <img src={props.foto} alt="Photo 2" className="profile-user-img img-fluid img-circle" />
+                                <div className="ribbon-wrapper ribbon-lg">
+                                  <div className="ribbon bg-success text-sm">
+                                    {props.type_lead}
+                                  </div>
+                                </div>
+                              </div>
+
+                            {/* <img className="profile-user-img img-fluid img-circle" src={props.foto} alt={props.nombre} /> */}
+                          </div>
+                          <h3 className="profile-username text-center">{props.nombre}</h3>
+                          <center>
+                          <a className="text-muted text-center">I am: &nbsp;                         
+                          <div className="btn-group">                                
+                                <button type="button" className="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  {props.type_lead}
+                                </button> 
+                                <div className="dropdown-menu">
+                                  <button className="dropdown-item" type="button">Buller</button>
+                                  <button className="dropdown-item" type="button">Seller</button>
+                                  <button className="dropdown-item" type="button">Lease</button>
+                                  <button className="dropdown-item" type="button">Buyer/Seller</button>
+                                </div>
+                              </div>
+                              </a>  
+                              </center>
+                              <br/>
+                          <ul className="list-group list-group-unbordered mb-3">
+                            <li className="list-group-item">
+                              <b>Phone:</b> <a className="float-right">
+                              <div className="btn-group">
+                                {props.telefono}&nbsp;
+                                <button type="button" className="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i className="fas fa-phone-alt"></i>
+                                </button> 
+                                <div className="dropdown-menu">
+                                  <button className="dropdown-item" type="button">2 Way Phone</button>
+                                  <button className="dropdown-item" type="button">Valid Number</button>
+                                  <button className="dropdown-item" type="button">Unknown</button>
+                                  <button className="dropdown-item" type="button">Do Not Call</button>
+                                  <button className="dropdown-item" type="button">Opted-Out</button>
+                                  <button className="dropdown-item" type="button">Wrong Number</button>
+                                </div>
+                              </div>
+                              </a>
+
+                            </li>
+                            <li className="list-group-item">
+                              <b>Mail:</b> <a className="float-right">
+                              <div className="btn-group">
+                              {props.correo}&nbsp;
+                              <button type="button" className="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i className="fas fa-envelope"></i>
+                              </button> 
+                              <div className="dropdown-menu">
+                                  <button className="dropdown-item" type="button">Valid Address</button>
+                                  <button className="dropdown-item" type="button">Unknown</button>
+                                  <button className="dropdown-item" type="button">2-Way Emailing</button>
+                                  <button className="dropdown-item" type="button">Opted-Out</button>
+                                  <button className="dropdown-item" type="button">Invalid Address</button>
+                              </div>
+                              </div></a>
+                            </li>  
+                            <li className="list-group-item">
+                              <b>Direccion:</b> <a className="float-right">                              
+                              <i class="fas fa-map-marked-alt"></i> 6919 South Jog Road, Peculiar, MO 64078
+                              </a>
+                            </li>
+                          </ul>
+                          {/* <a href="#" className="btn btn-primary btn-block"><b>Follow</b></a> */}
+                        </div>                 
+                       </div>
+                      {/* Acordion de datos */}
+                      <div id="accordion">
+                        {/* we are adding the .class so bootstrap.js collapse plugin detects it */}
+                        <div className="card card-primary">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                EXECUTIVE SUMMARY
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseOne" className="panel-collapse collapse in">
+                            <div className="card-body">
+                              4/18/20- not looking; using the site for other purposes; Albert; 
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-danger">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                CALL GOAL
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseTwo" className="panel-collapse collapse">
+                            <div className="card-body">
+                                Overdue
+                                Call now!
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-success">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                TASKS
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseThree" className="panel-collapse collapse">
+                            <div className="card-body">
+                              + ADD TASK
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-primary">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseFour">
+                                APPOINTMENTS
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseFour" className="panel-collapse collapse">
+                            <div className="card-body">
+                              + ADD APPOINTMENTS
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-success">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseFive">
+                                DETAILS
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseFive" className="panel-collapse collapse">
+                            <div className="card-body">
+                              <div className="card-body box-profile">    
+                                <ul className="list-group list-group-unbordered mb-3">
+                                  <li className="list-group-item">
+                                    <b>Phone:</b> <a className="float-right">{props.telefono}</a>
+                                  </li>
+                                  <li className="list-group-item">
+                                    <b>Mail:</b> <a className="float-right">{props.correo}</a>
+                                  </li>                            
+                                </ul>                               
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-primary">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapsesix">
+                                TAGS
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapsesix" className="panel-collapse collapse">
+                            <div className="card-body">
+                              + ADD TAGS
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-primary">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseseven">
+                                OPPORTUNITIES
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseseven" className="panel-collapse collapse">
+                            <div className="card-body">
+                              + ADD OPPORTUNITIES
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-primary">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapseeight">
+                                FILES
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapseeight" className="panel-collapse collapse">
+                            <div className="card-body">
+                              + ADD FILES
+                            </div>
+                          </div>
+                        </div>
+                        <div className="card card-primary">
+                          <div className="card-header">
+                            <h4 className="card-title">
+                              <a data-toggle="collapse" data-parent="#accordion" href="#collapsenine">
+                                CUSTOM FIELDS
+                              </a>
+                            </h4>
+                          </div>
+                          <div id="collapsenine" className="panel-collapse collapse">
+                            <div className="card-body">
+                              + CUSTOM FIELDS
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+
+
+                        {/* <div className="card" id="CardPesonal">
                           <h1>
                             <img id="ImagenAvatar" src={props.foto} className="card-img-top img-fluid rounded" alt="Avatar"/><b id="TituloCard">{props.nombre}</b>
                           </h1>
@@ -191,7 +412,7 @@ const Card = (props) => {
                               </div>
                             </div>
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                 </div>

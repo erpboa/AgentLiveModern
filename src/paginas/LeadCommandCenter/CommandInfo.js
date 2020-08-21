@@ -13,12 +13,9 @@ import './styles/LeadCommandCenterStyle.css';
 
 //import './style.css';
 import AvatarEjemplo from '../../image/AvatarEjemplo.png';
-import edit_icon from '../../image/edit_icon.png';
-import phone_icon from '../../image/phone.png';
-import mensaje_icon from '../../image/mensaje.png';
-import chat_icon from '../../image/chat.png';
-import net_icon from '../../image/net.png';
 import {ServiceRest} from "../../services/ServiceRest";
+import MenuPrincipal from '../../components/MenuPrincipal';
+
 const CommandInfo = (props) => {
   const {userContext} = useContext(UserContext);
   const {cambiarEstados} = useContext(CambiarEstados);
@@ -58,27 +55,15 @@ const CommandInfo = (props) => {
    }, []);
 
   return (
-    <div className={cambiarEstados}>
+    <div >
     {userContext === null && <Redirect to="/" />}
-    <MenuSuperior/>
-      <div id="layoutSidenav" >
-      <MenuLateral/>
-        <div id="layoutSidenav_content" className="contenedorCommadInfo">
-            <main>
-            <div className="container-fluid" id="contenedorDetalle">
-
-              <Card foto={AvatarEjemplo}
+      <MenuPrincipal Titulo="Lead Info" Componente={<Card foto={AvatarEjemplo}
                     nombre={nombre_lead}
                     telefono={telefono}
                     correo={correo}
                     type_lead={type_lead}
                     id_lead = {id_lead}
-              />
-              </div>
-            </main>
-            <Footer className="PiePagina"/>
-        </div>
-      </div>
+              />}/>
     </div>
   );
 }

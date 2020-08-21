@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import "../../components/styles/formLogin.css";
 import "../../components/styles/stylesMenu.css";
 import "../../components/icon/font-awesome-4.7.0/css/font-awesome.min.css";
-import Footer from "../../components/Footer";
 import SubAgent from "./SubAgent";
 import Teams from "./Teams";
 import LeadRouting from "./LeadRouting";
@@ -35,7 +34,7 @@ const ContenidoAgents = () => {
   }
 
   return (
-    <div id="layoutSidenav_content" >
+    <div>
       <div className="navbar">
       <div className="col-6"><span style={mystyle}>Agent Management </span>
       <a href="http://success.greatagentusa.com//hc/en-us/articles/360010934433-Turning-On-Off-Leads" target="_blank" alt="greatagentusa.com">Learn more about Agent Managemen</a>
@@ -69,8 +68,6 @@ const ContenidoAgents = () => {
           </Switch>
         </div>
       </Router>
-
-      <Footer />
     </div>
   );
 };

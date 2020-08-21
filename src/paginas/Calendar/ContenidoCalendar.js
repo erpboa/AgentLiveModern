@@ -6,13 +6,8 @@ import Footer from '../../components/Footer';
 
 const ContenidoCalendar = (props) => {
   return (
-    <div id="layoutSidenav_content">
-        <main>
-            <div className="container-fluid">
-              <h1 className="mt-4">Aqui poner el contenido Calendar</h1>
-            </div>
-        </main>
-        <Footer/>
+    <div>           
+      <h1>Aqui poner el contenido Calendar</h1>
     </div>
   );
 }

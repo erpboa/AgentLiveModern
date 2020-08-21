@@ -10,9 +10,7 @@ import { Notifications } from "./Notifications";
 
 const ContenidoSettings = (props) => {
   return (
-    <div id="layoutSidenav_content">
-      <main>
-        <div className="container-fluid">
+    <div>      
           <h3>Settings</h3>
           <Router>
             <div id="layoutSidenav">
@@ -41,9 +39,6 @@ const ContenidoSettings = (props) => {
             </div>
           </Router>
         </div>
-      </main>
-      <Footer />
-    </div>
   );
 };
 export default ContenidoSettings;

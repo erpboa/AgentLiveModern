@@ -1,23 +1,20 @@
-import React, {useContext} from 'react';
+import React, {useContext,useEffect} from 'react';
 import MenuSuperior from '../../components/MenuSuperior';
 import MenuLateral from '../../components/MenuLateral';
 import ContenidoLeadCommandCenter from './ContenidoLeadCommandCenter';
 import {UserContext} from "../../contexts/UserContext";
 import {CambiarEstados} from "../../contexts/CambiarEstados";
 import {Redirect} from "react-router-dom";
+import MenuPrincipal from '../../components/MenuPrincipal';
 
 const LeadCommandCenter = () => {
-  const {cambiarEstados} = useContext(CambiarEstados);
+
   const {userContext} = useContext(UserContext);
 
   if (userContext != null) {
     return (
-          <div className={cambiarEstados}>
-          <MenuSuperior/>
-          <div id="layoutSidenav">
-            <MenuLateral/>
-            <ContenidoLeadCommandCenter/>
-          </div>
+          <div>
+            <MenuPrincipal Titulo="Lead Command Center" Componente={<ContenidoLeadCommandCenter/>}/>
           </div>
     )
   } else {

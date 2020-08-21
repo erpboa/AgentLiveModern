@@ -1,22 +1,12 @@
 import React, {useContext} from 'react';
-import MenuSuperior from '../../components/MenuSuperior';
-import MenuLateral from '../../components/MenuLateral';
 import ContenidoGreatSheet from './ContenidoGreatSheet';
-import {CambiarEstados} from "../../contexts/CambiarEstados";
-
+import MenuPrincipal from '../../components/MenuPrincipal';
 const GreatSheet = () => {
-  const {cambiarEstados} = useContext(CambiarEstados)
 
   return (
-
-        <div className={cambiarEstados}>
-        <MenuSuperior/>
-        <div id="layoutSidenav">
-          <MenuLateral/>
-          <ContenidoGreatSheet/>
-        </div>
-        </div>
-
+    <div>
+      <MenuPrincipal Titulo="Great Sheet" Componente={<ContenidoGreatSheet/>}/>
+    </div>
   );
 }
 export default GreatSheet;
