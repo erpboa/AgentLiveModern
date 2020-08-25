@@ -1,4 +1,4 @@
-/**********************Estilo General para cambiar en toda la pagina web******************/
+/*********************Estilo General para cambiar en toda la pagina web******************/
 /*Cambiar colores a los nombres del Label*/
 #Letras{
   color:white;
@@ -7,7 +7,7 @@
 /****************************************/
 /*Cambia el Color de los Paneles*/
 #ColoresPaneles {
-  background: #10575C;
+  background: #393939;
   font-weight: 100;
 }
 /*********************************/
@@ -100,4 +100,21 @@
 .contenedorCommadInfo{
   overflow-x: hidden;
   overflow-y: hidden;
+}
+
+.BotonesMenuDerecha {
+  float: right;
+}
+
+#BotonesMenuDerechaSuperior {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  margin-left: 5px; 
+  text-decoration: none;  
+}
+
+#NombreUsuario{
+  white-space: normal;
+  margin-left: -40px;
 }

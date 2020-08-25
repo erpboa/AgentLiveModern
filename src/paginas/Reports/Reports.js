@@ -1,21 +1,14 @@
 import React, {useContext} from 'react';
-import MenuSuperior from '../../components/MenuSuperior';
-import MenuLateral from '../../components/MenuLateral';
 import ContenidoReports from './ContenidoReports';
-import {CambiarEstados} from "../../contexts/CambiarEstados";
+import MenuPrincipal from '../../components/MenuPrincipal';
 
 const Reports = () => {
-  const {cambiarEstados} = useContext(CambiarEstados)
 
   return (
 
-        <div className={cambiarEstados}>
-        <MenuSuperior/>
-        <div id="layoutSidenav">
-          <MenuLateral/>
-          <ContenidoReports/>
-        </div>
-        </div>
+    <div>
+      <MenuPrincipal Titulo="Reports" Componente={<ContenidoReports/>}/>
+    </div>
 
   );
 }

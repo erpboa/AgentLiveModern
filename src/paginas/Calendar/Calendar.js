@@ -1,19 +1,12 @@
 import React, {useContext} from 'react';
-import MenuSuperior from '../../components/MenuSuperior';
-import MenuLateral from '../../components/MenuLateral';
 import ContenidoCalendar from './ContenidoCalendar';
-import {CambiarEstados} from "../../contexts/CambiarEstados";
-
+import MenuPrincipal from '../../components/MenuPrincipal';
 const Calendar = (props) => {
-  const {cambiarEstados} = useContext(CambiarEstados);
+
   return (
 
-        <div className={cambiarEstados}>
-        <MenuSuperior/>
-        <div id="layoutSidenav">
-          <MenuLateral/>
-          <ContenidoCalendar/>
-        </div>
+        <div>
+            <MenuPrincipal Titulo="Calendar" Componente={<ContenidoCalendar/>}/>
         </div>
 
   );
