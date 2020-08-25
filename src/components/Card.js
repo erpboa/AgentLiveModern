@@ -6,7 +6,10 @@ import CallList from "./CallList";
 import TextList from "./TextList";
 import EmailList from "./EmailList";
 import PropertyList from "./PropertyList";
+import ActivitiesContainer from "./ActivitiesContainer";
 import { Tab, Icon, Menu, Label, Input } from 'semantic-ui-react';
+
+import PropertyProvider from '../contexts/PropertyContext';
 
 import edit_icon from '../image/edit_icon.png';
 import phone_icon from '../image/phone.png';
@@ -22,84 +25,6 @@ import FormEAlerts from "../paginas/LeadCommandCenter/FormEAlerts";
 import FormActionPlants from "../paginas/LeadCommandCenter/FormActionPlants";
 
 const Card = (props) => {
-
-  const panes = [
-    {
-      menuItem: 'All Activities',
-      render: () => <Tab.Pane attached={false}>
-        <AllActivityList
-            id_lead = {props.id_lead}
-            lead_name = {props.nombre}
-        />
-      </Tab.Pane>,
-    },
-    {
-      menuItem: (
-        <Menu.Item key='call'>
-          <Icon name="call"></Icon><Label>3</Label>
-        </Menu.Item>
-      ),
-      render: () => <Tab.Pane attached={false}>
-        <CallList
-            id_lead = {props.id_lead}
-            lead_name = {props.nombre}
-        />
-      </Tab.Pane>,
-    },
-    {
-      menuItem: (
-        <Menu.Item key='text'>
-          <Icon name="comment"></Icon><Label>3</Label>
-        </Menu.Item>
-      ),
-      render: () => <Tab.Pane attached={false}>
-        <TextList
-            id_lead = {props.id_lead}
-            lead_name = {props.nombre}
-        />
-      </Tab.Pane>,
-    },
-    {
-      menuItem: (
-        <Menu.Item key='email'>
-          <Icon name="mail"></Icon><Label>3</Label>
-        </Menu.Item>
-      ),
-      render: () => <Tab.Pane attached={false}>
-        <EmailList
-            id_lead = {props.id_lead}
-            lead_name = {props.nombre}
-        />
-      </Tab.Pane>,
-    },
-    {
-      menuItem:  (
-        <Menu.Item key='property'>
-          <Icon name="world"></Icon><Label>3</Label>
-        </Menu.Item>
-      ),
-      render: () => <Tab.Pane attached={false}>
-        <PropertyList
-            id_lead = {props.id_lead}
-            lead_name = {props.nombre}
-        />
-      </Tab.Pane>,
-    },
-      {
-          menuItem:  (
-              <Menu.Item key='search'>
-                  <Input icon='search' placeholder='Search...' />
-              </Menu.Item>
-          ),
-          render: () => <Tab.Pane attached={false}>
-              <PropertyList
-                  id_lead = {props.id_lead}
-                  lead_name = {props.nombre}
-              />
-          </Tab.Pane>,
-      }
-  ];
-
   return (
 
             <div className="container-fluid" id="contenedorPrincipalCardPersonal">
@@ -339,7 +264,9 @@ const Card = (props) => {
                           </div>
                         </div>
                         <div className="activity-content">
-                          <Tab menu={{ attached: false }} panes={panes} />
+                          <PropertyProvider>
+                            <ActivitiesContainer id_lead={props.id_lead} name={props.name} />
+                          </PropertyProvider>
                         </div>
                       </div>
                   </div>
