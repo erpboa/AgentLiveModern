@@ -106,7 +106,7 @@ const MenuPrincipal = (props) => {
       </li>      
     </ul>
     {/* SEARCH FORM */}
-    <form className="form-inline ml-3">
+    <form className="form-inline" id="FormBuscadorNavBar">
       <div className="input-group input-group-sm">
         <input className="form-control form-control-navbar" type="search" placeholder="Search" aria-label="Search" />
         <div className="input-group-append">
@@ -114,6 +114,7 @@ const MenuPrincipal = (props) => {
             <i id="iconos" className="fas fa-search" />
           </button>
         </div>
+        <button id="BotonesMenuDerechaSuperior" className="btn btn-primary" data-toggle="modal" data-target="#modalLead" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconos"></i> Add Lead</button>        
       </div>
     </form>
     {/* Boton Opciones Usuario */}
@@ -121,7 +122,7 @@ const MenuPrincipal = (props) => {
     <ul className="navbar-nav ml-auto">            
       <li className="nav-item">             
         <div className="BotonesMenuDerecha">
-          <button id="BotonesMenuDerechaSuperior" className="btn btn-primary" data-toggle="modal" data-target="#modalLead" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconos"></i> Add Lead</button>        
+          
           <button id="BotonesMenuDerechaSuperior" type="button" className="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i id="iconos" className="fas fa-user"></i>
           </button>

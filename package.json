@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "bootstrap": "^4.4.1",
     "jquery": "^3.5.1",
+    "pnotify": "^5.1.2",
     "popper.js": "^1.16.1",
     "pxp-client": "^2.1.16",
     "react": "^16.13.1",

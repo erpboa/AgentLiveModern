@@ -34,7 +34,7 @@ function App() {
   /*Esta Variable es la que mandara el inicio de sesion*/
   const [reloadComponent, setReloadComponent] = useState();
   const [userContext, setUserContext] = useState();
-  const [cambiarEstados, setCambiarEstados] = useState();
+  const [cambiarEstados, setCambiarEstados] = useState(false);
   const value = useMemo(()=> ({userContext, setUserContext}), [userContext, setUserContext]);
   const menu = useMemo(()=> ({cambiarEstados, setCambiarEstados}), [cambiarEstados, setCambiarEstados]);
   const reload = useMemo(()=> ({reloadComponent, setReloadComponent}), [reloadComponent, setReloadComponent]);
@@ -43,10 +43,10 @@ function App() {
     PxpClient.onAuthStateChanged((user) => {
       if (user) {
         setUserContext({user:user});
-        setCambiarEstados('sb-nav-fixed')
+        /* setCambiarEstados(true) */
       } else {
         setUserContext(null);
-        setCambiarEstados('sb-nav-fixed')
+        /* setCambiarEstados(false) */
       }
 
     });

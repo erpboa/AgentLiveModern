@@ -4,9 +4,19 @@ import './icon/font-awesome-4.7.0/css/font-awesome.min.css';
 import PxpClient from 'pxp-client';
 import {UserContext} from "../contexts/UserContext";
 import {Redirect,useHistory} from "react-router-dom";
+import {CambiarEstados} from "../contexts/CambiarEstados";
 
-const FormLogin = () => {
-  const {userContext} = useContext(UserContext)
+import '@pnotify/core/dist/PNotify.css';
+import '@pnotify/core/dist/BrightTheme.css';
+import { alert, notice, info, success, error} from '@pnotify/core';
+import * as PNotifyAnimate from '@pnotify/animate';
+
+
+
+const FormLogin = () => { 
+
+  const {userContext} = useContext(UserContext);
+  const {cambiarEstados, setCambiarEstados} = useContext(CambiarEstados);  
 
   const [cuenta, setCuenta] = useState('');
   const [password, setPassword] = useState('');
@@ -21,11 +31,27 @@ const FormLogin = () => {
     }
     const handleEnviar = e => {
         e.preventDefault();
-        PxpClient.login(cuenta, password);
+       var login = PxpClient.login(cuenta, password);
+       login.then((resp) => {       
+        if (resp!=undefined) {
+          if (resp.ROOT!=undefined) {
+            if (resp.ROOT.error === true) {
+              error({
+                text: resp.ROOT.detalle.mensaje,               
+              });
+            } 
+          }else {
+            setCambiarEstados(true);
+          }
+            
+        } else {
+          const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;          
+        }
+      })
         if (userContext != null) {
           history.push("/LeadCommandCenter");
         } else {
-          history.push("/");
+          history.push("/");          
         }
     }
   return (
