@@ -278,7 +278,32 @@
     font-size: 2em;
 }
 
+/*Menu content*/
 
+.activity-content {
+  overflow: hidden;
+  position: relative;
+}
+
+.activity-content .search-container {
+  width: 30%;
+  margin-right: 0;
+  margin-top: 0;
+  margin: 0 !important;
+  padding-top: 0;
+  padding: 0;
+  position: absolute;
+  top: 1.35em;
+  right: 1.5em;
+}
+
+.activity-content .segment .ui.icon.input {
+  width: 100%;
+}
+
+.activity-content .segment .ui.icon.input input {
+  height: 3em;
+}
 
 /*Sobreescribir Semantic.css*/
 

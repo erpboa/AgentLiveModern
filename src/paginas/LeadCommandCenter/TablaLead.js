@@ -3,6 +3,9 @@ import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import {NavLink} from 'react-router-dom';
 import Modal from '../../components/Modal';
 
+import moment from 'moment';
+import Currency  from '../../utilities/Currency';
+
 const TablaLead = ({ posts, loading }) => {
 
   const [estadoCheck, setEstadoCheck] = useState(false);
@@ -37,9 +40,8 @@ const TablaLead = ({ posts, loading }) => {
 /*Pendiente para hacer los modCheckboxAgent*/
   const cambiar = (id_leads) => {
     setIdLead([...id_lead,id_leads]);
-  }
+  };
   /*******************************************/
-
 return (
     <div>
     <Table className="table table-responsive table-bordered" id="TablaContenedor">
@@ -116,7 +118,8 @@ return (
                 <i className="fa fa-bolt" aria-hidden="true">{post.action_plan}</i>
               </Td>
               <Td>
-                 {post.ultima_visita}
+                 {moment.unix(post.ultima_visita).fromNow()} <br/>
+                 <span>last visit</span>
               </Td>
               <Td>
               <i className="fa fa-eye" aria-hidden="true"></i> {post.vistas}
@@ -128,7 +131,7 @@ return (
               <i className="fa fa-heart" aria-hidden="true"></i> {post.likes}
               </Td>
               <Td>
-                {post.price}
+                <span className="bold green-text">$ {Currency.currencyFormat(post.price)}</span>
               </Td>
               <Td>
                 {post.fecha_reg}
@@ -138,7 +141,7 @@ return (
                 <b id="nombreAgent">{post.agent_name}</b>
               </Td>
               <Td>
-                {post.lead_activity}
+                {moment.unix(post.lead_activity).fromNow()}
               </Td>
               <Td>
                 <button type="button" className="btn btn-link">Add</button>
