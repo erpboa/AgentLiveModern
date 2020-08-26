@@ -57,15 +57,13 @@ return (
 
     <div id="layoutSidenav_content">
         <main id="contenedorPrincipal">
-            <div classname="container-fluid" id="contenedorDetalle"> 
-            <TablaLead posts={currentPosts} loading={loading}/>
-              <div id="paginacion">
-                  <Paginacion
+            <div className="container-fluid" id="contenedorDetalle"> 
+             <TablaLead posts={currentPosts} loading={loading}/>  
+             <Paginacion
                       postsPerPage={postsPerPage}
                       totalPosts={posts.length}
                       paginate={paginate}
-                    />
-              </div>
+                    />           
             </div>
         </main>   
     </div>

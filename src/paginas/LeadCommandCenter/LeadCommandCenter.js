@@ -33,7 +33,7 @@ const LeadCommandCenter = () => {
   if (userContext != null) {       
     return (
           <div>
-            <MenuPrincipal Titulo="Lead Command Center" Componente={<ContenidoLeadCommandCenter/>}/>
+            <MenuPrincipal Componente={<ContenidoLeadCommandCenter/>}/>
           </div>
     )
   } else {

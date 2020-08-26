@@ -55,7 +55,7 @@ const Card = (props) => {
                                   {props.type_lead}
                                 </button> 
                                 <div className="dropdown-menu">
-                                  <button className="dropdown-item" type="button">Buller</button>
+                                  <button className="dropdown-item" type="button">Buyer</button>
                                   <button className="dropdown-item" type="button">Seller</button>
                                   <button className="dropdown-item" type="button">Lease</button>
                                   <button className="dropdown-item" type="button">Buyer/Seller</button>
@@ -102,7 +102,7 @@ const Card = (props) => {
                             </li>  
                             <li className="list-group-item">
                               <b>Direccion:</b> <a className="float-right">                              
-                              <i class="fas fa-map-marked-alt"></i> 6919 South Jog Road, Peculiar, MO 64078
+                              <i className="fas fa-map-marked-alt"></i> 6919 South Jog Road, Peculiar, MO 64078
                               </a>
                             </li>
                           </ul>
