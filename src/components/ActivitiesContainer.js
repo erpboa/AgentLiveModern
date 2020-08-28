@@ -78,6 +78,7 @@ const ActivitiesContainer = (props) => {
             id_lead = {props.id_lead}
             lead_name = {props.nombre}
             searchValue = {searchValue}
+            type = "property"
         />
       </Tab.Pane>,
     }
