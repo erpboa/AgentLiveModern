@@ -31,6 +31,10 @@
     color: blue;
 }
 
+.activity-content .menu .item i.icon.sticky.note {
+  color: #b5ce00;
+}
+
 .activity-content .menu .item .label {
     background: transparent;
     color: black;
@@ -255,7 +259,7 @@
     overflow: hidden;
 }
 .summary i.call, .summary .expanded-summary-main, .extra .editable-content__content,
-.summary i.comment, .summary i.home  {
+.summary i.comment, .summary i.home, .summary i.sticky.note  {
     float: left;
 }
 
@@ -274,7 +278,7 @@
     width: 50%;
 }
 
-.summary i.call, .summary i.comment, .summary i.home {
+.summary i.call, .summary i.comment, .summary i.home, .summary i.sticky.note {
     font-size: 2em;
 }
 

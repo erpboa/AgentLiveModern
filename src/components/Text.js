@@ -22,17 +22,17 @@ const Text = ({text, lead_name}) => {
                 <div class="summary_main__content expanded-summary-main">
                   <p>
                     <span>
-                      <span>Jonathan Santiago's</span>
+                      <span>{text.texter_name} </span>
                        text to 
                        <span class="name">
-                         <span>Karin Reilly</span>
-                       <span> failed to deliver</span>
-                       <a> (via Action Plan)</a>
-                      </span>
+                         <span> {lead_name}</span>
+                       { /*<span> failed to deliver</span>
+                       <a> (via Action Plan)</a>*/}
+                       </span>
                     </span>
                   </p>
                   <p>
-                    <span class="date" data-testid="activity-updated-at">3 hours ago</span>
+                    <span class="date" data-testid="activity-updated-at">{text.time_page}</span>
                   </p>               
                 </div>
               </div>
@@ -44,7 +44,8 @@ const Text = ({text, lead_name}) => {
       content: {
         content: (
           <div data-testid="extra-content" class="extra">
-            <div>
+            {text.message}
+            { /*<div>
               <div class="text-activity flex-row flex-row_gorizontal-start">
                 <a class="text-activity__property text-property-attachment" 
                   data-testid="text-property-attachment" 
@@ -78,7 +79,7 @@ const Text = ({text, lead_name}) => {
                   </span>
                 </p>
               </div>
-            </div>
+            </div>*/}
           </div>
         )
       }
