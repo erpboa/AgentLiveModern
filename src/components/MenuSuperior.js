@@ -1,6 +1,6 @@
 import React, {useContext, useState} from 'react';
 import './styles/formLogin.css';
-import './styles/stylesMenu.css';
+
 import './icon/font-awesome-4.7.0/css/font-awesome.min.css';
 import PxpClient from 'pxp-client';
 import {CambiarEstados} from "../contexts/CambiarEstados";

@@ -1,119 +1,103 @@
-import React, { useState, useEffect } from "react";
-import { dataTeam } from "./team.json";
+import React, { useState, useContext } from 'react';
+import TeamForm from './TeamForm';
+import { ServiceRest } from "../../services/ServiceRest";
+import { ReloadComponent } from "../../contexts/ReloadComponent";
+import $ from "jquery";
 
-export const SelectAgent = (props) => {
+const SelectAgent = ({
+    ...props
+}) => {
+    const { reloadComponent, setReloadComponent } = useContext(ReloadComponent)
+    const [users] = useState([...props.usernameList])
+    const [team, setTeam] = useState({...props.team})
+    
+    const handleChange = (event) => {
+        const { name, value, id } = event.target
 
-  const [items, setItems] = useState([]);
-  const [visible, setVisible] = useState(false)
-   
-  const addAgent = (e) => {
-    e.preventDefault();    
-    setVisible(false)
+        if (name === 'agents') {                 
+            const newUserObj = users.find(user => user.id_agent === value);
+            const data = {"id_agent": newUserObj.id_agent, "name": newUserObj.name, "lead_per_round": 0.00, "quantity": 0}
+            setTeam(prevTeam => ({
+                ...prevTeam,
+                [name]: prevTeam[name].concat(data),
+            }))
+                 
+        } else if (name === 'lead_per_round') {
+            
+            team.agents.find(user => {
+                if (user.id_agent === id) {
+                    user.lead_per_round = ((Number(value)/ 100) * 1000).toFixed(2)
+                    user.quantity = value 
+                    return user
+                }})            
+        }
+        
+        else if (name === 'name') {
+            setTeam(prevTeam => ({
+                ...prevTeam,
+                [name]: value,
+            }));
+        } else if (name === 'distribution_type') {
+            setTeam(prevTeam => ({
+                ...prevTeam,
+                [name]: value,
+            }));
+        }
+        
+    }
 
-    setItems(
-        items.concat(
-            { 
-                "id_agent": e.target.value                
-            })            
-        )    
-        dataTeam.agents.push(`{ 
-      "id_agent": ${e.target.value}}`)            
-  }
+    const insertTeam = async (e) => {
+        if (reloadComponent === undefined || reloadComponent === false) {
+          setReloadComponent(true);
+        } else {
+          setReloadComponent(false);
+        }
+        e.preventDefault();    
+        
+        const obj = {
+            name: team.name,
+            distribution_type: team.distribution_type,
+            agents: JSON.stringify(team.agents)
+        }
+        
+          ServiceRest("agent_portal/Team/insertarTeam", obj)
+            .then((resp) => {                
+              if (!resp.error) {
+                $("#modalTeam").modal("hide");
+              } else {
+                const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
+                alert(msg);
+              }
+            })
+            .catch((e) => console.error(e));
+        
+      };
+    const handleDeleteClick = (authority, id) => (event) => {
+        setTeam(prevTeam => ({
+            ...prevTeam,
+            [authority]: prevTeam[authority].filter(user => user.id_agent !== id),
+        }));
+    }
 
-  return (
-    <div>
-      <div className="form-row">
-        <div className="col">
-          <label id="Letras">
-            Agents
-            <strong className="text-danger" title="This is required">
-              *
-            </strong>
-          </label>
-          <select className="form-control" name="id_agent" onChange={addAgent}>
-            <option hidden defaultValue>
-              Select
-            </option>
-            {props.combo}
-          </select>
-        </div>
-        <div className="col">
-          <label>&nbsp;</label>
-          <select className="form-control" name="lead_per_round" hidden={visible}>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-          </select>
-        </div>
-        <div className="col" id="Letras">
-          <label>&nbsp;</label>
-          <div hidden={visible}>lead per round (100)%</div>
-        </div>
-        <div className="col">
-          <label>&nbsp;</label>
-          <div>
-            <button type="button" className="btn btn-sm" hidden={visible} >
-              <i
-                style={{ color: "white" }}
-                className="fa fa-trash-o fa-2x"
-                aria-hidden="true"
-              ></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      {items.map((e, i) => {                
-        return (
-          <div className="form-row" key={i}>
-            <div className="col">
-              <label id="Letras">
-                Agents
-                <strong className="text-danger" title="This is required">
-                  *
-                </strong>
-              </label>
-              <select
-                className="form-control"
-                name="id_agent"
-                onChange={addAgent}
-              >
-                <option hidden defaultValue>
-                  Select
-                </option>
-                {props.combo}
-              </select>
-            </div>
-            <div className="col">
-              <label>&nbsp;</label>
-              <select className="form-control" name="lead_per_round" hidden={visible}>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
-            <div className="col" id="Letras">
-              <label>&nbsp;</label>
-              <div hidden={visible}>lead per round (100)%</div>
-            </div>
-            <div className="col">
-              <label>&nbsp;</label>
-              <div>
-                <button type="button" className="btn btn-sm" hidden={visible} >
-                  <i
-                    style={{ color: "white" }}
-                    className="fa fa-trash-o fa-2x"
-                    aria-hidden="true"
-                  ></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
+    const usernameList = getUsersNotInTeam(users, team);
+    return (
+        <>
+            <TeamForm team={team}
+                usernameList={usernameList}                
+                handleChange={handleChange}
+                handleDeleteClick={handleDeleteClick}
+                insertTeam={insertTeam}
+            />
+        </>
+    )
+}
+
+export const getUsersNotInTeam = (usersList, team) => {  
+    const { agents = [] } = team;
+    return usersList.filter(user => {      
+        return !(agents.find(u => u.id_agent === user.id_agent));
+    });
+}
+
+
+export default SelectAgent;

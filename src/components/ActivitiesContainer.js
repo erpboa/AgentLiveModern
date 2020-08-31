@@ -103,7 +103,7 @@ const ActivitiesContainer = (props) => {
             id_lead = {props.id_lead}
             lead_name = {props.name}
             searchValue = {searchValue}
-            type="property"
+            type = "property"
         />
       </Tab.Pane>,
     }
@@ -126,6 +126,6 @@ const ActivitiesContainer = (props) => {
         />
       </Segment>
   ];
-}
+};
 
 export default ActivitiesContainer

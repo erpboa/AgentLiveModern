@@ -42,20 +42,18 @@ const TablaLead = ({ posts, loading }) => {
     setIdLead([...id_lead,id_leads]);
   };
   /*******************************************/
-return (
-    <div>
-    <Table className="table table-responsive table-bordered" id="TablaContenedor">
-        <Thead id="ColoresPaneles" >
+return (  
+
+      <div className='table-cont' id='table-cont'>
+    <Table className="table" id="TablaContenedor">
+        <Thead className="thead-dark">
           <Tr>
-            <Th className="AnchoCabTabla" id="Letras">
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" value="" id="defaultCheck1"/>
-                  <label className="form-check-label">
-                  </label>
-              </div>
+            <Th scope="col">           
+              <input type="checkbox" name="vehicle1" defaultValue="Bike" />
+              <label htmlFor="vehicle1"> </label>          
             </Th>
-            <Th className="AnchoCabTabla" id="Letras">Stage</Th>
             <Th className="AnchoCabTabla" id="Letras">Type</Th>
+            <Th className="AnchoCabTabla" id="Letras">Stage</Th>
             <Th className="AnchoCabTabla" id="Letras">Name</Th>
             <Th className="AnchoCabTabla" id="Letras">Phone</Th>
             <Th className="AnchoCabTabla" id="Letras">CallGoal</Th>
@@ -81,14 +79,8 @@ return (
         {posts.map(post => (
           <Tr key = {post.id_lead}>
               <Td>
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox"
-                value={estadoCheck}
-                name={post.id_lead}
-                onClick={(value) => cambiar(post.id_lead)} id="defaultUnchecked"/>
-                  <label className="form-check-label">
-                  </label>
-              </div>
+              <input type="checkbox" name="vehicle1" defaultValue="Bike" />
+              <label htmlFor="vehicle1"> </label>
               </Td>
               <Td>
                 stage
@@ -109,10 +101,10 @@ return (
                 <NavLink data-toggle="tooltip" data-placement="top" className="nav-link" to="#"><div>+ add {post.descripcion_tarea}</div></NavLink>
               </Td>
               <Td>
-                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => setDatosModalCalled(datosModalCalled)}><i className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
+                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => setDatosModalCalled(datosModalCalled)}><i aria-hidden="true" className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
               </Td>
               <Td>
-              <button type="button" id="BotonContenedor" className="btn btn-warning" data-toggle="modal" data-target="#modalEmails" name="modalEmails" onClick={(value) => setDatosModalEmails(datosModalEmails)}><i className="fa fa-share" id="ContenidoIcono" ></i>{post.emails}</button>
+              <button type="button" id="BotonContenedor" className="btn btn-warning" data-toggle="modal" data-target="#modalEmails" name="modalEmails" onClick={(value) => setDatosModalEmails(datosModalEmails)}><i aria-hidden="true" className="fa fa-share" id="ContenidoIcono" ></i>{post.emails}</button>
               </Td>
               <Td>
                 <i className="fa fa-bolt" aria-hidden="true">{post.action_plan}</i>
@@ -157,11 +149,14 @@ return (
               </Td>
             </Tr>
         ))}
-        </Tbody>
+        </Tbody>   
+        
       </Table>
       <Modal datos={datosModalCalled}/>
       <Modal datos={datosModalEmails}/>
       </div>
+      
+      
   );
 
 }
