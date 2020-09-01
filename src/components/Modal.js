@@ -2,6 +2,13 @@ import React,{useEffect,useState} from 'react';
 
 const Modal = (props) => {
 
+const saveDate = e => {
+  console.log("aqui llega los datos",props);
+}
+
+
+
+
 if (props.datos != undefined) {
   return (
   <div className="modal fade" id={props.datos.id_modal} role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -15,6 +22,10 @@ if (props.datos != undefined) {
             </div>
             <div className="modal-body">
               {props.datos.contenido}
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" className="btn btn-primary" onClick={saveDate}>Save changes</button>
             </div>
         </div>
       </div>

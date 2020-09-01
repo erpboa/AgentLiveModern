@@ -1,7 +1,7 @@
 /****************************************************************************************
 *@file FormLogCall.js
 *@author  (Maylee Perez Pastor)
-*@date 12-08-2020 
+*@date 12-08-2020
 *@description Componente Add FormLogCall
 *****************************************************************************************/
 
@@ -11,7 +11,7 @@ import { ServiceRest } from "../../services/ServiceRest";
 import { ReloadComponent } from "../../contexts/ReloadComponent";
 
 import './styles/FormLogCallStyle.css';
- 
+
 const FormLogCall = (props) => {
   const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
@@ -43,8 +43,8 @@ const FormLogCall = (props) => {
   };
   return (
     <div id="container-all-logCall">
-        
-        <div class="tab-content">        
+
+        <div className="tab-content">
             <div id="container-logCall">
                 <button type="button" className="btn btn-outline-success" id="bn-container-logCall"> Talked to Lead</button>
                 <button type="button" className="btn btn-outline-secondary" id="bn-container-logCall">Left Voicemail</button>
@@ -53,7 +53,7 @@ const FormLogCall = (props) => {
             <div  id="container-logCall">
                 <button type="button" className="btn btn-outline-warning" id="bn-container-logCall">Bad Time</button>
                 <button type="button" className="btn btn-outline-danger" id="bn-container-logCall">Opted Out</button>
-                <button type="button" className="btn btn-outline-danger" id="bn-container-logCall">Wrong Number</button>   
+                <button type="button" className="btn btn-outline-danger" id="bn-container-logCall">Wrong Number</button>
             </div>
         </div>
         <div id="container-logCall-det">
@@ -62,32 +62,32 @@ const FormLogCall = (props) => {
                     <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Add call notes here"></textarea>
                 </div>
             </form>
-            
+
         </div>
         <div id="container-logCall-footer">
             <form className="form-inline">
-                <div class="row">
-                    <div class="col">
+                <div className="row">
+                    <div className="col">
                         <div className="alert alert-secondary" role="alert" id= "text-phone">
                             to: {props.telefono}
                         </div>
                     </div>
-                    <div class="col">                        
+                    <div className="col">
                     </div>
-                    <div class="col">                        
+                    <div className="col">
                     </div>
-                    <div class="col">                        
+                    <div className="col">
                     </div>
-                    <div class="col">
+                    <div className="col">
                         <button type="button" /*onClick={insertTeam}*/ className="btn btn-primary" id="bn-logCall-footer" >
                             Save
                         </button>
                     </div>
                 </div>
-                
+
             </form>
         </div>
-      
+
     </div>
   );
 };

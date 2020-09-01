@@ -6,17 +6,27 @@ import {UserContext} from "../contexts/UserContext";
 import {Redirect,useHistory} from "react-router-dom";
 import {CambiarEstados} from "../contexts/CambiarEstados";
 
+/*importamos las librerias de PNotify*/
+import { alert, defaultModules } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css';
+import * as PNotifyMobile from '@pnotify/mobile';
+import '@pnotify/mobile/dist/PNotifyMobile.css';
+import * as PNotifyDesktop from '@pnotify/desktop';
+import * as PNotifyBootstrap4 from '@pnotify/bootstrap4';
 import '@pnotify/core/dist/BrightTheme.css';
-import { alert, notice, info, success, error} from '@pnotify/core';
+import * as PNotifyFontAwesome5 from '@pnotify/font-awesome5';
 import * as PNotifyAnimate from '@pnotify/animate';
+defaultModules.set(PNotifyBootstrap4, {});
+defaultModules.set(PNotifyFontAwesome5, {});
+defaultModules.set(PNotifyMobile, {});
+/*****************************************/
 
 
 
-const FormLogin = () => { 
+const FormLogin = () => {
 
   const {userContext} = useContext(UserContext);
-  const {cambiarEstados, setCambiarEstados} = useContext(CambiarEstados);  
+  const {cambiarEstados, setCambiarEstados} = useContext(CambiarEstados);
 
   const [cuenta, setCuenta] = useState('');
   const [password, setPassword] = useState('');
@@ -32,26 +42,32 @@ const FormLogin = () => {
     const handleEnviar = e => {
         e.preventDefault();
        var login = PxpClient.login(cuenta, password);
-       login.then((resp) => {       
+       login.then((resp) => {
         if (resp!=undefined) {
           if (resp.ROOT!=undefined) {
             if (resp.ROOT.error === true) {
-              error({
-                text: resp.ROOT.detalle.mensaje,               
-              });
-            } 
+              const myNotice = alert({
+                                      text: "Incorrect data please verify your information.",
+                                      type: 'error',
+                                      textTrusted: true,
+                                      closerHover: true,
+                                      modules: new Map([
+                                        ...defaultModules,
+                                      ])
+                                    });
+            }
           }else {
             setCambiarEstados(true);
           }
-            
+
         } else {
-          const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;          
+          const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
         }
       })
         if (userContext != null) {
           history.push("/LeadCommandCenter");
         } else {
-          history.push("/");          
+          history.push("/");
         }
     }
   return (

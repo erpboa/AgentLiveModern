@@ -1,4 +1,8 @@
 /*********************Estilo General para cambiar en toda la pagina web******************/
+body{
+  font-size: 1.2em !important;
+}
+
 /*Cambiar colores a los nombres del Label*/
 #Letras{
   color:white;
@@ -41,17 +45,17 @@
 }
 /*********************************************/
 /*Para que la tabla tenga scroll y no se distorcione*/
-#TablaContenedor{  
+#TablaContenedor{
   white-space: nowrap;
 }
 /******************************************/
 
 /**********El contenedor que contiene el contenido principal***************/
 #contenedorPrincipal{
-  height: 100%; 
+  height: 100%;
 }
 /***************************************************************************************/
-#ContenidoIcono{  
+#ContenidoIcono{
   float: left;
   left: -12px;
   padding: 6px 12px;
@@ -108,23 +112,22 @@
   float: left;
   color: #f2f2f2;
   text-align: center;
-  margin-left: 5px; 
-  text-decoration: none;  
+  margin-left: 5px;
+  text-decoration: none;
 }
 
 #NombreUsuario{
   white-space: normal;
   margin-left: -40px;
 }
-
 .table-cont{
   /**make table can scroll**/
-  height: 500px;
+  height: 90vh;
   overflow: auto;
+  padding:0px;
   /** add some style**/
   /*padding: 2px;*/
   background: #ddd;
   margin: 20px 10px;
   box-shadow: 0 0 1px 3px #ddd;
 }
-

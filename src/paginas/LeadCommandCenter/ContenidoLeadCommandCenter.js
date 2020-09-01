@@ -25,7 +25,7 @@ const {reloadComponent,setReloadComponent} = useContext(ReloadComponent);
 /*Crearemos la paginacion para los datos*/
 const [loading, setLoading] = useState(false);
 const [currentPage, setCurrentPage] = useState(1);
-const [postsPerPage] = useState(8);
+const [postsPerPage] = useState(20);
 const [posts, setPosts] = useState([]);
 
 
@@ -41,7 +41,7 @@ cargar la pagina por lo tanto llamamos a la funcion del listado*/
 
 /************************************************************/
    useEffect(() => {
-     const getData = () => {
+       const getData = () => {
         setLoading(true);
         const res = ServiceRest('agent_portal/Lead/listarLeadCommandCenter');
         res.then((value) => {
@@ -51,21 +51,20 @@ cargar la pagina por lo tanto llamamos a la funcion del listado*/
       };
       getData();
     }, [reloadComponent]);
+
 /*************************************************************************/
 
 return (
 
-    <div id="layoutSidenav_content">
-        <main id="contenedorPrincipal">
-            <div className="container-fluid" id="contenedorDetalle"> 
-             <TablaLead posts={currentPosts} loading={loading}/>  
-             <Paginacion
+    <div>
+             <TablaLead posts={currentPosts} loading={loading} paginacion={<Paginacion
                       postsPerPage={postsPerPage}
                       totalPosts={posts.length}
                       paginate={paginate}
-                    />           
-            </div>
-        </main>   
+                    />}/>
+
+
+
     </div>
 
   );

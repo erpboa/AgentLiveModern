@@ -9,6 +9,7 @@ import {ServiceRest} from "../services/ServiceRest";
 import $ from "jquery";
 import PxpClient from 'pxp-client';
 import {UserContext} from "../contexts/UserContext";
+import {useHistory} from "react-router-dom";
 
 const MenuPrincipal = (props) => {
 
@@ -16,24 +17,24 @@ const MenuPrincipal = (props) => {
   const {userContext} = useContext(UserContext);
 
   const [usuarioInicio, setUsuarioInicio] = useState();
-
+  let history = useHistory();
   /************************************************************/
   useEffect(() => {
     if (userContext != null) {
-      const user = userContext.user.user;      
-      setUsuarioInicio(user);      
+      const user = userContext.user.user;
+      setUsuarioInicio(user);
     }
    }, []);
 
-  
-  
+
+
   /*Aqui Creamos el Hook para el Estado Inicial para el Combo*/
   const [listaCombo, setListaCombo] = useState('Select');
   /***********************************************************/
 
   /***************Insertar un nuevo Lead********************/
     /*Creamos la variable que almacenara los Campos del Lead*/
-    const [dataLeadInsert, setLeadInsert] = useState();   
+    const [dataLeadInsert, setLeadInsert] = useState();
     /*******************************************************/
     /*Creamos el contexto para actualizar la tabla*/
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
@@ -68,7 +69,7 @@ const MenuPrincipal = (props) => {
     };
   /**************************************************************************************/
   /************************************************************/
-  
+
  /*Funcion para llamar al Servicio del ERP y Listar el Combo*/
  const llamarComboLead = e => {
   var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_types'};
@@ -88,6 +89,7 @@ const MenuPrincipal = (props) => {
     /****************Cerrar Sesion*****************/
     /*Funcion para Hacer Logout desde el Boton*/
         const cerrarSesion = e => {
+          history.push("/");
           PxpClient.logout();
       }
     /******************************************/
@@ -103,7 +105,7 @@ const MenuPrincipal = (props) => {
     <ul className="navbar-nav">
       <li className="nav-item">
         <a className="nav-link" data-widget="pushmenu" href="#" role="button"><i id="iconos" className="fas fa-bars" /></a>
-      </li>      
+      </li>
     </ul>
     {/* SEARCH FORM */}
     <form className="form-inline" id="FormBuscadorNavBar">
@@ -114,25 +116,25 @@ const MenuPrincipal = (props) => {
             <i id="iconos" className="fas fa-search" />
           </button>
         </div>
-        <button id="BotonesMenuDerechaSuperior" className="btn btn-primary" data-toggle="modal" data-target="#modalLead" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconos"></i> Add Lead</button>        
+        <button id="BotonesMenuDerechaSuperior" className="btn btn-primary" data-toggle="modal" data-target="#modalLead" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconos"></i> Add Lead</button>
       </div>
     </form>
     {/* Boton Opciones Usuario */}
-    
-    <ul className="navbar-nav ml-auto">            
-      <li className="nav-item">             
+
+    <ul className="navbar-nav ml-auto">
+      <li className="nav-item">
         <div className="BotonesMenuDerecha">
-          
+
           <button id="BotonesMenuDerechaSuperior" type="button" className="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i id="iconos" className="fas fa-user"></i>
           </button>
           <div className="dropdown-menu dropdown-menu-right" id="ColoresPaneles" >
-            <button className="dropdown-item" id ="HoverMenu" type="button" onClick={cerrarSesion}><i id="iconos" className="fas fa-door-open"></i> Logout</button>           
+            <button className="dropdown-item" id ="HoverMenu" type="button" onClick={cerrarSesion}><i id="iconos" className="fas fa-door-open"></i> Logout</button>
           </div>
-        </div>        
+        </div>
 
-      
-{/* 
+
+{/*
 
 
         <div className="btn-group">
@@ -140,11 +142,11 @@ const MenuPrincipal = (props) => {
           <i id="iconos" class="fas fa-user"></i>
           </button>
           <div className="dropdown-menu dropdown-menu-right">
-            <button className="dropdown-item" type="button"><i class="fas fa-sign-out-alt"></i> Logout</button>        
+            <button className="dropdown-item" type="button"><i class="fas fa-sign-out-alt"></i> Logout</button>
           </div>
         </div> */}
-      </li>      
-    </ul>    
+      </li>
+    </ul>
   </nav>
   {/* /.navbar */}
 
@@ -155,17 +157,17 @@ const MenuPrincipal = (props) => {
       <img src={Logo} alt="Live Modern" className="brand-image img-circle elevation-3" style={{opacity: '.8'}} />
       <span className="brand-text font-weight-light">Live Modern</span>
     </a>
-    
+
     {/* Sidebar */}
     <div className="sidebar" id="Letras">
     <div className="dropdown-divider"></div>
       {/* Datos del Usuario */}
       <div className="user-panel mt-1 pb-1 mb-1 d-flex">
         <div className="image">
-          <img src={User} className="img-circle elevation-2" alt="User Image" />          
-        </div>        
-        <div className="info" id="NombreUsuario">                   
-              <p className="info">{usuarioInicio}</p>           
+          <img src={User} className="img-circle elevation-2" alt="User Image" />
+        </div>
+        <div className="info" id="NombreUsuario">
+              <p className="info">{usuarioInicio}</p>
         </div>
       </div>
       <div className="dropdown-divider"></div>
@@ -174,40 +176,40 @@ const MenuPrincipal = (props) => {
         <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           {/* Add icons to the links using the .nav-icon class
          with font-awesome or any other icon font library */}
-          <li className="nav-item has-treeview menu-open">                      
-            <ul className="nav nav-treeview">                            
+          <li className="nav-item has-treeview menu-open">
+            <ul className="nav nav-treeview">
               <li className="nav-item">
                 <a className="nav-link" href="/LeadCommandCenter" id="HoverMenu"><i id="iconos" className="fa fa-tachometer"></i> <p>Lead Command Center</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Calendar" id="HoverMenu"><i id="iconos" className="fa fa-calendar"></i> <p>Calendar</p></a>                
-              </li>              
+                <a className="nav-link" href="/Calendar" id="HoverMenu"><i id="iconos" className="fa fa-calendar"></i> <p>Calendar</p></a>
+              </li>
               <li className="nav-item">
                 <a className="nav-link" href="/Oportunities" id="HoverMenu"><i id="iconos" className="fa fa-handshake-o"></i> <p>Oportunities</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/GreatSheet" id="HoverMenu"><i id="iconos" className="fa fa-file-o"></i> <p>Great Sheet</p></a>                
+                <a className="nav-link" href="/GreatSheet" id="HoverMenu"><i id="iconos" className="fa fa-file-o"></i> <p>Great Sheet</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/FeaturedListings" id="HoverMenu"><i id="iconos" className="fa fa-handshake-o"></i> <p>Featured</p></a>                
+                <a className="nav-link" href="/FeaturedListings" id="HoverMenu"><i id="iconos" className="fa fa-handshake-o"></i> <p>Featured</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Import" id="HoverMenu"><i id="iconos" className="fa fa-file-o"></i> <p>Import</p></a>                
+                <a className="nav-link" href="/Import" id="HoverMenu"><i id="iconos" className="fa fa-file-o"></i> <p>Import</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Marketing" id="HoverMenu"><i id="iconos" className="fa fa-newspaper-o"></i> <p>Marketing</p></a>                
+                <a className="nav-link" href="/Marketing" id="HoverMenu"><i id="iconos" className="fa fa-newspaper-o"></i> <p>Marketing</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Agents" id="HoverMenu"><i id="iconos" className="fa fa-users"></i> <p>Agents</p></a>                
+                <a className="nav-link" href="/Agents" id="HoverMenu"><i id="iconos" className="fa fa-users"></i> <p>Agents</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Reports" id="HoverMenu"><i id="iconos" className="fa fa-line-chart"></i> <p>Reports</p></a>                
+                <a className="nav-link" href="/Reports" id="HoverMenu"><i id="iconos" className="fa fa-line-chart"></i> <p>Reports</p></a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/Settings" id="HoverMenu"><i id="iconos" className="fa fa-cog"></i> <p>Settings</p></a>                
+                <a className="nav-link" href="/Settings" id="HoverMenu"><i id="iconos" className="fa fa-cog"></i> <p>Settings</p></a>
               </li>
             </ul>
-          </li> 
+          </li>
         </ul>
       </nav>
       {/* /.sidebar-menu */}
@@ -216,19 +218,19 @@ const MenuPrincipal = (props) => {
   </aside>
   {/* Content Wrapper. Contains page content */}
   <div className="content-wrapper">
-    {/* Content Header (Page header) */}    
+    {/* Content Header (Page header) */}
     {/* /.content-header */}
     {/* Main content */}
     <section className="content">
-      <div className="container-fluid">      
+      {/*<div className="container-fluid">  */}
         {props.Componente}
-      </div>{/* /.container-fluid */}
+      {/*</div>{/* /.container-fluid */}
     </section>
     {/* /.content */}
   </div>
   {/* /.content-wrapper */}
   <footer className="main-footer" id="ColoresPaneles">
-    <strong id="Letras">Copyright © 2020 <b>LiveModer</b></strong> All rights reserved.    
+    <strong id="Letras">Copyright © 2020 <b>LiveModer</b></strong> All rights reserved.
     <div className="float-right d-none d-sm-inline-block">
     <img src={Logo} alt="Live Modern" className="brand-image img-circle elevation-3" width="30"/>
       <span className="brand-text font-weight-light" id="Letras"> Live Modern</span>
@@ -236,7 +238,7 @@ const MenuPrincipal = (props) => {
   </footer>
 
          {/* Modal Formulario para agregar el Lad */}
-    
+
          <div className="modal fade" id="modalLead" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div className="modal-dialog">
         <div className="modal-content" id="ColoresPaneles">

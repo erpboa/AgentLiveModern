@@ -20,7 +20,6 @@ import {CambiarEstados} from "./contexts/CambiarEstados";
 import {ReloadComponent} from "./contexts/ReloadComponent";
 import {Redirect} from "react-router-dom";
 import PxpConfig from './Config/DatosGenerales';
-import MenuPrincipal from './components/MenuPrincipal';
 
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 
@@ -54,8 +53,7 @@ function App() {
 
 
   return (
-      <BrowserRouter>
-    <div>
+    <BrowserRouter >   
     {userContext === null && <Redirect to="/" />}
     <ReloadComponent.Provider value={reload}>
     <CambiarEstados.Provider value={menu}>
@@ -73,14 +71,12 @@ function App() {
             <Route path="/Agents" component={Agents}/>
             <Route path="/Reports" component={Reports}/>
             <Route path="/Settings" component={Settings}/>
-            <Route path="/MenuPrincipal" component={MenuPrincipal}/>
             <Route path="/NotFound" component={NotFound} />
             <Route path="*" component={NotFound} />
       </Switch>
       </UserContext.Provider>
       </CambiarEstados.Provider>
-      </ReloadComponent.Provider>
-    </div>
+      </ReloadComponent.Provider>   
     </BrowserRouter>
   );
 }

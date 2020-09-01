@@ -5,19 +5,103 @@ import Modal from '../../components/Modal';
 
 import moment from 'moment';
 import Currency  from '../../utilities/Currency';
+import TableFixed  from '../../utilities/TableFixed';
+import {ServiceRest} from "../../services/ServiceRest";
+import { ComboList } from '../../components/ComboList';
 
-const TablaLead = ({ posts, loading }) => {
+/*importamos las librerias de PNotify*/
+import { alert, defaultModules } from '@pnotify/core';
+import '@pnotify/core/dist/PNotify.css';
+import * as PNotifyMobile from '@pnotify/mobile';
+import '@pnotify/mobile/dist/PNotifyMobile.css';
+import * as PNotifyDesktop from '@pnotify/desktop';
+import * as PNotifyBootstrap4 from '@pnotify/bootstrap4';
+import '@pnotify/core/dist/BrightTheme.css';
+import * as PNotifyFontAwesome5 from '@pnotify/font-awesome5';
+import * as PNotifyAnimate from '@pnotify/animate';
+defaultModules.set(PNotifyBootstrap4, {});
+defaultModules.set(PNotifyFontAwesome5, {});
+defaultModules.set(PNotifyMobile, {});
+/*****************************************/
 
+const TablaLead = ({ posts, loading, paginacion }) => {
+  let action_rest = 'parametros/Catalogo/listarCatalogoCombo';
+  var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_type_stage'};
   const [estadoCheck, setEstadoCheck] = useState(false);
-  const [id_lead,setIdLead] = useState([]);
+  const [idLead,setIdLead] = useState(null);//Hooks para obtener el id Lead
+  const [listaCombo, setListaCombo] = useState();//Hooks para listar el combo Stage
+  const [datosRecibidos, setDatosRecibidos] = useState(posts.type_lead);//Hooks para recibir el id_lead
+  const [cambiarValor, setCambiarValor] = useState(false);//Hooks para Renderizar la tabla con el nuevo valor
+  /*Aqui Ponemos el Header de la tabla Fija*/
+  const scrollHandle = e => {
+    e.target.querySelector('thead').style.transform = 'translateY(' + e.target.scrollTop + 'px)';
+  }
+
+
+  useEffect(() => {
+       TableFixed.obtenerTabla('#table-cont').addEventListener('scroll',scrollHandle);
+  }, [posts,cambiarValor]);
+  /******************************************/
+
+  /*Creamos la variable que almacenara los Campos del Lead*/
+  const [dataLogCall, setLogCall] = useState();
+  /*******************************************************/
+
+  const enviarDatos = (e) => {
+      setLogCall({...dataLogCall,[e.target.name]: e.target.value,});
+  };
 
   /*Aqui llamamos el id Modal para tener un modal dianmico*/
   var formularioCalled = <form id="formularioLead">
-                            <div className="form-group">
-                              <label id="Letras">Add Call Notes</label>
-                              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <div className="card card-solid">
+                              <div className="card-body pb-0">
+                                <div className="row d-flex align-items-stretch"> 
+                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                      <div className="card"> 
+                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
+                                      </div>
+                                    </div>
+                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                      <div className="card">  
+                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
+                                      </div>
+                                    </div>
+                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                      <div className="card"> 
+                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
+                                      </div>
+                                    </div>
+                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                      <div className="card"> 
+                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
+                                      </div>
+                                    </div>
+                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                      <div className="card"> 
+                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
+                                      </div>
+                                    </div>
+                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
+                                      <div className="card"> 
+                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
+                                      </div>
+                                    </div>
+                                </div>
+                              </div>
                             </div>
+
+                           
+
+
+                            {/* <div className="form-group">
+                              <label id="Letras">Add Call Notes</label>
+                              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" onBlur = {enviarDatos}/>
+                            </div> */}
                           </form>;
+
+
+
+
   var formularioMails = <form id="formularioLead">
                             <div className="form-group row">
                               <label id="Letras" className="col-sm-2 col-form-label">For</label>
@@ -32,28 +116,33 @@ const TablaLead = ({ posts, loading }) => {
                           </form>;
 
   const [idModalCalled,setIdModalCalled] = useState("modalLlamadas");
+  const [envioId,setEnvioId] = useState();
   const [idModalEmails,setIdModalEmails] = useState("modalEmails");
   const [datosModalCalled,setDatosModalCalled] = useState({id_modal:idModalCalled,titulo:"Called",contenido:formularioCalled});
   const [datosModalEmails,setDatosModalEmails] = useState({id_modal:idModalEmails,titulo:"Emails",contenido:formularioMails});
   /********************************************************/
+  const [modalComponente,setmodalComponente] = useState();
 
-/*Pendiente para hacer los modCheckboxAgent*/
-  const cambiar = (id_leads) => {
-    setIdLead([...id_lead,id_leads]);
-  };
-  /*******************************************/
-return (  
+  const sentModal = (id_lead) => {
+    setEnvioId(id_lead);
+  }
 
-      <div className='table-cont' id='table-cont'>
-    <Table className="table" id="TablaContenedor">
+  useEffect(() => {
+    setmodalComponente(<Modal id_modal={idModalCalled} datos={datosModalCalled} id_lead={envioId}/>);
+  }, [envioId]);
+
+return (
+
+  <div className='table-cont' id='table-cont'>
+    <Table className="table">
         <Thead className="thead-dark">
           <Tr>
-            <Th scope="col">           
-              <input type="checkbox" name="vehicle1" defaultValue="Bike" />
-              <label htmlFor="vehicle1"> </label>          
+            <Th scope="col">
+              <input type="checkbox" />
+              <label> </label>
             </Th>
-            <Th className="AnchoCabTabla" id="Letras">Type</Th>
             <Th className="AnchoCabTabla" id="Letras">Stage</Th>
+            <Th className="AnchoCabTabla" id="Letras">Type</Th>
             <Th className="AnchoCabTabla" id="Letras">Name</Th>
             <Th className="AnchoCabTabla" id="Letras">Phone</Th>
             <Th className="AnchoCabTabla" id="Letras">CallGoal</Th>
@@ -75,7 +164,7 @@ return (
             <Th className="AnchoCabTabla" id="Letras">Tags</Th>
           </Tr>
         </Thead>
-        <Tbody id="CuerpoTabla">
+        <Tbody id="TablaContenedor">
         {posts.map(post => (
           <Tr key = {post.id_lead}>
               <Td>
@@ -83,13 +172,18 @@ return (
               <label htmlFor="vehicle1"> </label>
               </Td>
               <Td>
-                stage
+              <a className="btn btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value={post.id_lead}>
+                {post.stage}
+              </a>
+              <div className="dropdown-menu">
+                <ComboList  id_lead={post.id_lead}  action={action_rest}  params = {params} />
+              </div>
               </Td>
               <Td>
                 {post.type_lead}
               </Td>
               <Td>
-                <NavLink data-toggle="tooltip" data-placement="top" title={`${post.full_name}`} className="nav-link" to={`CommandInfo/Lead${post.id_lead}`}><div>{post.full_name}</div></NavLink>
+                <a data-toggle="tooltip" data-placement="top" title={`${post.full_name}`} className="nav-link" href={`CommandInfo/Lead${post.id_lead}`}>{post.full_name}</a>
               </Td>
               <Td>
                 {post.phone}
@@ -101,7 +195,7 @@ return (
                 <NavLink data-toggle="tooltip" data-placement="top" className="nav-link" to="#"><div>+ add {post.descripcion_tarea}</div></NavLink>
               </Td>
               <Td>
-                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => setDatosModalCalled(datosModalCalled)}><i aria-hidden="true" className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
+                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => sentModal(post.id_lead)}><i aria-hidden="true" className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
               </Td>
               <Td>
               <button type="button" id="BotonContenedor" className="btn btn-warning" data-toggle="modal" data-target="#modalEmails" name="modalEmails" onClick={(value) => setDatosModalEmails(datosModalEmails)}><i aria-hidden="true" className="fa fa-share" id="ContenidoIcono" ></i>{post.emails}</button>
@@ -149,14 +243,13 @@ return (
               </Td>
             </Tr>
         ))}
-        </Tbody>   
-        
+        </Tbody>
       </Table>
-      <Modal datos={datosModalCalled}/>
-      <Modal datos={datosModalEmails}/>
+      {modalComponente}
+      {paginacion}
       </div>
-      
-      
+
+
   );
 
 }
