@@ -29,7 +29,7 @@ const Property = ({property, lead_name}) => {
                       </span>
                   </p>
                   <p>
-                    <span data-testid="activity-updated-at">{property.time_page} ago</span>
+                    <span data-testid="activity-updated-at">{property.time_page}</span>
                   </p>
                 </div>
               </div>

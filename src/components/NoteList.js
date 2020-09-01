@@ -1,43 +1,43 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {ServiceRest} from "../services/ServiceRest";
-import Text from './Text';
+import Note from './Note';
 import { PropertyContext } from '../contexts/PropertyContext';
 
-const TextList = (props) => {
+const NoteList = (props) => {
 
-    const [texts, loadText] = useState([]);
+    const [notes, loadNote] = useState([]);
 
     const { searchValue, searchProperties, saveQuery, activityType, setActivityType } = useContext(PropertyContext);
 
-    setActivityType('text');
+    setActivityType('note');
 
-    //var Texts = Array();
-    const loadTextList = async () => {
+    //var Notes = Array();
+    const loadNoteList = async () => {
         var params = { start: 0, limit: 50, id_lead:props.id_lead, type:props.type, search_key:props.searchValue};
         ServiceRest('agent_portal/GreatSheet/listarGreatSheet',params).then((response) => {
-            loadText(response.datos);
-            console.log(response.datos);
+            loadNote(response.datos);
         });
     };
     useEffect(() => {
-        loadTextList();
+        loadNoteList();
     }, [searchValue]);
 
     return (
         <div>
-            { texts != null ?
-              (texts.map(t => renderText(t, props.lead_name))):
-              (<div>Nothing Texts</div>)
+            { notes != null ?
+              (notes.map(n => renderNote(n, props.lead_name))):
+              (<div>Nothing Notes</div>)
             }
         </div>
     );
 };
 
-const renderText = (t, lead_name) => {
-    const text = JSON.parse(t.jsondata);
+const renderNote = (n, lead_name) => {
+    const note = JSON.parse(n.jsondata);
     return (
-        <Text key={text.id_texts} text={text} lead_name={lead_name}/>
+        <Note key={note.id_note} note={note} lead_name={lead_name}/>
       );
   };
 
-export default TextList;
+
+export default NoteList;

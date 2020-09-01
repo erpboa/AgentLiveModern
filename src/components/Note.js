@@ -4,7 +4,7 @@ import "semantic-ui-css/semantic.min.css";
 import './styles/activity.css';
 
 
-const Call = ({call, lead_name}) => {
+const Note = ({note, lead_name}) => {
 
   const panel = [
     {
@@ -14,7 +14,7 @@ const Call = ({call, lead_name}) => {
           <div data-testid="summary-content" class="summary pointer">
             <div class="summary_main ">
               <div class="summary_main__wrapper" >
-                <Icon name="call" 
+                <Icon name="sticky note" 
                   data-testid="activity-timeline-icon" 
                   aria-hidden="true" 
                   class="phone circular icon icon_timeline icon_dark"
@@ -23,15 +23,15 @@ const Call = ({call, lead_name}) => {
                   <p>
                     <span>
                       <span class="capitalize">
-                      <span>{call.caller_name} </span>
-                      </span> called 
+                        <span>{note.noteer_name} </span>
+                      </span>  added a note to  
                       <span class="name">
-                      <span> {lead_name}</span>
+                        <span> {lead_name}</span>
                       </span>
                     </span>
                   </p>
                   <p>
-                    <span class="date" data-testid="activity-updated-at">{call.time_page}</span>
+                    <span class="date" data-testid="activity-updated-at">{note.time_page}</span>
                   </p>               
                 </div>
               </div>
@@ -45,15 +45,8 @@ const Call = ({call, lead_name}) => {
           <div data-testid="extra-content" class="extra">
             <div class="editable-content touch-area">
               <div class="editable-content__content">
-                <p class="extra-line" data-testid="call-outcome">
-                  <strong>Outcome:</strong> {call.type}
-                </p>
-                <p class="extra-line" data-testid="call-duration">
-                  <strong>Duration:</strong> {call.duration}
-                </p>
-                <p data-testid="call-notes">
-                  <strong>Notes: </strong>
-                  <span class="multiline-text">{call.notes}</span>
+                <p class="extra-line" data-testid="Note-outcome">
+                  {note.descripcion}
                 </p>
               </div>
               <Icon name="edit"></Icon>
@@ -68,4 +61,4 @@ const Call = ({call, lead_name}) => {
     <Accordion defaultActiveIndex={0} panels={panel} />
   );
 };
-export default Call;
+export default Note;

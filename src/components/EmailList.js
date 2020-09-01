@@ -8,7 +8,7 @@ const EmailList = (props) => {
 
     //var Emails = Array();
     const loadEmailList = async () => {
-        var params = { start: 0, limit: 50, id_lead:props.id_lead};
+        var params = { start: 0, limit: 50, id_lead:props.id_lead, type: props.type};
         ServiceRest('agent_portal/GreatSheet/listarGreatSheet',params).then((response) => {
             loadEmail(response.datos);
         });

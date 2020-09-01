@@ -6,15 +6,16 @@ export const PropertyContext = createContext();
 
 const PropertyProvider = (props) => {
 
-    const [properties, saveProperties] = useState([]);
+    //const [properties, saveProperties] = useState([]);
     const [searchValue, searchProperties] = useState('');
+    const [activityType, setActivityType] = useState('');
 
     const [query, saveQuery] = useState(false);
 
-    useEffect(() => {
+    /*useEffect(() => {
         if(query) {
             const getProperties = async () => {
-              var params = { start: 0, limit: 50, id_lead:'98', search_key:searchValue};
+              var params = { start: 0, limit: 50, id_lead:'98', type:activityType, search_key:searchValue};
               ServiceRest('agent_portal/GreatSheet/listarGreatSheet',params).then((response) => {
                   saveProperties(response.datos);
               });
@@ -23,20 +24,22 @@ const PropertyProvider = (props) => {
             getProperties();
         }
 
-    }, [searchValue]);
+    }, [searchValue]);*/
 
-    return ( 
+    return (
         <PropertyContext.Provider
             value={{
-                properties,
-                searchProperties, 
+                //properties,
+                searchProperties,
                 saveQuery,
-                searchValue
+                searchValue,
+                activityType,
+                setActivityType
             }}
         >
             {props.children}
         </PropertyContext.Provider>
-     );
-}
- 
+    );
+};
+
 export default PropertyProvider;
