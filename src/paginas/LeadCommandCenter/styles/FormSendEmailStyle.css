@@ -1,48 +1,3 @@
-#chooseEAlerts{
-    float: right;
-    margin: 5px 10px 10px 0px;
-}
-#Formulario_EAlert{
-    font-size: small;
-}
-#style_subtitulos{
-    color: #007bff;
-}
-#formatoform_city{
-    margin: 0px 0px 0px 118px;
-}#formato_zip{
-     margin: 0px 0px 0px 133px;
- }
-#formatoform_neigh{
-    margin: 0px 0px 0px 65px;
-}
-#formatoform_location{
-    margin: 0px 0px 0px 46px;
-}
-#formatoform_county{
-    margin: 0px 0px 0px 110px;
-}
-#formatoform_school{
-    margin: 0px 0px 0px 110px;
-}
-#style-position-right{
-    width: 300px;
-    float: right;
-
-    /*background: #00BDCB;*/
-}
-#style-position-left{
-    width: 180px;
-    float: left;
-
-    /*background: #4e555b;*/
-}
-#label_left{
-    float: left;
-}
-#size_option{
-    width: 220px;
-}
 #style_input_email{
     border: none;
     width: 600px;
@@ -104,15 +59,16 @@
     justify-content: center;
 }
 
-#btn_alert_cancel{
-    margin: 0px 270px 0px 2px;
+#btn_use_template{
+    /*margin: 20px 270px 20px 2px;*/
+    height: 100%;
+    width: 100%;
 }
-#btn_alert_savetem{
-    margin: 0px 10px 0px 0px;
+#btn_send_email{
+    /*margin: 20px 0px 20px 120px;*/
+    height: 100%;
+    width: 100%;
 }
-#btn_alert_preview{
-    margin: 0px 10px 0px 0px;
-}
-#btn_alert_save{
-    margin: 0px 0px 0px 0px;
+#container-sendemaile-footer{
+    margin: 20px 20px 10px 5px;
 }

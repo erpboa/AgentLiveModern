@@ -1,34 +1,34 @@
 /****************************************************************************************
-*@file FormEAlerts.js
-*@author  (Maylee Perez Pastor)
-*@date 12-08-2020 
-*@description Componente Add FormEAlerts
-*****************************************************************************************/
+ *@file FormEAlerts.js
+ *@author  (Maylee Perez Pastor)
+ *@date 12-08-2020
+ *@description Componente Add FormEAlerts
+ *****************************************************************************************/
 
 
-import React, { useState, useEffect, useContext } from "react";
-import { ServiceRest } from "../../services/ServiceRest";
-import { ReloadComponent } from "../../contexts/ReloadComponent";
+import React, {useState, useEffect, useContext} from "react";
+import {ServiceRest} from "../../services/ServiceRest";
+import {ReloadComponent} from "../../contexts/ReloadComponent";
 
 import './styles/FormEAlertsStyle.css';
 
-import {Redirect,useHistory} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
+import FormEAlertsRegistro from "./FormEAlertsRegistro";
 
 
 const FormEAlerts = (props) => {
-  const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
+  const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
   const [dataTeam, setDataTeam] = useState();
 
-  //nueva ventana añadir
-//  const { onFormEAlertsRegistro } = FormEAlertsRegistro();
+  const id_lead = props.match.params.id_lead;
 
 
   // List data table
   const getData = async () => {
     ServiceRest("agent_portal/Team/listarTeam")
-      .then((res) => setDataTeam(res.datos))
-      .catch((err) => setErrors(err));
+        .then((res) => setDataTeam(res.datos))
+        .catch((err) => setErrors(err));
   };
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const FormEAlerts = (props) => {
 
   // Delete Team
   const deleteTeam = (id) => {
-    let p_delete = { id_team: id };
+    let p_delete = {id_team: id};
     ServiceRest("agent_portal/Team/eliminarTeam", p_delete).then((resp) => {
       if (!resp.error) {
         getData()
@@ -49,82 +49,85 @@ const FormEAlerts = (props) => {
     });
   };
 
-   /* const [show, setShow] = useState(false);
-    const handleShow = () => setShow(true);*/
-  let history = useHistory();
 
-  const handleShow = e => {
-    e.preventDefault();
-      history.push("./paginas/LeadCommandCenter/FormEAlertsRegistro");
+  const [cart, setCart] = useState(false);
+
+
+  function addItemToCart(e) {
+    setCart(true)
+
   }
 
   return (
-    <div>
+      <div>
 
-        <div>
-          {dataTeam && (
-            <div className="container-fluid">
-              <div>
-
-                <button  type="button"   className="btn btn-primary" id="chooseActionPlan" onClick={handleShow}>Add E-Alert </button>
-
-              </div>
-
-                <div >
+        <div className="container-fluid">
 
 
-                </div>
+          { (cart) ?
+
+              <FormEAlertsRegistro id_lead = {id_lead}/>
+              : <div className="cart">
+
+                <button type="button" className="btn btn-primary" id="chooseActionPlan" onClick={addItemToCart}
+                        name="FormEAlertsShow">Add E-Alert
+                </button>
+
+                {dataTeam && (
+
+                    <div>
+                      <div className="table-responsive">
+
+                        <table className="table table-bordered table-hover">
+                          <thead>
+                          <tr>
+                            <th scope="col">Subject</th>
+                            <th scope="col">Price Range</th>
+                            <th scope="col">Frequency</th>
+                            <th scope="col">Last Sent</th>
+                            <th scope="col">Action</th>
+                          </tr>
+                          </thead>
+                          <tbody>
+                          {dataTeam.map((e, i) => (
+                              <tr key={i}>
+                                <td>{e.name}</td>
+                                <td>{e.distribution_type}</td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                  <div>
+                                    <button type="button" className="btn btn-sm">
+                                      <i className="fa fa-edit fa-2x"></i>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm"
+                                        onClick={(value) => deleteTeam(e.id_team)}
+                                    >
+                                      <i
+                                          style={{color: "#DC143C"}}
+                                          className="fa fa-trash-o fa-2x"
+                                          aria-hidden="true"
+                                      ></i>
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                          ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                )}
 
 
-              <div className="table-responsive">
-                <table className="table table-bordered table-hover">
-                  <thead>
-                    <tr>
-                      <th scope="col">Subject</th>
-                      <th scope="col">Price Range</th>
-                      <th scope="col">Frequency</th>
-                      <th scope="col">Last Sent</th>
-                      <th scope="col">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {dataTeam.map((e, i) => (
-                      <tr key={i}>
-                        <td>{e.name}</td>
-                        <td>{e.distribution_type}</td>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <div>
-                            <button type="button" className="btn btn-sm">
-                              <i clFormLogCallassName="fa fa-edit fa-2x"></i>
-                            </button>
-                            <button
-                              type="button"
-                              className="btn btn-sm"
-                              onClick={(value) => deleteTeam(e.id_team)}
-                            >
-                              <i
-                                style={{ color: "#DC143C" }}
-                                className="fa fa-trash-o fa-2x"
-                                aria-hidden="true"
-                              ></i>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+              </div> }
+
         </div>
 
 
-
-
-    </div>
+      </div>
   );
 };
 

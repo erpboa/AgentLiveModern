@@ -1,25 +1,28 @@
 /****************************************************************************************
-*@file FormSendText.js
-*@author  (Maylee Perez Pastor)
-*@date 12-08-2020 
-*@description Componente Add FormSendText
-*****************************************************************************************/
+ *@file FormSendText.js
+ *@author  (Maylee Perez Pastor)
+ *@date 12-08-2020
+ *@description Componente Add FormSendText
+ *****************************************************************************************/
 
 
 import React, { useState, useEffect, useContext } from "react";
 import { ServiceRest } from "../../services/ServiceRest";
 import { ReloadComponent } from "../../contexts/ReloadComponent";
 
+import './styles/FormSendTextStyle.css';
+
 const FormSendText = (props) => {
   const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
   const [dataTeam, setDataTeam] = useState();
 
+
   // List data table
   const getData = async () => {
     ServiceRest("agent_portal/Team/listarTeam")
-      .then((res) => setDataTeam(res.datos))
-      .catch((err) => setErrors(err));
+        .then((res) => setDataTeam(res.datos))
+        .catch((err) => setErrors(err));
   };
 
   useEffect(() => {
@@ -40,9 +43,26 @@ const FormSendText = (props) => {
     });
   };
   return (
-    <div>
-       <h3>Contenido Send Text</h3>
-    </div>
+      <div>
+        <div className="container-fluid">
+
+          <h5>Text History</h5>
+          <div className="card w-100">
+            <div className="card-body" id="size_card_tex">
+              <p className="card-text"> </p>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="exampleFormControlTextarea1">Message</label>
+            <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Type message here"> </textarea>
+          </div>
+
+          <div>
+          </div>
+
+        </div>
+      </div>
   );
 };
 

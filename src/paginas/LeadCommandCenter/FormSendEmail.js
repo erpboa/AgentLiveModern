@@ -1,50 +1,79 @@
 /****************************************************************************************
-*@file FormSendEmail.js
-*@author  (Maylee Perez Pastor)
-*@date 12-08-2020 
-*@description Componente Add FormSendEmail
-*****************************************************************************************/
+ *@file FormSendEmail.js
+ *@author  (Maylee Perez Pastor)
+ *@date 12-08-2020
+ *@description Componente Add FormSendEmail
+ *****************************************************************************************/
 
 
-import React, { useState, useEffect, useContext } from "react";
-import { ServiceRest } from "../../services/ServiceRest";
-import { ReloadComponent } from "../../contexts/ReloadComponent";
+import React, {useState, useEffect, useContext} from "react";
+import {ServiceRest} from "../../services/ServiceRest";
+import {ReloadComponent} from "../../contexts/ReloadComponent";
+
+import './styles/FormSendEmailStyle.css';
+import $ from "jquery";
 
 const FormSendEmail = (props) => {
-  const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
+  const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
-  const [dataTeam, setDataTeam] = useState();
 
-  // List data table
-  const getData = async () => {
-    ServiceRest("agent_portal/Team/listarTeam")
-      .then((res) => setDataTeam(res.datos))
-      .catch((err) => setErrors(err));
-  };
+  const value_id_lead =props.match.params.id_lead;
+
+  /*************** List data table ********************/
+
+
 
   useEffect(() => {
-    getData();
-  }, [reloadComponent]);
+    if (value_id_lead != null || value_id_lead != '') {
+      //getData();
+    }
 
-  // Delete Team
-  const deleteTeam = (id) => {
-    let p_delete = { id_team: id };
-    ServiceRest("agent_portal/Team/eliminarTeam", p_delete).then((resp) => {
+  }, []);
+
+
+  /***************Insertar un nuevo Lead********************/
+  /*Creamos la variable que almacenara los Campos del Lead*/
+  const [dataLeadInsert, setLeadInsert] = useState();
+
+  /********Llamamos a la funcion para recuperar los datos de cada Campo cuando se cambie del input*****/
+  const enviarDatos = (e) => {
+    setLeadInsert({...dataLeadInsert, [e.target.name]: e.target.value,});
+  };
+  /****************************************************************************************************/
+
+  /*******Aqui llamamos al boton de Agregar un nuevo call y mandar los datos al ERP*******/
+  const insertLead = async (e) => {
+    if (reloadComponent == undefined || reloadComponent == false) {
+      setReloadComponent(true);
+    } else {
+      setReloadComponent(false);
+    }
+    e.preventDefault();
+    /*Llamamos al servicio ServiceRest para mandar la url y los parametros para hacer inserccion*/
+    var insertar = ServiceRest('agent_portal/Call/insertarCall', dataLeadInsert);
+    insertar.then((resp) => {
       if (!resp.error) {
-        getData()
+        $("#modalLead").modal("hide");
       } else {
         const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
-        setErrors(msg);
-        alert(hasError);
+        alert(msg);
       }
-    });
+    })
+
+
   };
+
+
   return (
-      <div className="col-md-9">
+
+
+
+
+      <div className="tab-content">
+
+
         <div className="card card-primary card-outline">
-          <div className="card-header">
-            <h3 className="card-title">Compose New Message</h3>
-          </div>
+
           {/* /.card-header */}
           <div className="card-body">
             <div className="form-group">
@@ -54,7 +83,28 @@ const FormSendEmail = (props) => {
               <input className="form-control" placeholder="Subject:" />
             </div>
             <div className="form-group">
-              <textarea id="compose-textarea" className="form-control" style={{height: 300}} defaultValue={"                      <h1><u>Heading Of Message</u></h1>\n                      <h4>Subheading</h4>\n                      <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain\n                        was born and I will give you a complete account of the system, and expound the actual teachings\n                        of the great explorer of the truth, the master-builder of human happiness. No one rejects,\n                        dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know\n                        how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again\n                        is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,\n                        but because occasionally circumstances occur in which toil and pain can procure him some great\n                        pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,\n                        except to obtain some advantage from it? But who has any right to find fault with a man who\n                        chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that\n                        produces no resultant pleasure? On the other hand, we denounce with righteous indignation and\n                        dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so\n                        blinded by desire, that they cannot foresee</p>\n                      <ul>\n                        <li>List item one</li>\n                        <li>List item two</li>\n                        <li>List item three</li>\n                        <li>List item four</li>\n                      </ul>\n                      <p>Thank you,</p>\n                      <p>John Doe</p>\n                    "} />
+                                    <textarea id="compose-textarea" className="form-control" style={{height: 300}}
+                                              defaultValue={"                      <h1><u>Heading Of Message</u></h1>\n                      <h4>Subheading</h4>\n                      " +
+                                              "<p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain\n                        " +
+                                              "was born and I will give you a complete account of the system, and expound the actual teachings\n                        " +
+                                              "of the great explorer of the truth, the master-builder of human happiness. No one rejects,\n                        " +
+                                              "dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know\n                        " +
+                                              "how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again\n                        " +
+                                              "is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain,\n                        " +
+                                              "but because occasionally circumstances occur in which toil and pain can procure him some great\n                        " +
+                                              "pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise,\n                        " +
+                                              "except to obtain some advantage from it? But who has any right to find fault with a man who\n                        " +
+                                              "chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that\n                        " +
+                                              "produces no resultant pleasure? On the other hand, we denounce with righteous indignation and\n                        " +
+                                              "dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so\n                        " +
+                                              "blinded by desire, that they cannot foresee</p>\n                      <ul>\n                        " +
+                                              "<li>List item one</li>\n                        " +
+                                              "<li>List item two</li>\n                        <" +
+                                              "li>List item three</li>\n                        " +
+                                              "<li>List item four</li>\n                      " +
+                                              "</ul>\n                      " +
+                                              "<p>Thank you,</p>\n                      " +
+                                              "<p>John Doe</p>\n                    "} />
             </div>
             <div className="form-group">
               <div className="btn btn-default btn-file">
@@ -76,6 +126,11 @@ const FormSendEmail = (props) => {
         </div>
         {/* /.card */}
       </div>
+
+
+
+
+
   );
 };
 

@@ -345,36 +345,35 @@ const Card = props => {
                                         <Link to="/LeadCommandCenter/FormLogCall" className="nav-link" aria-selected="true" name="logCall">Log Call</Link>
                                       </li>
                                       <li className="nav-item">
-                                        <Link to="/LeadCommandCenter/FormSendText" className="nav-link" aria-selected="false" name="sendText">Send Text</Link>
+                                        <a href={`/CommandInfo/Lead${props.id_lead}/FormSendText`} className="nav-link" aria-selected="false" name="sendText">Send Text</a>
                                       </li>
                                       <li className="nav-item">
-                                        <Link to="/LeadCommandCenter/FormSendEmail" className="nav-link"  aria-selected="false" name="SedEmail">Send Email</Link>
+                                        <a href={`/CommandInfo/Lead${props.id_lead}/FormSendEmail${props.id_lead}`} className="nav-link"  aria-selected="false" name="SedEmail">Send Email</a>
                                       </li>
                                       <li className="nav-item">
-                                        <Link to="/LeadCommandCenter/FormAddNote" className="nav-link" name="addNote">Add Note</Link>
+                                        <a href={`/CommandInfo/Lead${props.id_lead}/FormAddNote${props.id_lead}`} className="nav-link" name="addNote">Add Note</a>
                                       </li>
                                       <li className="nav-item">
-                                        <Link to="/LeadCommandCenter/FormEAlerts" className="nav-link" name="Alerts">E-Alerts</Link>
+                                        <a href={`/CommandInfo/Lead${props.id_lead}/FormEAlerts${props.id_lead}`} className="nav-link" name="Alerts">E-Alerts</a>
                                       </li>
                                       <li className="nav-item">
-                                        <Link to="/LeadCommandCenter/FormActionPlants" className="nav-link" name="actionPlants">Action Plants</Link>
+                                        <a href={`/CommandInfo/Lead${props.id_lead}/FormActionPlants${props.id_lead}`} className="nav-link" name="actionPlants">Action Plants</a>
                                       </li>
                                     </ul>
 
                                     {/* </div>             */}
                                   </nav>
-                                  <div>
-                                  </div>
 
                                   <Switch>
                                     {/* <Route path="/LeadCommandCenter/FormLogCall" component={FormLogCall} exact={true}/> */}
                                     <Route path="./Componets/Card" component={FormLogCall} exact={true}/>
-                                    <Route path="/LeadCommandCenter/FormSendText" component={FormSendText}/>
-                                    <Route path="/LeadCommandCenter/FormSendEmail" component={FormSendEmail}/>
-                                    <Route path="/LeadCommandCenter/FormAddNote" component={FormAddNote}/>
-                                    <Route path="/LeadCommandCenter/FormEAlerts" component={FormEAlerts}/>
-                                    <Route path="/LeadCommandCenter/FormActionPlants" component={FormActionPlants}/>
-                                    <FormLogCall telefono={props.telefono} />
+                                    <Route path="/CommandInfo/Lead:id_lead/FormSendText" component={FormSendText}/>
+                                    <Route path="/CommandInfo/Lead:id_lead/FormSendEmail:id_lead" component={FormSendEmail}/>
+                                    <Route path="/CommandInfo/Lead:id_lead/FormAddNote:id_lead" component={FormAddNote}/>
+                                    <Route path="/CommandInfo/Lead:id_lead/FormEAlerts:id_lead" component={FormEAlerts}/>
+                                    <Route path="/CommandInfo/Lead:id_lead/FormActionPlants:id_lead" component={FormActionPlants}/>
+                                    <FormLogCall telefono={props.telefono}
+                                                 id_lead = {props.id_lead} />
                                   </Switch>
                                 </div>
                               </Router>
