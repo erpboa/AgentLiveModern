@@ -25,15 +25,25 @@ const {reloadComponent,setReloadComponent} = useContext(ReloadComponent);
 /*Crearemos la paginacion para los datos*/
 const [loading, setLoading] = useState(false);
 const [currentPage, setCurrentPage] = useState(1);
-const [postsPerPage] = useState(20);
+const [postsPerPage,setPostsPerpage] = useState(20);
 const [posts, setPosts] = useState([]);
+const [cantDatos, setCantDatos] = useState();
 
-
+const [siguienteData, setSiguienteData] = useState(0);
 const indexOfLastPost = currentPage * postsPerPage;
 const indexOfFirstPost = indexOfLastPost - postsPerPage;
-const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+const currentPosts = posts;
 
-const paginate = pageNumber => setCurrentPage(pageNumber);
+const paginate = pageNumber => {
+  setCurrentPage(pageNumber);
+  setSiguienteData((pageNumber - 1) * (postsPerPage));
+}
+
+
+const cambiarLimit = value => {
+  setPostsPerpage(value);
+}
+
 /*******************************************************************/
 
 /*El use effect es el que se encarga de que es lo primero que renderizara al
@@ -43,25 +53,34 @@ cargar la pagina por lo tanto llamamos a la funcion del listado*/
    useEffect(() => {
        const getData = () => {
         setLoading(true);
-        const res = ServiceRest('agent_portal/Lead/listarLeadCommandCenter');
-        res.then((value) => {
+        let params = {start:siguienteData,limit:postsPerPage}; 
+        const res = ServiceRest('agent_portal/Lead/listarLeadCommandCenter',params);        
+        res.then((value) => {     
+          if (!res.error) {             
           setPosts(value.datos);
           setLoading(false);
+          setCantDatos(value.total)
+          } else {
+            setPosts();
+          }
         });
       };
       getData();
-    }, [reloadComponent]);
+    }, [reloadComponent,siguienteData,postsPerPage]);
 
 /*************************************************************************/
 
 return (
 
     <div>
-             <TablaLead posts={currentPosts} loading={loading} paginacion={<Paginacion
+
+      {posts && (<TablaLead posts={currentPosts} loading={loading} paginacion={<Paginacion
                       postsPerPage={postsPerPage}
-                      totalPosts={posts.length}
-                      paginate={paginate}
-                    />}/>
+                      totalPosts={cantDatos}
+                      paginate={paginate}     
+                      cambiarLimit={cambiarLimit}                
+                    />}/>)}
+             
 
 
 

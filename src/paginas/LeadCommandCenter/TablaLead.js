@@ -1,13 +1,16 @@
-import React, {useEffect,useState} from 'react';
+import React, {useEffect,useState,useContext} from 'react';
 import { Table, Thead, Tbody, Tr, Th, Td } from 'react-super-responsive-table'
 import {NavLink} from 'react-router-dom';
 import Modal from '../../components/Modal';
+
 
 import moment from 'moment';
 import Currency  from '../../utilities/Currency';
 import TableFixed  from '../../utilities/TableFixed';
 import {ServiceRest} from "../../services/ServiceRest";
 import { ComboList } from '../../components/ComboList';
+import FormCallPrincipal from './FormCallPrincipal';
+import { ReloadComponent } from "../../contexts/ReloadComponent";
 
 /*importamos las librerias de PNotify*/
 import { alert, defaultModules } from '@pnotify/core';
@@ -25,82 +28,78 @@ defaultModules.set(PNotifyMobile, {});
 /*****************************************/
 
 const TablaLead = ({ posts, loading, paginacion }) => {
-  let action_rest = 'parametros/Catalogo/listarCatalogoCombo';
-  var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_type_stage'};
-  const [estadoCheck, setEstadoCheck] = useState(false);
-  const [idLead,setIdLead] = useState(null);//Hooks para obtener el id Lead
+  
+  let action_register_log = 'agent_portal/Call/insertarCallPrincipal'; 
+  const {reloadComponent, setReloadComponent } = useContext(ReloadComponent);
+
+  
   const [listaCombo, setListaCombo] = useState();//Hooks para listar el combo Stage
-  const [datosRecibidos, setDatosRecibidos] = useState(posts.type_lead);//Hooks para recibir el id_lead
-  const [cambiarValor, setCambiarValor] = useState(false);//Hooks para Renderizar la tabla con el nuevo valor
+  const [listaComboStage, setListaComboStage] = useState();//Hooks para listar el combo Stage  
+  const [datosRecibidos, setDatosRecibidos] = useState();//Hooks para recibir el id_lead  
+  
   /*Aqui Ponemos el Header de la tabla Fija*/
   const scrollHandle = e => {
     e.target.querySelector('thead').style.transform = 'translateY(' + e.target.scrollTop + 'px)';
   }
-
-
   useEffect(() => {
-       TableFixed.obtenerTabla('#table-cont').addEventListener('scroll',scrollHandle);
-  }, [posts,cambiarValor]);
+       TableFixed.obtenerTabla('#table-cont').addEventListener('scroll',scrollHandle);       
+       if (listaCombo==undefined) {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tcall_logs'};   
+        var listado_combo = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params); 
+        listado_combo.then((value) => {
+          if (!value.error) { 
+                setListaCombo(value.datos.map((comboLead) =>
+                              <div className="col-6 col-sm-6 col-md-4 d-flex align-items-stretch" key={comboLead.descripcion}>
+                                <div className="card"> 
+                                    <a href="#" value = {comboLead.descripcion} className="btn btn-secondary active" id={comboLead.codigo} style={{width: 120}} role="button" aria-pressed="true" >{comboLead.descripcion}</a>                                                                         
+                                </div>                             
+                              </div>  
+                        ));
+            }
+          });
+       }      
+       
+  }, [listaCombo]); 
   /******************************************/
 
   /*Creamos la variable que almacenara los Campos del Lead*/
-  const [dataLogCall, setLogCall] = useState();
+  const [nombreLead, setNombreLead] = useState();
   /*******************************************************/
+     
 
-  const enviarDatos = (e) => {
-      setLogCall({...dataLogCall,[e.target.name]: e.target.value,});
-  };
+    const updateCall = (e) => {            
+      let params = { id_lead: e.target.id, stage_lead:e.target.value, edit_type:'stageLead'};
+      var value = e.target.value; 
+      ServiceRest("agent_portal/Lead/modificarLeadCondicional", params).then((resp) => {
+        if (!resp.error) {
+          setReloadComponent(true);
+             const myNotice = alert({
+                                     text: "Successful Update",
+                                     type: 'success',
+                                     textTrusted: true,
+                                     closerHover: true,
+                                     modules: new Map([
+                                       ...defaultModules,
+                                     ])
+                                   });
+          setReloadComponent(false);
+  
+  
+        } else {
+          const myNotice = alert({
+                                  text: "Report the code: <b>"+resp.data.id_log+"</b> for your review. <br>Detail: <b>"+resp.detail.message+"</b>",
+                                  type: 'error',
+                                  textTrusted: true,
+                                  closerHover: true,
+                                  modules: new Map([
+                                    ...defaultModules,
+                                  ])
+                                });
+        }
+      }) 
+    } 
 
   /*Aqui llamamos el id Modal para tener un modal dianmico*/
-  var formularioCalled = <form id="formularioLead">
-                            <div className="card card-solid">
-                              <div className="card-body pb-0">
-                                <div className="row d-flex align-items-stretch"> 
-                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                      <div className="card"> 
-                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
-                                      </div>
-                                    </div>
-                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                      <div className="card">  
-                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
-                                      </div>
-                                    </div>
-                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                      <div className="card"> 
-                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
-                                      </div>
-                                    </div>
-                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                      <div className="card"> 
-                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
-                                      </div>
-                                    </div>
-                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                      <div className="card"> 
-                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
-                                      </div>
-                                    </div>
-                                    <div className="col-12 col-sm-6 col-md-4 d-flex align-items-stretch">
-                                      <div className="card"> 
-                                          <a href="#" className="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a>                                                                         
-                                      </div>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-
-                           
-
-
-                            {/* <div className="form-group">
-                              <label id="Letras">Add Call Notes</label>
-                              <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" onBlur = {enviarDatos}/>
-                            </div> */}
-                          </form>;
-
-
-
 
   var formularioMails = <form id="formularioLead">
                             <div className="form-group row">
@@ -118,22 +117,36 @@ const TablaLead = ({ posts, loading, paginacion }) => {
   const [idModalCalled,setIdModalCalled] = useState("modalLlamadas");
   const [envioId,setEnvioId] = useState();
   const [idModalEmails,setIdModalEmails] = useState("modalEmails");
-  const [datosModalCalled,setDatosModalCalled] = useState({id_modal:idModalCalled,titulo:"Called",contenido:formularioCalled});
+  const [datosModalCalled,setDatosModalCalled] = useState({id_modal:idModalCalled,titulo:"Called logged:"});
   const [datosModalEmails,setDatosModalEmails] = useState({id_modal:idModalEmails,titulo:"Emails",contenido:formularioMails});
   /********************************************************/
   const [modalComponente,setmodalComponente] = useState();
 
-  const sentModal = (id_lead) => {
-    setEnvioId(id_lead);
+  const sentModal = (id_lead,nombre_lead) => {    
+    setEnvioId(id_lead);   
+    setDatosRecibidos({listaCombo}); 
+    setNombreLead(nombre_lead);    
   }
 
-  useEffect(() => {
-    setmodalComponente(<Modal id_modal={idModalCalled} datos={datosModalCalled} id_lead={envioId}/>);
-  }, [envioId]);
+   useEffect(() => {
+        setmodalComponente(<Modal action_register={action_register_log} id_modal={idModalCalled} datos={datosModalCalled} id_lead={envioId} nombreLeadTabla={nombreLead} listado={<FormCallPrincipal lista={datosRecibidos}/>}/>);
+  }, [envioId]); 
+
+  const [currentPage,setCurrentPage] = useState(1);
+
+  const changeCurrentPage = numPage => {
+    console.log("aqui llega data",numPage);
+    setCurrentPage(numPage);
+    //fetch a data
+    //or update a query to get data
+  };
 
 return (
 
   <div className='table-cont' id='table-cont'>
+
+        
+
     <Table className="table">
         <Thead className="thead-dark">
           <Tr>
@@ -172,12 +185,27 @@ return (
               <label htmlFor="vehicle1"> </label>
               </Td>
               <Td>
-              <a className="btn btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value={post.id_lead}>
+              {/* <a className="btn btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" value={post.id_lead} onClick={(value) => setMandar(post.id_lead)}>
                 {post.stage}
-              </a>
-              <div className="dropdown-menu">
-                <ComboList  id_lead={post.id_lead}  action={action_rest}  params = {params} />
-              </div>
+              </a> */}
+              
+                <a className="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {post.stage}
+                </a>
+
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <button className="dropdown-item" href="#" value="NEW" onClick={updateCall} id={post.id_lead}>NEW</button>
+                    <button className="dropdown-item" href="#" value="SHOWING" onClick={updateCall} id={post.id_lead}>SHOWING</button>
+                    <button className="dropdown-item" href="#" value="CLOSED" onClick={updateCall} id={post.id_lead}>CLOSED</button>
+                    <button className="dropdown-item" href="#" value="HOT" onClick={updateCall} id={post.id_lead}>HOT</button>
+                    <button className="dropdown-item" href="#" value="NURTURING" onClick={updateCall} id={post.id_lead}>NURTURING</button>
+                    <button className="dropdown-item" href="#" value="PAST CLIENT" onClick={updateCall} id={post.id_lead}>PAST CLIENT</button>
+                    <button className="dropdown-item" href="#" value="PENDING" onClick={updateCall} id={post.id_lead}>PENDING</button>
+                    <button className="dropdown-item" href="#" value="SPHERE" onClick={updateCall} id={post.id_lead}>SPHERE</button>
+                    <button className="dropdown-item" href="#" value="COLD" onClick={updateCall} id={post.id_lead}>COLD</button>
+                    <button className="dropdown-item" href="#" value="ARCHIVED" onClick={updateCall} id={post.id_lead}>ARCHIVED</button>
+                    <button className="dropdown-item" href="#" value="TRASHED" onClick={updateCall} id={post.id_lead}>TRASHED</button>
+                </div>                
               </Td>
               <Td>
                 {post.type_lead}
@@ -195,7 +223,7 @@ return (
                 <NavLink data-toggle="tooltip" data-placement="top" className="nav-link" to="#"><div>+ add {post.descripcion_tarea}</div></NavLink>
               </Td>
               <Td>
-                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => sentModal(post.id_lead)}><i aria-hidden="true" className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
+                <button type="button" id="BotonContenedor" className="btn btn-success" data-toggle="modal" data-target="#modalLlamadas" name="modalLlamadas" onClick={(value) => sentModal(post.id_lead,post.full_name)}><i aria-hidden="true" className="fa fa-phone" id="ContenidoIcono" ></i>{post.llamadas}</button>
               </Td>
               <Td>
               <button type="button" id="BotonContenedor" className="btn btn-warning" data-toggle="modal" data-target="#modalEmails" name="modalEmails" onClick={(value) => setDatosModalEmails(datosModalEmails)}><i aria-hidden="true" className="fa fa-share" id="ContenidoIcono" ></i>{post.emails}</button>

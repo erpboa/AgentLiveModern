@@ -58,7 +58,8 @@ const MenuPrincipal = (props) => {
       var insertar = ServiceRest('agent_portal/Lead/insertarLead',dataLeadInsert);
       insertar.then((resp) => {
         if (!resp.error) {
-          $("#modalLead").modal("hide");
+          /* $("#modalLead").modal("hide"); */
+          window.$('#modalLead').modal('hide');
         } else {
           const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
           alert(msg);

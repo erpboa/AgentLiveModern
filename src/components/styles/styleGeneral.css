@@ -131,3 +131,27 @@ body{
   margin: 20px 10px;
   box-shadow: 0 0 1px 3px #ddd;
 }
+
+#Talked_to_Lead:hover{
+  background:green;
+}
+
+#Wrong_Number:hover{
+  background:#C3D131;
+}
+
+#Opted_Out:hover{
+  background:red;
+}
+
+#Bad_Time:hover{
+  background:orange;
+}
+
+#Call_Attempt:hover{
+  background:black;
+}
+
+#Left_Voicemail:hover{
+  background:#79C307;
+}

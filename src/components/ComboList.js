@@ -57,27 +57,29 @@ export const ComboList = (props) => {
   }
   /*************************************************/
   const llamarComboStage = () => {
-    var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_type_stage'};
-    var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
-    /*Formateamos el Promise de resultado para mandar el dato al combo*/
-       listado.then((value) => {
-         setListaCombo(value.datos.map((comboLead) =>
-                   <button
-                          key={comboLead.descripcion}
-                          id={props.id_lead}
-                          className="dropdown-item"
-                          type="button"
-                          value={comboLead.descripcion}
-                          onClick={updateLead}
-                        >{comboLead.descripcion}
-                  </button>
-                 ));
-       });
+    
      }
 
      useEffect(() => {
-          llamarComboStage();
-     }, [carga]);
+          if (listaCombo == undefined) {
+            var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_type_stage'};
+            var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+            /*Formateamos el Promise de resultado para mandar el dato al combo*/
+              listado.then((value) => {
+                setListaCombo(value.datos.map((comboLead) =>
+                          <button
+                                  key={comboLead.descripcion}
+                                  id={props.id_lead}
+                                  className="dropdown-item"
+                                  type="button"
+                                  value={comboLead.descripcion}
+                                  onClick={updateLead}
+                                >{comboLead.descripcion}
+                          </button>
+                        ));
+              });
+          }            
+     }, [listaCombo]);
 
   return (
     <div>
