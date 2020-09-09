@@ -116,3 +116,30 @@
 #btn_alert_save{
     margin: 0px 0px 0px 0px;
 }
+#form_reg_alert_1{
+    /*margin: 10px 5px 0px 0px;*/
+
+}
+#form_reg_alert_2{
+    margin: 10px 8px 0px 0px;
+    width: 190px;
+    height: 20px;
+}
+#size_save_alert{
+    margin: 8px 0px 15px 0px;
+}
+#size_city{
+    width: 218px;
+    height: 35px;
+}
+#inlineFormCustomSelectPref{
+    width: 150px;
+}
+#size_price{
+    margin-right: 10px;
+    width: 180px;
+}
+#size_save_alert2{
+    margin-right: 10px;
+    width: 220px;
+}

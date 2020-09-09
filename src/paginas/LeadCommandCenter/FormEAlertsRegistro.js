@@ -19,6 +19,10 @@ const FormEAlertsRegistro = (props) => {
     const [dataTeam, setDataTeam] = useState();
 
     const id_lead = props.id_lead;
+    const v_setCart = props.setCart;
+    console.log('kllea va', v_setCart)
+
+
 
     // List data table
     const getData = async () => {
@@ -29,45 +33,54 @@ const FormEAlertsRegistro = (props) => {
 
     useEffect(() => {
         getData();
+        llamarComboProperty();
+        llamarComboListingStatus();
+        llamarComboCommunityFeatures();
+        llamarComboPropertyFeatures();
+        llamarComboWaterfront();
+        llamarComboView();
+        llamarComboExteriorFeatures();
+        llamarComboInteriorFeatures();
+        llamarComboStyle();
+        llamarComboFinancing();
     }, [reloadComponent]);
 
     /******************Lista del Combo Tipo property**********************/
     /*Aqui Creamos el Hook para el Estado Inicial para el Combo*/
-    const [listaCombo, setListaCombo] = useState('Select');
-    /***********************************************************/
+    const [listaComboProperty, setListaComboProperty] = useState();
+
     /*Funcion para llamar al Servicio del ERP y Listar el Combo*/
     const llamarComboProperty = e => {
+        console.log('llega setListeee')
         var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_property_type'};
         var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
         /*Formateamos el Promise de resultado para mandar el dato al combo*/
+
         listado.then((value) => {
-            setListaCombo(value.datos.map((comboLead) =>
-                <option key={comboLead.descripcion} value = {comboLead.descripcion}>
-                    {comboLead.descripcion}
-                </option>
-            ));
+            setListaComboProperty(value.datos)
+            console.log('llega value.datos', value.datos)
         });
         document.getElementById("Formulario_EAlert").reset();
     }
-    const llamarComboDaysListed = e => {
-        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_days_listed'};
-        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
-        /*Formateamos el Promise de resultado para mandar el dato al combo*/
-        listado.then((value) => {
-            setListaCombo(value.datos.map((comboLead) =>
-                <option key={comboLead.descripcion} value = {comboLead.descripcion}>
-                    {comboLead.descripcion}
-                </option>
-            ));
-        });
-        document.getElementById("Formulario_EAlert").reset();
-    }
+
+    const [listaComboListingStatus, setListaComboListingStatus] = useState();
     const llamarComboListingStatus = e => {
         var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_listing_status'};
         var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
         /*Formateamos el Promise de resultado para mandar el dato al combo*/
         listado.then((value) => {
-            setListaCombo(value.datos.map((comboLead) =>
+            setListaComboListingStatus(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+
+    const [listaComboDaysListed, setListaComboDaysListed] = useState();
+    const llamarComboDaysListed = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_days_listed'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboDaysListed(value.datos.map((comboLead) =>
                 <option key={comboLead.descripcion} value = {comboLead.descripcion}>
                     {comboLead.descripcion}
                 </option>
@@ -75,38 +88,97 @@ const FormEAlertsRegistro = (props) => {
         });
         document.getElementById("Formulario_EAlert").reset();
     }
+
+    const [listaComboCommunityFeatures, setListaComboCommunityFeatures] = useState();
     const llamarComboCommunityFeatures = e => {
         var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_community_features'};
         var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
         /*Formateamos el Promise de resultado para mandar el dato al combo*/
         listado.then((value) => {
-            setListaCombo(value.datos.map((comboLead) =>
-                <option key={comboLead.descripcion} value = {comboLead.descripcion}>
-                    {comboLead.descripcion}
-                </option>
-            ));
+            setListaComboCommunityFeatures(value.datos)
         });
         document.getElementById("Formulario_EAlert").reset();
     }
+
+    const [listaComboPropertyFeature, setListaComboPropertyFeature] = useState();
     const llamarComboPropertyFeatures = e => {
         var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_property_features'};
         var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
         /*Formateamos el Promise de resultado para mandar el dato al combo*/
         listado.then((value) => {
-            setListaCombo(value.datos.map((comboLead) =>
-                <option key={comboLead.descripcion} value = {comboLead.descripcion}>
-                    {comboLead.descripcion}
-                </option>
-            ));
+            setListaComboPropertyFeature(value.datos)
         });
         document.getElementById("Formulario_EAlert").reset();
     }
+
+    const [listaComboWaterfront, setListaComboWaterfront] = useState();
     const llamarComboWaterfront = e => {
         var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_waterfront'};
         var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
         /*Formateamos el Promise de resultado para mandar el dato al combo*/
         listado.then((value) => {
-            setListaCombo(value.datos.map((comboLead) =>
+            setListaComboWaterfront(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+
+    const [listaComboView, setListaComboView] = useState();
+    const llamarComboView = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_view'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboView(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    const [listaComboExteriorFeatures, setListaComboExteriorFeatures] = useState();
+    const llamarComboExteriorFeatures = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_exterior_features'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboExteriorFeatures(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    const [listaComboInteriorFeaturess, setListaComboInteriorFeatures] = useState();
+    const llamarComboInteriorFeatures = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_interior_Features'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboInteriorFeatures(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    const [listaComboStyle, setListaComboStyle] = useState();
+    const llamarComboStyle = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_style'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboStyle(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    const [listaComboFinancing, setListaComboFinancing] = useState();
+    const llamarComboFinancing = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_financing'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboFinancing(value.datos)
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    const [listaComboEAlertFrequency, setListaComboEAlertFrequency] = useState();
+    const llamarComboEAlertFrequency = e => {
+        var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_frequency'};
+        var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaComboEAlertFrequency(value.datos.map((comboLead) =>
                 <option key={comboLead.descripcion} value = {comboLead.descripcion}>
                     {comboLead.descripcion}
                 </option>
@@ -114,6 +186,8 @@ const FormEAlertsRegistro = (props) => {
         });
         document.getElementById("Formulario_EAlert").reset();
     }
+
+    const [listaCombo, setListaCombo] = useState();
     /*******************************************************************/
     /***************Insertar un nuevo Note********************/
     /*Creamos la variable que almacenara los Campos del Lead*/
@@ -145,12 +219,14 @@ const FormEAlertsRegistro = (props) => {
     };
     /*******************************************************************/
 
+    console.log('llega checklista', listaCombo)
     return (
         <div>
 
 
             <div className="container-fluid">
-                <form id='Formulario_EAlert'  >
+
+                <form id='Formulario_EAlert'>
 
                     <div className="form-group row">
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
@@ -160,23 +236,33 @@ const FormEAlertsRegistro = (props) => {
                     </div>
 
                     <h6 id='style_subtitulos'>Location</h6>
-                    <div className="form-row">
+                    <div className="form-group row">
                         <form className="form-inline">
-                            <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref">City</label>
-                            <div id="formatoform_city">
-                                <select className="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                                    <option selected>Enter any city</option>
-                                    <option value="1"></option>
-                                    <option value="2"></option>
-                                    <option value="3"></option>
-                                </select>
-                                <select className="custom-select my-1 mr-sm-2" id="inlineFormCustomSelectPref">
-                                    <option selected>Specify any state</option>
-                                    <option value="1"></option>
-                                    <option value="2"></option>
-                                    <option value="3"></option>
-                                </select>
+                            <div id="style-position-left">
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">City</label>
                             </div>
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" id="size_city">
+                                        <option selected>Enter any city</option>
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                        <option value="3"></option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" id="size_city">
+                                        <option selected>Specify any state</option>
+                                        <option value="1"></option>
+                                        <option value="2"></option>
+                                        <option value="3"></option>
+                                    </select>
+                                </div>
+                            </div>
+
                         </form>
                     </div>
                     <div className="form-group row">
@@ -257,32 +343,50 @@ const FormEAlertsRegistro = (props) => {
                     <h6 id='style_subtitulos'>Price Range</h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <input type="text" className="form-control" placeholder="From"/>
-                            <span>  </span>
-                            <input type="text" className="form-control" placeholder="To"/>
+                            <input type="text" className="form-control" placeholder="From" id="size_price"/>
+
+                            <input type="text" className="form-control" placeholder="To" id="size_price"/>
                         </form>
                     </div>
 
                     <h6 id='style_subtitulos'>Property Type</h6>
+
                     <div className="form-group row">
-                        <form className="form-inline" onClick={llamarComboProperty}>
-                            <div>
-                                <select id="size_option" className="form-control" name="property_type" onChange={enviarDatos}>
-                                    <option hidden defaultValue>Enter any property</option>
-                                    {listaCombo}
-                                </select>
-                            </div>
+
+                        <form className="form-inline" id='form_reg_alert'>
+
+                            { listaComboProperty && listaComboProperty.map((value, i) =>(
+                                <div className="form-check" key={i}>
+                                        <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1'/>
+                                        <label className="form-check-label">
+                                            <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                            </option>
+                                        </label>
+                                </div>
+
+                            ))}
+
                         </form>
+
                     </div>
+
                     <h6 id='style_subtitulos'>Listing Status</h6>
                     <div className="form-group row">
-                        <form className="form-inline" onClick={llamarComboListingStatus}>
-                            <div>
-                                <select id="size_option" className="form-control" name="listing_status" onChange={enviarDatos}>>
-                                    <option hidden defaultValue>Enter any listing</option>
-                                    {listaCombo}
-                                </select>
-                            </div>
+                        <form className="form-inline">
+
+                            { listaComboListingStatus && listaComboListingStatus.map((value, i) =>(
+                                <div className="form-check" key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1'/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Bedrooms</h6>
@@ -545,111 +649,153 @@ const FormEAlertsRegistro = (props) => {
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any property</option>
-                                    {listaCombo}
+                                    {listaComboDaysListed}
                                 </select>
                             </div>
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Community Features</h6>
                     <div className="form-group row">
-                        <form className="form-inline" onClick={llamarComboCommunityFeatures}>
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
-                                    {listaCombo}
-                                </select>
-                            </div>
+                        <form className="form-inline">
+
+                            { listaComboCommunityFeatures && listaComboCommunityFeatures.map((value, i) =>(
+                                <div className="form-check" key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Property Features</h6>
                     <div className="form-group row">
-                        <form className="form-inline" onClick={llamarComboPropertyFeatures}>
-                            <div>
-                                <select id="size_option" className="form-control" name="property_type" onChange={enviarDatos}>
-                                    <option hidden defaultValue>Enter any property</option>
-                                    {listaCombo}
-                                </select>
-                            </div>
+                        <form className="form-inline">
+
+                            { listaComboPropertyFeature && listaComboPropertyFeature.map((value, i) =>(
+                                <div className="form-check" key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Waterfront</h6>
                     <div className="form-group row">
-                        <form className="form-inline" onClick={llamarComboWaterfront}>
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
-                                    {listaCombo}
-                                </select>
-                            </div>
+                        <form className="form-inline">
+
+                            { listaComboWaterfront && listaComboWaterfront.map((value, i) =>(
+                                <div className="form-check"  key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>View</h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
 
-                                </select>
-                            </div>
+                            { listaComboView && listaComboView.map((value, i) =>(
+                                <div className="form-check"  key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Exterior features</h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
 
-                                </select>
-                            </div>
+                            { listaComboExteriorFeatures && listaComboExteriorFeatures.map((value, i) =>(
+                                <div className="form-check"  key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Interior Features</h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
 
-                                </select>
-                            </div>
+                            { listaComboInteriorFeaturess && listaComboInteriorFeaturess.map((value, i) =>(
+                                <div className="form-check"  key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Style</h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
 
-                                </select>
-                            </div>
+                            { listaComboStyle && listaComboStyle.map((value, i) =>(
+                                <div className="form-check"  key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
                     <h6 id='style_subtitulos'>Financing</h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
-                                >
-                                    <option hidden defaultValue>Enter any property</option>
 
-                                </select>
-                            </div>
+                            { listaComboFinancing && listaComboFinancing.map((value, i) =>(
+                                <div className="form-check"  key={i}>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <label className="form-check-label">
+                                        <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
+                                            {value.descripcion}
+                                        </option>
+                                    </label>
+                                </div>
+
+                            ))}
+
                         </form>
                     </div>
 
@@ -663,28 +809,32 @@ const FormEAlertsRegistro = (props) => {
                     </div>
 
                     <h6 id='style_subtitulos'>Save This e-Alert</h6>
-                    <div>
+                    <div className="form-group row">
                         <form className="form-inline">
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>Buller</option>
-                                        <option value="1">Seller</option>
-                                    </select>
+                                    <a>E-Alert Content Type</a>
+                                    <form>
 
+                                            <select id="size_save_alert2" className="form-control">
+                                                <option selected>Buller</option>
+                                                <option value="1">Seller</option>
+                                            </select>
+
+                                    </form>
                                 </div>
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>Daily</option>
-                                        <option value="1">Never</option>
-                                        <option value="2">Instantly</option>
-                                        <option value="3">Daily</option>
-                                        <option value="3">Twice a week</option>
-                                    </select>
+                                    <a>E-Alert Frequency</a>
+                                    <form onClick={llamarComboEAlertFrequency}>
+
+                                            <select id="size_save_alert2" className="form-control">
+                                                <option hidden defaultValue>Enter any property</option>
+                                                {listaComboEAlertFrequency}
+                                            </select>
+
+                                    </form>
                                 </div>
                             </div>
                         </form>
@@ -704,6 +854,7 @@ const FormEAlertsRegistro = (props) => {
                     </div>
 
                 </form>
+
             </div>
 
         </div>

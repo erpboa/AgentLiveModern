@@ -66,7 +66,7 @@ const FormEAlerts = (props) => {
 
           { (cart) ?
 
-              <FormEAlertsRegistro id_lead = {id_lead}/>
+              <FormEAlertsRegistro id_lead = {id_lead} setCart = {addItemToCart}/>
               : <div className="cart">
 
                 <button type="button" className="btn btn-primary" id="chooseActionPlan" onClick={addItemToCart}
