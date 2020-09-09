@@ -46,6 +46,7 @@ const Card = props => {
   const [datosRecibidos, setDatosRecibidos] = useState(props.type_lead);
   const [listaCombo, setListaCombo] = useState();
   const [cambiarValor, setCambiarValor] = useState(false);
+  const [listaComboTypeLead, setListaComboTypeLead] = useState();
 
   const llamarComboLead = e => {
    var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_types'};
@@ -100,9 +101,16 @@ const Card = props => {
      useEffect(() => {
        if (cambiarValor == false) {
          setDatosRecibidos(props.type_lead);
-       }
-       llamarComboLead();
+       }         
      }, [props,cambiarValor]);
+
+     useEffect(() => {      
+      if (listaCombo) {
+       setListaComboTypeLead(listaCombo)
+      } else {
+       llamarComboLead();
+      }       
+    }, [listaCombo]);
 
 
   return (
@@ -135,7 +143,7 @@ const Card = props => {
                                   {datosRecibidos}
                                 </button>
                                 <div className="dropdown-menu">
-                                  {listaCombo}
+                                  {listaComboTypeLead}
                                 </div>
                               </div>
                               </a>
