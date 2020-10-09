@@ -46,7 +46,7 @@ const SelectAgent = ({
         
     }
 
-    const insertTeam = async (e) => {
+    const insertTeam = (e) => {
         if (reloadComponent === undefined || reloadComponent === false) {
           setReloadComponent(true);
         } else {

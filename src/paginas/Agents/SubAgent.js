@@ -17,7 +17,7 @@ const SubAgent = () => {
   const [data, setData] = useState();
 
   // List data table  
-  const getData = async () => {
+  const getData = () => {
     ServiceRest('agent_portal/Agent/listarAgent')
       .then((res) => setData(res.datos))
       .catch((err) => setErrors(err));

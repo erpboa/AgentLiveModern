@@ -33,7 +33,7 @@ export const AddUser = () => {
     });
   };
 
-  const insertAgent = async (e) => {
+  const insertAgent =  (e) => {
     
     if (reloadComponent === undefined || reloadComponent === false) {
       setReloadComponent(true);

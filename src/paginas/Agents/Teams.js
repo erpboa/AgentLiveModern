@@ -16,7 +16,7 @@ const Teams = (props) => {
   const [dataTeam, setDataTeam] = useState();
 
   // List data table
-  const getData = async () => {
+  const getData = () => {
     ServiceRest("agent_portal/Team/listarTeam")
       .then((res) => setDataTeam(res.datos))
       .catch((err) => setErrors(err));

@@ -50,13 +50,13 @@ const TeamForm = ({
                   
                   return (
                     <div className="row" id="Letras" key={i}>
-                      <div className="col-3">{agent.name}</div>
+                      <div className="col-3">{agent.name.toLocaleUpperCase()}</div>
                       <div className="col-2">
                         <select className="form-control" 
                           name="lead_per_round"   
                           id={agent.id_agent}                                        
                           onChange={handleChange}>
-                          <option defaultValue>Select</option> 
+                          <option hidden defaultValue>Select</option> 
                           <option value="1">1</option>
                           <option value="2">2</option>
                           <option value="3">3</option>
@@ -92,8 +92,9 @@ const TeamForm = ({
                 name={"agents"}
                 value={""}
                 onChange={handleChange}
+                placeholder="Select"
               >
-                <option defaultValue>Select</option>
+                <option hidden defaultValue>Select</option>
                 {usernameList.map(({ id_agent, name }) => (
                   <option key={id_agent} value={id_agent}>
                     {name}
@@ -116,8 +117,9 @@ const TeamForm = ({
                 onChange={handleChange}
                 value={team.distribution_type}
                 name={"distribution_type"}
+                placeholder="Select"
               >
-                <option defaultValue>Select</option>                
+                <option hidden defaultValue>Select</option>                
                 <option value="round_robin">
                   Round Robin: Weighted distribution of leads to agents in
                   sequential order

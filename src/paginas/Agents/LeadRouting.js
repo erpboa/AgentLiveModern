@@ -5,9 +5,10 @@
 *@description Componente LeadRouting
 *****************************************************************************************/
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import InsertLeadRouting from "./InsertLeadRouting";
 import useModalInsert from "./useModalInsert";
+import { TableLeadRouting } from "./TableLeadRouting";
 import { ServiceRest } from "../../services/ServiceRest";
 
 const LeadRouting = (props) => {
@@ -15,6 +16,7 @@ const LeadRouting = (props) => {
   const [listaCombo, setListaCombo] = useState("Select");
   const [listaCatalog, setCatalog] = useState();
   const [dataLeadRouting, setLeadRouting] = useState();
+  const [dataDB, setDB] = useState();
 
   const handleInputChange = (e) => {
     setLeadRouting({
@@ -22,21 +24,44 @@ const LeadRouting = (props) => {
       [e.target.name]: e.target.value,
     });
   };
+  const [hasError, setErrors] = useState(false);
 
+  const onDeleteLeadRouting = (id) => {
+      let p_delete = { id_lead_routing: id };
+      ServiceRest("agent_portal/LeadRouting/eliminarLeadRouting", p_delete).then((resp) => {
+        if (!resp.error) {
+          getData()
+        } else {
+          const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
+          setErrors(msg);
+          alert(hasError);
+        }
+      })
+  }
   const insertDataLeadRout = (e) => {    
-    
+    e.preventDefault();
     ServiceRest("agent_portal/LeadRouting/insertarLeadRouting", dataLeadRouting)
     .then((resp) => {
       if(resp.error){
         const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
         alert(msg);
+      }else{
+        getData()
+        toggle()
       }
     })
     .catch((e) => console.error(e))
   }
 
+  const getData = () => {
+    ServiceRest("agent_portal/LeadRouting/listarLeadRouting")
+      .then((res) => setDB(res.datos))
+      .catch((err) => setErrors(err));
+  };
+
   useEffect(() => {
-    // const tableList = await ServiceRest()
+    getData();   
+        
     ServiceRest("agent_portal/Agent/listarAgent")
     .then((value) => {
       setListaCombo(
@@ -50,7 +75,8 @@ const LeadRouting = (props) => {
         })
       )
     })
-    var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_routing'};
+
+    const params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'tlead_routing'};
     ServiceRest('parametros/Catalogo/listarCatalogoCombo', params)
     .then((value) => {
       setCatalog(
@@ -92,7 +118,10 @@ const LeadRouting = (props) => {
     </div>
     
       <InsertLeadRouting isShowing={isShowing} hide={toggle} listaCombo={listaCombo} listaCatalog={listaCatalog} handleInputChange={handleInputChange}/>
-      {/* <TableLeadRouting listLeadRouting={listLeadRouting} listaCombo={listaCombo}/> */}
+
+      {dataDB && dataDB.map((e,i) => (
+      <TableLeadRouting key={i} listLeadRouting={e} onDeleteLeadRouting={onDeleteLeadRouting} />
+      ))} 
     </div>
   );
 };

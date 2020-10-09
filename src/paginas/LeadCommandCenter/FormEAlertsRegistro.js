@@ -17,19 +17,32 @@ const FormEAlertsRegistro = (props) => {
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
     const [hasError, setErrors] = useState(false);
     const [dataTeam, setDataTeam] = useState();
+    const [dataProperty, setProperty] = useState();
+    const [dataEalertInsert, setEalertInsert] = useState();
+    const [filterE, setFilter] = useState();
+    const [count, setCount] = useState();
 
     const id_lead = props.id_lead;
     const v_setCart = props.setCart;
-    console.log('kllea va', v_setCart)
+    
 
 
 
     // List data table
-    const getData = async () => {
+    const getData = () => {
         ServiceRest("agent_portal/Team/listarTeam")
             .then((res) => setDataTeam(res.datos))
             .catch((err) => setErrors(err));
     };
+
+    const getApiAlertProperty = () => {
+        ServiceRest("agent_portal/Alerts/apiAlertsProperty")
+        .then((res) => {
+            setProperty(JSON.parse(res.datos[0].jsondata))
+            setCount(res.total)            
+        })
+        .catch((err) => setErrors(err));
+    }
 
     useEffect(() => {
         getData();
@@ -43,6 +56,7 @@ const FormEAlertsRegistro = (props) => {
         llamarComboInteriorFeatures();
         llamarComboStyle();
         llamarComboFinancing();
+        getApiAlertProperty()
     }, [reloadComponent]);
 
     /******************Lista del Combo Tipo property**********************/
@@ -203,7 +217,7 @@ const FormEAlertsRegistro = (props) => {
     /****************************************************************************************************/
 
     /*******Aqui llamamos al boton de Agregar un nuevo Lead y mandar los datos al ERP*******/
-    const insertEAlerts = async (e) => {
+    const insertEAlerts = (e) => {
         var params = { start: 0, limit: 50, id_lead:id_lead, descripcion:dataEALertInsert};
         var insertar = ServiceRest('agent_portal/Note/insertarNote',params);
         console.log('lleganote3344 ',insertar)
@@ -219,7 +233,37 @@ const FormEAlertsRegistro = (props) => {
     };
     /*******************************************************************/
 
-    console.log('llega checklista', listaCombo)
+    /*******************************************************************/
+    const onHandleInput = (e) => {     
+        
+        setEalertInsert({...dataEalertInsert,[e.target.name]: e.target.value}) ;
+        
+        switch (e.target.name) {
+            case 'year_build_from':
+                    setFilter({...filterE, 'ffd_yearbuilt_pb': e.target.value})                  
+                break;
+            case 'bedrooms_from':
+                    setFilter({...filterE, 'ffd_bedrooms_pb': e.target.value}) 
+                break;                 
+        }
+        console.log("data", dataEalertInsert);
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
+        .then((res) => {            
+            setCount(res.datos[0].contador)            
+        })
+    }
+
+    const onInsertEalert = (e) => {
+        e.preventDefault()
+        dataEalertInsert.id_lead= id_lead
+        
+        var insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
+        insertar.then((resp) => {
+            console.log(dataEalertInsert);
+            console.log(resp);
+        })
+    }
+
     return (
         <div>
 
@@ -232,10 +276,10 @@ const FormEAlertsRegistro = (props) => {
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
                         <NavLink className="nav-link" to="#" id="btn_alert_savetem"><a href="#">Load Templates</a></NavLink>
                         <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
-                        <button className="btn btn-primary" type="submit" id="btn_alert_save">Save</button>
+                        <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
                     </div>
 
-                    <h6 id='style_subtitulos'>Location</h6>
+                    <h6 id='style_subtitulos'>Location </h6>
                     <div className="form-group row">
                         <form className="form-inline">
                             <div id="style-position-left">
@@ -271,7 +315,7 @@ const FormEAlertsRegistro = (props) => {
                             <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">Zip</label>
                         </div>
                         <div id="style-position-right" >
-                            <select id="size_option" className="form-control" name="id_agent"
+                            <select  className="form-control" name="id_agent"
                                 //onChange={onAddAgent}
                             >
                                 <option hidden defaultValue>Enter any zip</option>
@@ -288,7 +332,7 @@ const FormEAlertsRegistro = (props) => {
                                        htmlFor="inlineFormCustomSelectPref" id="label_left">Neighborhood</label>
                             </div>
                             <div id="style-position-right">
-                                <select id="size_option" className="form-control" name="id_agent"
+                                <select  className="form-control" name="id_agent"
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any neighborhood</option>
@@ -303,7 +347,7 @@ const FormEAlertsRegistro = (props) => {
                                     Locations</label>
                             </div>
                             <div id="style-position-right">
-                                <select id="size_option" className="form-control" name="id_agent"
+                                <select  className="form-control" name="id_agent"
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any location</option>
@@ -317,7 +361,7 @@ const FormEAlertsRegistro = (props) => {
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">County</label>
                             </div>
                             <div id="style-position-right">
-                                <select id="size_option" className="form-control" name="id_agent"
+                                <select  className="form-control" name="id_agent"
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any county</option>
@@ -331,7 +375,7 @@ const FormEAlertsRegistro = (props) => {
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">School</label>
                             </div>
                             <div id="style-position-right">
-                                <select id="size_option" className="form-control" name="id_agent"
+                                <select  className="form-control" name="id_agent"
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any school</option>
@@ -340,16 +384,20 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
 
-                    <h6 id='style_subtitulos'>Price Range</h6>
+                    
+                    <h6 id='style_subtitulos'>Price Range <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <input type="text" className="form-control" placeholder="From" id="size_price"/>
+                            <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
+                            name="price_from" />
 
-                            <input type="text" className="form-control" placeholder="To" id="size_price"/>
+                            <input type="text" className="form-control" placeholder="To"  onChange={onHandleInput}
+                            name="price_to" />
                         </form>
                     </div>
 
-                    <h6 id='style_subtitulos'>Property Type</h6>
+                    
+                    <h6 id='style_subtitulos'>Property Type <label className="count_alert">Properties {count}</label></h6>
 
                     <div className="form-group row">
 
@@ -357,7 +405,8 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboProperty && listaComboProperty.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                        <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1'/>
+                                        <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onChange={onHandleInput} 
+                                        name="property_type" />
                                         <label className="form-check-label">
                                             <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -370,14 +419,15 @@ const FormEAlertsRegistro = (props) => {
                         </form>
 
                     </div>
-
-                    <h6 id='style_subtitulos'>Listing Status</h6>
+                    
+                    <h6 id='style_subtitulos'>Listing Status <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboListingStatus && listaComboListingStatus.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1'/>
+                                    <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onChange={onHandleInput}
+                                    name="listing_status" />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -389,21 +439,50 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Bedrooms</h6>
+                    
+                    <h6 id='style_subtitulos'>Bedrooms <label className="count_alert">Properties {count}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>From</option>
+                                    <select className="custom-select my-1 mr-sm-2" name="bedrooms_from"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>From</option>
+                                        <option value="any">Any</option>
+                                        {dataProperty && dataProperty.value_data[0].bedroom.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" name="bedrooms_to"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>to</option>
+                                        <option value="any">Any</option>
+                                        {dataProperty && dataProperty.value_data[0].bedroom.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <h6 id='style_subtitulos'>Bathrooms <label className="count_alert">Properties {count}</label></h6>
+                    <div>
+                        <form className="form-inline">
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" name="bathrooms_from"
+                                            onChange={onHandleInput} >
+                                        <option hidden defaultValue>From</option>
                                         <option value="1">Any</option>
-                                        <option value="2">1</option>
-                                        <option value="3">2</option>
-                                        <option value="3">3</option>
-                                        <option value="3">4</option>
-                                        <option value="3">5</option>
-                                        <option value="3">6</option>
+                                        {dataProperty && dataProperty.value_data[0].bathroom.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
                                     </select>
 
                                 </div>
@@ -411,63 +490,26 @@ const FormEAlertsRegistro = (props) => {
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>to</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1</option>
-                                        <option value="3">2</option>
-                                        <option value="3">3</option>
-                                        <option value="3">4</option>
-                                        <option value="3">5</option>
-                                        <option value="3">6</option>
+                                            onChange={onHandleInput} name="bathrooms_to">
+                                        <option hidden defaultValue>to</option>
+                                        <option value="any">Any</option>
+                                        {dataProperty && dataProperty.value_data[0].bathroom.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Bathrooms</h6>
+                    
+                    <h6 id='style_subtitulos'>Square Footage <label className="count_alert">Properties {count}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>From</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1</option>
-                                        <option value="3">2</option>
-                                        <option value="3">3</option>
-                                        <option value="3">4</option>
-                                        <option value="3">5</option>
-                                        <option value="3">6</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>to</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1</option>
-                                        <option value="3">2</option>
-                                        <option value="3">3</option>
-                                        <option value="3">4</option>
-                                        <option value="3">5</option>
-                                        <option value="3">6</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <h6 id='style_subtitulos'>Square Footage</h6>
-                    <div>
-                        <form className="form-inline">
-                            <div className="form-group row">
-                                <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
+                                    onChange={onHandleInput} name="square_footage_from"
+                                            >
                                         <option selected>From</option>
                                         <option value="1">Any</option>
                                         <option value="2">500</option>
@@ -483,7 +525,8 @@ const FormEAlertsRegistro = (props) => {
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
+                                        onChange={onHandleInput} name="square_footage_to"
+                                            >
                                         <option selected>to</option>
                                         <option value="1">Any</option>
                                         <option value="2">500</option>
@@ -497,13 +540,75 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Year Build</h6>
+                    
+                    <h6 id='style_subtitulos'>Year Build <label className="count_alert">Properties {count}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
+                                    <select className="custom-select my-1 mr-sm-2" name="year_build_from"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>From</option>
+                                        <option value="any">Any</option>
+                                        {dataProperty && dataProperty.value_data[0].yearbuilt.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" name="year_build_to"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>to</option>
+                                        <option value="any">Any</option>
+                                        {dataProperty && dataProperty.value_data[0].yearbuilt.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <h6 id='style_subtitulos'>Acreage <label className="count_alert">Properties {count}</label></h6>
+                    <div>
+                        <form className="form-inline">
+                            <div className="form-group row">
+                                <div className="col-sm-10"> 
+                                    <select className="custom-select my-1 mr-sm-2" name="acreage_from"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>From</option>
+                                        <option value="any">Any</option>
+                                        {dataProperty && dataProperty.value_data[0].ffd_acres_calc.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" name="acreage_to"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>to</option>
+                                        {dataProperty && dataProperty.value_data[0].ffd_acres_calc.map((data,i) => (
+                                            <option value={data} key={i}>{data}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <h6 id='style_subtitulos'>Stories total <label className="count_alert">Properties {count}</label></h6>
+                    <div>
+                        <form className="form-inline">
+                            <div className="form-group row">
+                                <div className="col-sm-10">
+                                    <select className="custom-select my-1 mr-sm-2" name="stories_total_from"
+                                            onChange={onHandleInput}>
                                         <option selected>From</option>
                                         <option value="1">Any</option>
                                         <option value="2">1900</option>
@@ -518,8 +623,8 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
+                                    <select className="custom-select my-1 mr-sm-2" name="stories_total_to"
+                                            onChange={onHandleInput}>
                                         <option selected>to</option>
                                         <option value="1">Any</option>
                                         <option value="2">1900</option>
@@ -533,13 +638,14 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Acreage</h6>
+                    
+                    <h6 id='style_subtitulos'>Garages total <label className="count_alert">Properties {count}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
+                                    <select className="custom-select my-1 mr-sm-2" name="garages_total_from"
+                                            onChange={onHandleInput}>
                                         <option selected>From</option>
                                         <option value="1">Any</option>
                                         <option value="2">1900</option>
@@ -554,8 +660,8 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
+                                    <select className="custom-select my-1 mr-sm-2" name="garages_total_to"
+                                            onChange={onHandleInput}>
                                         <option selected>to</option>
                                         <option value="1">Any</option>
                                         <option value="2">1900</option>
@@ -569,84 +675,13 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Stories total</h6>
-                    <div>
-                        <form className="form-inline">
-                            <div className="form-group row">
-                                <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>From</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1900</option>
-                                        <option value="3">1930</option>
-                                        <option value="3">1940</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>to</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1900</option>
-                                        <option value="3">1930</option>
-                                        <option value="3">1940</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <h6 id='style_subtitulos'>Garages total</h6>
-                    <div>
-                        <form className="form-inline">
-                            <div className="form-group row">
-                                <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>From</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1900</option>
-                                        <option value="3">1930</option>
-                                        <option value="3">1940</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div className="form-group row">
-                                <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"
-                                            id="inlineFormCustomSelectPref">
-                                        <option selected>to</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1900</option>
-                                        <option value="3">1930</option>
-                                        <option value="3">1940</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <h6 id='style_subtitulos'>Days Listed</h6>
+                    
+                    <h6 id='style_subtitulos'>Days Listed <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline" onClick={llamarComboDaysListed}>
                             <div>
-                                <select id="size_option" className="form-control" name="id_agent"
-                                    //onChange={onAddAgent}
+                                <select  className="form-control" name="days_listed"
+                                    onChange={onHandleInput} //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any property</option>
                                     {listaComboDaysListed}
@@ -654,13 +689,16 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Community Features</h6>
+                    
+                    <h6 id='style_subtitulos'>Community Features <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboCommunityFeatures && listaComboCommunityFeatures.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value={value.id_catalogo}
+                                    name="community_features"
+                                    onChange={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -672,13 +710,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Property Features</h6>
+                    
+                    <h6 id='style_subtitulos'>Property Features <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboPropertyFeature && listaComboPropertyFeature.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    name="property_features"
+                                    onChange={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -690,13 +731,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Waterfront</h6>
+                    
+                    <h6 id='style_subtitulos'>Waterfront <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboWaterfront && listaComboWaterfront.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"
+                                    name="waterfront"
+                                    onChange={onHandleInput}/>
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -708,13 +752,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>View</h6>
+                    
+                    <h6 id='style_subtitulos'>View <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboView && listaComboView.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"
+                                    name="view"
+                                    onChange={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -726,13 +773,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Exterior features</h6>
+                    
+                    <h6 id='style_subtitulos'>Exterior features <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboExteriorFeatures && listaComboExteriorFeatures.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    name="exterior_features"
+                                    onChange={onHandleInput}/>
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -744,13 +794,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Interior Features</h6>
+                    
+                    <h6 id='style_subtitulos'>Interior Features <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboInteriorFeaturess && listaComboInteriorFeaturess.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    name="interior_features"
+                                    onChange={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -762,13 +815,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Style</h6>
+                    
+                    <h6 id='style_subtitulos'>Style <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboStyle && listaComboStyle.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"
+                                    name="style"
+                                    onChange={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -780,13 +836,16 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Financing</h6>
+                    
+                    <h6 id='style_subtitulos'>Financing <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
                             { listaComboFinancing && listaComboFinancing.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"/>
+                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    name="financing"
+                                    onChange={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -798,17 +857,20 @@ const FormEAlertsRegistro = (props) => {
 
                         </form>
                     </div>
-
-                    <h6 id='style_subtitulos'>Keywords</h6>
+                    
+                    <h6 id='style_subtitulos'>Keywords <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <input type="text" className="form-control" placeholder="Keywords"/>
+                            <input type="text" className="form-control" placeholder="Keywords" 
+                            name="keywords"
+                            onChange={onHandleInput}
+                            />
                             <p>Keywords are matched to text in the public remarks, street address, postal code,
                                 MLS number and neighborhood fields on a listing's full details page</p>
                         </form>
                     </div>
-
-                    <h6 id='style_subtitulos'>Save This e-Alert</h6>
+                    
+                    <h6 id='style_subtitulos'>Save This e-Alert <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
                             <div className="form-group row">
@@ -839,7 +901,8 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                         </form>
                     </div>
-                    <h6 id='style_subtitulos'>Sending Settings</h6>
+                    
+                    <h6 id='style_subtitulos'>Sending Settings </h6>
                     <div className="form-group row">
                         <form>
 
@@ -850,7 +913,7 @@ const FormEAlertsRegistro = (props) => {
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
                         <button type="button" className="btn btn-secondary" id="btn_alert_savetem">Save As Template</button>
                         <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
-                        <button className="btn btn-primary" type="submit" id="btn_alert_save">Save</button>
+                        <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
                     </div>
 
                 </form>

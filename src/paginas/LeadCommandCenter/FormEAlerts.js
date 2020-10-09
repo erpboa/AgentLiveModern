@@ -25,8 +25,9 @@ const FormEAlerts = (props) => {
 
 
   // List data table
-  const getData = async () => {
-    ServiceRest("agent_portal/Team/listarTeam")
+  const getData =  () => {
+
+    ServiceRest("agent_portal/Alerts/listarAlerts", {id_lead: id_lead, start: 0, limit: 50})
         .then((res) => setDataTeam(res.datos))
         .catch((err) => setErrors(err));
   };
@@ -90,10 +91,10 @@ const FormEAlerts = (props) => {
                           </thead>
                           <tbody>
                           {dataTeam.map((e, i) => (
-                              <tr key={i}>
-                                <td>{e.name}</td>
-                                <td>{e.distribution_type}</td>
-                                <td></td>
+                              <tr key={i} style={{fontSize: '10pt'}}>
+                                <td>{e.subject}</td>
+                                <td>{(e.price_from !== null)? e.price_from:'Automatic'}</td>
+                                <td>{e.alert_frequency}</td>
                                 <td></td>
                                 <td>
                                   <div>
