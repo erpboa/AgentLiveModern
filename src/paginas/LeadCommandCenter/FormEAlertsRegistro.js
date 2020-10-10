@@ -18,7 +18,49 @@ const FormEAlertsRegistro = (props) => {
     const [hasError, setErrors] = useState(false);
     const [dataTeam, setDataTeam] = useState();
     const [dataProperty, setProperty] = useState();
-    const [dataEalertInsert, setEalertInsert] = useState();
+    const [dataEalertInsert, setEalertInsert] = useState(	{'id_lead': "",
+    'exterior_features': "",
+    'state': "",
+    'stories_total_to': "",
+    'neighborhood': "",
+    'garages_total_from': "",
+    'listing_status': "",
+    'interior_features': "",
+    'alert_frequency': "",
+    'property_type': "",
+    'style': "",
+    'subject': "",
+    'view': "",
+    'square_footage_to': "",
+    'waterfront': "",
+    'type_content': "",
+    'square_footage_from': "",
+    'year_build_from': "",
+    'school': "",
+    'garages_total_to': "",
+    'acreage_from': "",
+    'bedrooms_from': "",
+    'days_listed': "",
+    'keywords': "",
+    'financing': "",
+    'zip': "",
+    'property_features': "",
+    'city': "",
+    'price_to': "",
+    'estado_reg': "",
+    'location': "",
+    'community_features': "",
+    'popular_locations': "",
+    'acreage_to': "",
+    'year_build_to': "",
+    'stories_total_from': "",
+    'draw_on_map': "",
+    'country': "",
+    'price_from': "",
+    'bedrooms_to': "",
+    'bathrooms_from': "",
+    'bathrooms_to': ""
+    });
     const [filterE, setFilter] = useState();
     const [count, setCount] = useState();
 
@@ -878,7 +920,7 @@ const FormEAlertsRegistro = (props) => {
                                     <a>E-Alert Content Type</a>
                                     <form>
 
-                                            <select id="size_save_alert2" className="form-control">
+                                            <select id="size_save_alert2" className="form-control" onChange={onHandleInput}>
                                                 <option selected>Buller</option>
                                                 <option value="1">Seller</option>
                                             </select>
@@ -891,7 +933,7 @@ const FormEAlertsRegistro = (props) => {
                                     <a>E-Alert Frequency</a>
                                     <form onClick={llamarComboEAlertFrequency}>
 
-                                            <select id="size_save_alert2" className="form-control">
+                                            <select id="size_save_alert2" className="form-control" onChange={onHandleInput}>
                                                 <option hidden defaultValue>Enter any property</option>
                                                 {listaComboEAlertFrequency}
                                             </select>
