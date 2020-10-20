@@ -18,6 +18,7 @@ import PxpClient from 'pxp-client';
 import {UserContext} from "./contexts/UserContext";
 import {CambiarEstados} from "./contexts/CambiarEstados";
 import {ReloadComponent} from "./contexts/ReloadComponent";
+import {Coordinates} from "./contexts/Coordinates";
 import {Redirect} from "react-router-dom";
 import PxpConfig from './Config/DatosGenerales';
 
@@ -34,9 +35,11 @@ function App() {
   const [reloadComponent, setReloadComponent] = useState();
   const [userContext, setUserContext] = useState();
   const [cambiarEstados, setCambiarEstados] = useState(false);
+  const [coordinates, setCoordinates] = useState();
   const value = useMemo(()=> ({userContext, setUserContext}), [userContext, setUserContext]);
   const menu = useMemo(()=> ({cambiarEstados, setCambiarEstados}), [cambiarEstados, setCambiarEstados]);
   const reload = useMemo(()=> ({reloadComponent, setReloadComponent}), [reloadComponent, setReloadComponent]);
+  const map = useMemo(()=> ({coordinates, setCoordinates}), [coordinates, setCoordinates]);
   /*****************************************************/
   useEffect(() => {
     PxpClient.onAuthStateChanged((user) => {
@@ -58,6 +61,7 @@ function App() {
     <ReloadComponent.Provider value={reload}>
     <CambiarEstados.Provider value={menu}>
     <UserContext.Provider value={value}>
+    <Coordinates.Provider value={map}>
     <Switch>
             <Route path="/" component={Login} exact={true}/>
             <Route path="/LeadCommandCenter" component={LeadCommandCenter}/>
@@ -74,6 +78,7 @@ function App() {
             <Route path="/NotFound" component={NotFound} />
             <Route path="*" component={NotFound} />
       </Switch>
+      </Coordinates.Provider>
       </UserContext.Provider>
       </CambiarEstados.Provider>
       </ReloadComponent.Provider>   

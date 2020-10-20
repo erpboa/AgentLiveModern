@@ -29,13 +29,9 @@ const AllActivityList = (props) => {
   }, [searchValue]);
 
   return (
-    <Segment className="all-activity-content">
-      {
-        activity != null ?
-        (activity.map(a => renderActicity(a, props.lead_name))):
-        (<div>Nothing Activities</div>)
-      }
-    </Segment>
+    activity != null ?
+    (activity.map(a => renderActicity(a, props.lead_name))):
+    (<div>Nothing Activities</div>)
   );
 };
 
@@ -44,22 +40,22 @@ const renderActicity = (activity, lead_name ) => {
 
   switch (act.activity_type) {
     case 'call':
-      return <Call key={act.id_call} call={act} lead_name={lead_name}/>
+      return <Call key={`call-${act.id_call}`} call={act} lead_name={lead_name}/>
       break;
     case 'text':
-      return <Text key={act.id_texts} text={act} lead_name={lead_name}/>
+      return <Text key={`text-${act.id_texts}`} text={act} lead_name={lead_name}/>
       break;
     case 'email':
-      return <Email key={act.emails} email={act} lead_name={lead_name}/>
+      return <Email key={`email-${act.emails}`} email={act} lead_name={lead_name}/>
       break;
     case 'note':
-      return <Note key={act.id_note} note={act} lead_name={lead_name}/>
+      return <Note key={`note-${act.id_note}`} note={act} lead_name={lead_name}/>
       break;
     case 'property':
-      return <Property key={act.id_great_sheet} property={act} lead_name={lead_name}/>
+      return <Property key={`property-${act.id_great_sheet}`} property={act} lead_name={lead_name}/>
       break;
     default:
-      return 
+      return
   }
 }
 

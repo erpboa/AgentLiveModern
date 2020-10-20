@@ -14,10 +14,10 @@ const Call = ({call, lead_name}) => {
           <div data-testid="summary-content" class="summary pointer">
             <div class="summary_main ">
               <div class="summary_main__wrapper" >
-                <Icon name="call" 
+              <Icon name={call.type == 'voicemail' ? `file audio`: `call`} 
                   data-testid="activity-timeline-icon" 
                   aria-hidden="true" 
-                  class="phone circular icon icon_timeline icon_dark"
+                  className="circular icon icon_timeline icon_dark"
                 />
                 <div class="summary_main__content expanded-summary-main">
                   <p>
