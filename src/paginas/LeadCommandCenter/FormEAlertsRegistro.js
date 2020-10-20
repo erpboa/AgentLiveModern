@@ -70,8 +70,27 @@ const FormEAlertsRegistro = (props) => {
 
     const id_lead = props.id_lead;
     const v_setCart = props.setCart;
-    
 
+    //console.log('kllea va', id_lead)
+    /*******************************************************************/
+    //listar email lead
+    const [email, setemail] = useState();
+    console.log('llegaemail ', email)
+    const getDataEmail = e => {
+        var params = { start: 0, limit: 50, id_lead:id_lead};
+        var listado = ServiceRest('agent_portal/Lead/listarLead',params);
+
+        listado.then((value) => {
+            /*Enviamos el Valor a las variables para mostrar en el componente*/
+            //console.log('llegacall33445list ',value.datos)
+            if (value.datos.length > 0 ){
+                setemail(value.datos[0].email);
+            }
+
+        });
+    }
+
+    /*******************************************************************/
 
 
     // List data table
@@ -92,6 +111,7 @@ const FormEAlertsRegistro = (props) => {
 
     useEffect(() => {
         getData();
+        getDataEmail();
         llamarComboProperty();
         llamarComboListingStatus();
         llamarComboCommunityFeatures();
@@ -324,6 +344,42 @@ const FormEAlertsRegistro = (props) => {
         })
     }
 
+    /***************Insertar un nuevo Template********************/
+    /*Creamos la variable que almacenara los Campos del Lead*/
+    const [dataTemplateInsert, setTemplateInsert] = useState();
+    console.log('llegaTemplate2',dataTemplateInsert)
+
+
+    /********Llamamos a la funcion para recuperar los datos de cada Campo cuando se cambie del input*****/
+    const enviarDatosTemplate = (e) => {
+        //console.log('e', e.target.value)
+        setTemplateInsert(e.target.value);
+    };
+    /****************************************************************************************************/
+//console.log('llega ', dataEalertInsert)
+    /*******Aqui llamamos al boton de Agregar un nuevo Lead y mandar los datos al ERP*******/
+    const insertTemplates = async (e) => {
+        var params = { start: 0, limit: 50, id_lead:id_lead, name_template:dataTemplateInsert};
+        var insertar = ServiceRest('agent_portal/AlertsTemplate/insertarAlertsTemplate',params);
+        //console.log('llegaTemplate3344 ',insertar)
+        insertar.then((resp) => {
+            //console.log('llegaTemplateeeeee2s', resp.error)
+            if (resp.error) {
+                const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+                alert(msg);
+            }
+        })
+
+
+    };
+    /*******************************************************************/
+
+    /*******************************************************************/
+    const handleDelete = e => {
+        console.log('llega delete')
+    };
+    /*******************************************************************/
+
     return (
         <div>
 
@@ -341,6 +397,7 @@ const FormEAlertsRegistro = (props) => {
                         <button type="button" className="btn btn-success" id="btn_alert_preview" onClick={onPreview}>Preview</button>
                         <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>                        
                     </div>
+                    <h6 className='style_subtitulos'>Location </h6>
                     <div className="form-group row">
                     <div style={{width:'100%'}}>
                         <input type="radio"  name="map" defaultChecked/>
@@ -982,19 +1039,92 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Sending Settings </h6>
+                    <h6 className='style_subtitulos'>Sending Settings </h6>
                     <div className="form-group row">
                         <form>
+
+                            <div className="tag-item" >
+                                {email}
+                                <button
+                                    type="button"
+                                    className="button"
+                                    onClick={handleDelete()}
+                                >
+
+                                </button>
+                            </div>
+
+                            <input id="inputemail"
+                                //className={"input " + (this.state.error && " has-error")}
+                                //value={this.state.value}
+                                   placeholder="Type or paste email addresses and press `Enter`..."
+                                //onKeyDown={this.handleKeyDown}
+                                //onChange={this.handleChange}
+                                //onPaste={this.handlePaste}
+                            />
 
                         </form>
                     </div>
 
                     <div className="form-group row">
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
-                        <button type="button" className="btn btn-secondary" id="btn_alert_savetem">Save As Template</button>
+                        <button data-toggle="modal" type="button" className="btn btn-secondary" id="btn_alert_savetem" data-target="#chooseSavetemplate">Save As Template</button>
                         <button type="button" className="btn btn-success" id="btn_alert_preview" onClick={onPreview}>Preview</button>
+
                         <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
                     </div>
+
+                    <div className="modal fade" data-backdrop="static" data-keyboard="false"
+                         id="chooseSavetemplate" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div className="modal-dialog modal-lg">
+                            <div className="modal-content">
+
+                                <div className="modal-header">
+                                    <h5 className="modal-title" id="exampleModalLabel">
+                                        Save eAlert Template
+                                    </h5>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div className="modal-body">
+                                    <form>
+                                        <div className="form-row">
+
+                                            <div className="col">
+                                                <label>Template name</label>
+                                                <input type="text" className="form-control" id="formGroupExampleInput" name="first_name" placeholder="Type the name of your template" onChange={enviarDatosTemplate} required />
+
+
+                                            </div>
+
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        className="btn btn-secondary"
+                                        data-dismiss="modal"
+                                    >
+                                        Close
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={insertTemplates}
+                                        className="btn btn-primary"
+                                    >
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                 </form>
 

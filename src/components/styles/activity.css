@@ -104,6 +104,11 @@
     word-wrap: break-word;
     white-space: normal;
 }
+
+.summary_main__content.expanded-summary-main p {
+    margin-bottom: 0;
+}
+
 .ui.feed .event .content .summary_main span {
     max-width: 100%;
     display: inline-block;
@@ -261,6 +266,7 @@
 .summary i.call, .summary .expanded-summary-main, .extra .editable-content__content,
 .summary i.comment, .summary i.home, .summary i.sticky.note  {
     float: left;
+    padding-left: 0.5em;
 }
 
 .extra {
@@ -279,7 +285,33 @@
 }
 
 .summary i.call, .summary i.comment, .summary i.home, .summary i.sticky.note {
-    font-size: 2em;
+    font-size: 1em;
+    min-width: 30px;
+    margin-top: 0.4em;
+}
+
+.summary i.call, .summary i.comment, .summary i.sticky.note, .summary i.home {
+  color: white;
+}
+
+.summary i.call.circular.icon {
+  background: black;
+}
+
+.summary i.circular.icon {
+  box-shadow: 0 0 0 0.1em rgba(0,0,0,0) inset;
+}
+
+.summary i.comment.circular.icon {
+  background: #00c844;
+}
+
+.summary i.sticky.note.circular.icon {
+  background: #b5ce00;
+}
+
+.summary i.home.circular.icon {
+  background: #1683d3;
 }
 
 /*Menu content*/
@@ -309,6 +341,24 @@
   height: 3em;
 }
 
+.activity-content .segment {
+    padding-right: 0;
+  }
+  
+  .activity-content .segment.tab .divider, .activity-content .extra, .activity-content .extend-content {
+    width: 90%;
+    margin-left: 2.5em;
+    padding: 0;
+  }
+  
+  .activity-content .extend-content .link{
+    color: #3c8dbc;
+  }
+  
+  .activity-content .segment.tab .content {
+    min-height: auto;
+    padding-bottom: 2em !important;
+  }
 /*Sobreescribir Semantic.css*/
 
 .ui.accordion .accordion .active.title .dropdown.icon, .ui.accordion .active.title .dropdown.icon,

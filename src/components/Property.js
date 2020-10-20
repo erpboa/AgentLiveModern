@@ -1,5 +1,5 @@
 import React from 'react';
-import { Accordion,Icon } from 'semantic-ui-react'
+import { Accordion, Divider, Icon } from 'semantic-ui-react'
 import "semantic-ui-css/semantic.min.css";
 import './styles/activity.css';
 
@@ -10,14 +10,14 @@ const Property = ({property, lead_name}) => {
     {
       key: 0,
       title: {
-        content: (
+        content: [
           <div data-testid="summary-content" class="summary summary pointer">
             <div class="summary_main ">
               <div class="summary_main__wrapper">
                 <Icon name="home"
                       data-testid="activity-timeline-icon"
                       aria-hidden="true"
-                      class="phone circular icon icon_timeline icon_dark"
+                      className="circular icon icon_timeline icon_dark"
                 />
                 <div class="summary_main__content expanded-summary-main">
                   <p>
@@ -35,8 +35,9 @@ const Property = ({property, lead_name}) => {
               </div>
             </div>
 
-        </div>
-        )
+        </div>,
+          <Divider />
+        ]
       },
       content: {
         content: (
@@ -89,7 +90,7 @@ const Property = ({property, lead_name}) => {
                 </div>
                 <div class="additional-param">
                   <span class="additional-param-label">Listing #</span>
-                  <a target="_blank" class="additional-param-value">{property.ffd_mls_id}</a>
+                  <a target="_blank" class="additional-param-value link">{property.ffd_mls_id}</a>
                 </div>
                 <div class="additional-param">
                   <span class="additional-param-label">Built</span>
