@@ -9,9 +9,12 @@
 import React, {useState, useEffect, useContext} from "react";
 import {ServiceRest} from "../../services/ServiceRest";
 import {ReloadComponent} from "../../contexts/ReloadComponent";
-
+import {Coordinates} from "../../contexts/Coordinates";
 import './styles/FormEAlertsStyle.css';
 import {NavLink} from "react-router-dom";
+
+import MapGoogle from '../../components/MapGoogle';
+import {onPreviewSearchLM } from './searchFlterLivemoDern.js';
 
 const FormEAlertsRegistro = (props) => {
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
@@ -63,6 +66,7 @@ const FormEAlertsRegistro = (props) => {
     });
     const [filterE, setFilter] = useState();
     const [count, setCount] = useState();
+    const {coordinates} = useContext(Coordinates);
 
     const id_lead = props.id_lead;
     const v_setCart = props.setCart;
@@ -277,31 +281,45 @@ const FormEAlertsRegistro = (props) => {
 
     /*******************************************************************/
     const onHandleInput = (e) => {     
-        
-        setEalertInsert({...dataEalertInsert,[e.target.name]: e.target.value}) ;
+        const myarr = ["property_type","community_features","property_features","waterfront","view", "exterior_features","interior_features","style","financing"];
+        const arrayContainst = (myarr.indexOf(e.target.name) > -1);
+        let selecValuefil
+        if(arrayContainst) {
+                if (e.target.checked){
+                    selecValuefil = true
+                }else{
+                    selecValuefil = false
+                }            
+        }else{
+            selecValuefil = e.target.value
+        }
+        setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil}) ;
         
         switch (e.target.name) {
             case 'year_build_from':
-                    setFilter({...filterE, 'ffd_yearbuilt_pb': e.target.value})                  
+                    setFilter({...filterE, 'ffd_yearbuilt_pb': selecValuefil})                  
                 break;
             case 'bedrooms_from':
-                    setFilter({...filterE, 'ffd_bedrooms_pb': e.target.value}) 
+                    setFilter({...filterE, 'ffd_bedrooms_pb': selecValuefil}) 
                 break;                 
         }
-        console.log("data", dataEalertInsert);
+        
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {            
             setCount(res.datos[0].contador)            
         })
     }
 
+    const onPreview = () => {
+        onPreviewSearchLM(coordinates, dataEalertInsert)
+    }
+
     const onInsertEalert = (e) => {
         e.preventDefault()
-        dataEalertInsert.id_lead= id_lead
-        
-        var insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
-        insertar.then((resp) => {
-            console.log(dataEalertInsert);
+        dataEalertInsert.id_lead= id_lead    
+        dataEalertInsert.draw_on_map = JSON.stringify(coordinates)
+        const insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
+        insertar.then((resp) => {            
             console.log(resp);
         })
     }
@@ -314,18 +332,27 @@ const FormEAlertsRegistro = (props) => {
 
                 <form id='Formulario_EAlert'>
 
+             
+
+                    <h6 id='style_subtitulos'>Location </h6>                                                
                     <div className="form-group row">
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
                         <NavLink className="nav-link" to="#" id="btn_alert_savetem"><a href="#">Load Templates</a></NavLink>
-                        <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
-                        <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
+                        <button type="button" className="btn btn-success" id="btn_alert_preview" onClick={onPreview}>Preview</button>
+                        <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>                        
                     </div>
-
-                    <h6 id='style_subtitulos'>Location </h6>
                     <div className="form-group row">
+                    <div style={{width:'100%'}}>
+                        <input type="radio"  name="map" defaultChecked/>
+                        <label className="my-1 mr-2"> Draw On Map</label>
+                        <div>
+                            <MapGoogle />
+                        </div>
+                    </div>
                         <form className="form-inline">
-                            <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">City</label>
+                        <input type="radio"  name="city" />
+                            <div id="style-position-left">                            
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> City</label>
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
@@ -352,9 +379,9 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     <div className="form-group row">
-
+                        <input type="radio"  name="zip" />
                         <div id="style-position-left">
-                            <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">Zip</label>
+                            <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Zip</label>
                         </div>
                         <div id="style-position-right" >
                             <select  className="form-control" name="id_agent"
@@ -369,9 +396,10 @@ const FormEAlertsRegistro = (props) => {
 
                     <div className="form-group row">
                         <form className="form-inline">
+                            <input type="radio"  name="neighborhood" />
                             <div id="style-position-left">
                                 <label className="my-1 mr-2"
-                                       htmlFor="inlineFormCustomSelectPref" id="label_left">Neighborhood</label>
+                                       htmlFor="inlineFormCustomSelectPref" id="label_left"> Neighborhood</label>
                             </div>
                             <div id="style-position-right">
                                 <select  className="form-control" name="id_agent"
@@ -384,8 +412,9 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
+                        <input type="radio"  name="popular_locations" />
                             <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">Popular
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Popular
                                     Locations</label>
                             </div>
                             <div id="style-position-right">
@@ -399,8 +428,9 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
+                            <input type="radio"  name="county" />
                             <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">County</label>
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> County</label>
                             </div>
                             <div id="style-position-right">
                                 <select  className="form-control" name="id_agent"
@@ -413,8 +443,9 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
+                            <input type="radio"  name="school" />
                             <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">School</label>
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> School</label>
                             </div>
                             <div id="style-position-right">
                                 <select  className="form-control" name="id_agent"
@@ -447,7 +478,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboProperty && listaComboProperty.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                        <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onChange={onHandleInput} 
+                                        <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onClick={onHandleInput} 
                                         name="property_type" />
                                         <label className="form-check-label">
                                             <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
@@ -466,10 +497,17 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                         <form className="form-inline">
 
-                            { listaComboListingStatus && listaComboListingStatus.map((value, i) =>(
+                            { listaComboListingStatus && listaComboListingStatus.map((value, i) => {
+                                let listing_check = false
+                                if(value.descripcion === 'Active'|| value.descripcion === 'Coming soon'){
+                                    listing_check = true
+                                }
+
+                                return (
+                                
                                 <div className="form-check" key={i}>
                                     <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onChange={onHandleInput}
-                                    name="listing_status" />
+                                    name="listing_status" defaultChecked={listing_check}/>
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -477,7 +515,7 @@ const FormEAlertsRegistro = (props) => {
                                     </label>
                                 </div>
 
-                            ))}
+                            )})}
 
                         </form>
                     </div>
@@ -740,7 +778,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="form-check" key={i}>
                                     <input className="form-check-input" type="checkbox" value={value.id_catalogo}
                                     name="community_features"
-                                    onChange={onHandleInput} />
+                                    onClick={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -954,7 +992,7 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
                         <button type="button" className="btn btn-secondary" id="btn_alert_savetem">Save As Template</button>
-                        <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
+                        <button type="button" className="btn btn-success" id="btn_alert_preview" onClick={onPreview}>Preview</button>
                         <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
                     </div>
 
