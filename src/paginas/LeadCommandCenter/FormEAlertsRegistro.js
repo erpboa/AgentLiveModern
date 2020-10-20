@@ -13,6 +13,8 @@ import {ReloadComponent} from "../../contexts/ReloadComponent";
 import './styles/FormEAlertsStyle.css';
 import {NavLink} from "react-router-dom";
 
+import FormEAlerts from "./FormEAlerts";
+
 const FormEAlertsRegistro = (props) => {
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
     const [hasError, setErrors] = useState(false);
@@ -71,7 +73,7 @@ const FormEAlertsRegistro = (props) => {
     /*******************************************************************/
     //listar email lead
     const [email, setemail] = useState();
-    console.log('llegaemail ', email)
+    //console.log('llegaemail ', email)
     const getDataEmail = e => {
         var params = { start: 0, limit: 50, id_lead:id_lead};
         var listado = ServiceRest('agent_portal/Lead/listarLead',params);
@@ -81,6 +83,30 @@ const FormEAlertsRegistro = (props) => {
             //console.log('llegacall33445list ',value.datos)
             if (value.datos.length > 0 ){
                 setemail(value.datos[0].email);
+            }
+
+        });
+    }
+
+    /*******************************************************************/
+
+    /*******************************************************************/
+    //listar Alert
+    const [dataEAlertPriceFrom, setEAlertPriceFrom] = useState();
+    const [dataEAlertPriceTo, setEAlertPriceTo] = useState();
+    console.log('llegaalert22 ', dataEAlertPriceFrom)
+    const ListDataEAlert = e => {
+        console.log('llegaalert22eeee', e)
+        var params = { start: 0, limit: 50, id_lead:id_lead};
+        var listado = ServiceRest('agent_portal/Alerts/listarAlerts',params);
+
+        listado.then((value) => {
+            /*Enviamos el Valor a las variables para mostrar en el componente*/
+            console.log('llegacall33445listalert ',value.datos )
+
+            if (value.datos.length > 0 ){
+                setEAlertPriceFrom(value.datos[0].price_from);
+                setEAlertPriceTo(value.datos[0].price_to);
             }
 
         });
@@ -118,7 +144,7 @@ const FormEAlertsRegistro = (props) => {
         llamarComboInteriorFeatures();
         llamarComboStyle();
         llamarComboFinancing();
-        getApiAlertProperty()
+        getApiAlertProperty();
     }, [reloadComponent]);
 
     /******************Lista del Combo Tipo property**********************/
@@ -265,6 +291,23 @@ const FormEAlertsRegistro = (props) => {
 
     const [listaCombo, setListaCombo] = useState();
     /*******************************************************************/
+    const [listaComboTemplate, setListaTemplate] = useState();
+    const llamarTemplate = e => {
+        var params = { start: 0, limit: 50, id_lead:id_lead};
+        var listado = ServiceRest('agent_portal/AlertsTemplate/listarAlertsTemplate',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaTemplate(value.datos.map((comboLead) =>
+
+                <option key={comboLead.name_template} value = {comboLead.name_template}>
+                    {comboLead.name_template}
+                </option>
+
+            ));
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    /*******************************************************************/
     /***************Insertar un nuevo Note********************/
     /*Creamos la variable que almacenara los Campos del Lead*/
     const [dataEALertInsert, setEAlertInsert] = useState();
@@ -326,6 +369,15 @@ const FormEAlertsRegistro = (props) => {
         })
     }
 
+    /***********************para cerrar el modal************************/
+
+    /*const onCanceModal = () => {
+        //chooseSavetemplate.modal('hide');
+        this.setState({modal: hide})
+    }*/
+    /**************************.*****************************************/
+
+
     /***************Insertar un nuevo Template********************/
     /*Creamos la variable que almacenara los Campos del Lead*/
     const [dataTemplateInsert, setTemplateInsert] = useState();
@@ -353,6 +405,8 @@ const FormEAlertsRegistro = (props) => {
         })
 
 
+
+
     };
     /*******************************************************************/
 
@@ -362,17 +416,41 @@ const FormEAlertsRegistro = (props) => {
     };
     /*******************************************************************/
 
+    //const [btnCancel, setCancel] = useState(false);
+
+
+    function buttonCancel(e) {
+
+
+    }
+    /*******************************************************************/
+
+
+
     return (
         <div>
 
 
             <div className="container-fluid">
 
+
                 <form id='Formulario_EAlert'>
 
                     <div className="form-group row">
-                        <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
-                        <NavLink className="nav-link" to="#" id="btn_alert_savetem"><a href="#">Load Templates</a></NavLink>
+                        <button type="button" className="btn btn-secondary" id="btn_alert_cancel" onClick={buttonCancel}>Cancel</button>
+
+
+                            {/*<a>Load Templates</a>*/}
+                            <form onClick={llamarTemplate}>
+
+                                <select id="btn_alert_template" className="form-control" onChange={ListDataEAlert}>
+                                    <option hidden defaultValue>Select an EAlert Template</option>
+                                    {listaComboTemplate}
+                                </select>
+
+                            </form>
+
+
                         <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
                         <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
                     </div>
@@ -487,7 +565,7 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                         <form className="form-inline">
                             <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
-                            name="price_from" />
+                            name="price_from" defaultValue={dataEAlertPriceFrom}/>
 
                             <input type="text" className="form-control" placeholder="To"  onChange={onHandleInput}
                             name="price_to" />
@@ -1069,6 +1147,7 @@ const FormEAlertsRegistro = (props) => {
                                         type="button"
                                         className="btn btn-secondary"
                                         data-dismiss="modal"
+                                        //onClick={onCanceModal}
                                     >
                                         Close
                                     </button>

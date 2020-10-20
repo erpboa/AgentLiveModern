@@ -108,15 +108,18 @@
 }
 
 #btn_alert_cancel{
-    margin: 0px 270px 0px 2px;
+    margin: 0px 200px 0px 2px;
 }
 #btn_alert_savetem{
     margin: 0px 10px 0px 0px;
 }
 #btn_alert_preview{
-    margin: 0px 10px 0px 0px;
+    margin: 0px 10px 0px 10px;
 }
 #btn_alert_save{
+    margin: 0px 0px 0px 0px;
+}
+#btn_alert_template{
     margin: 0px 0px 0px 0px;
 }
 #form_reg_alert_1{

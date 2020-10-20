@@ -19,27 +19,30 @@ import FormEAlertsRegistro from "./FormEAlertsRegistro";
 const FormEAlerts = (props) => {
   const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
   const [hasError, setErrors] = useState(false);
-  const [dataTeam, setDataTeam] = useState();
+  const [dataAlerts, setAlerts] = useState();
 
   const id_lead = props.match.params.id_lead;
 
-
+console.log('llegaform ',dataAlerts )
   // List data table
   const getData =  () => {
 
     ServiceRest("agent_portal/Alerts/listarAlerts", {id_lead: id_lead, start: 0, limit: 50})
-        .then((res) => setDataTeam(res.datos))
+        .then((res) => setAlerts(res.datos))
         .catch((err) => setErrors(err));
   };
+
+
 
   useEffect(() => {
     getData();
   }, [reloadComponent]);
 
-  // Delete Team
-  const deleteTeam = (id) => {
-    let p_delete = {id_team: id};
-    ServiceRest("agent_portal/Team/eliminarTeam", p_delete).then((resp) => {
+  // Delete Alerts
+  const deleteAlerts = (id) => {
+    //let p_delete = {id_team: id};
+    let p_delete = {id_alerts: id};
+    ServiceRest("agent_portal/Alerts/eliminarAlerts", p_delete).then((resp) => {
       if (!resp.error) {
         getData()
       } else {
@@ -74,7 +77,7 @@ const FormEAlerts = (props) => {
                         name="FormEAlertsShow">Add E-Alert
                 </button>
 
-                {dataTeam && (
+                {dataAlerts && (
 
                     <div>
                       <div className="table-responsive">
@@ -90,7 +93,9 @@ const FormEAlerts = (props) => {
                           </tr>
                           </thead>
                           <tbody>
-                          {dataTeam.map((e, i) => (
+                          {dataAlerts.map((e, i) => (
+                              console.log('llegadataale e', e),
+                              console.log('llegadataale i', i),
                               <tr key={i} style={{fontSize: '10pt'}}>
                                 <td>{e.subject}</td>
                                 <td>{(e.price_from !== null)? e.price_from:'Automatic'}</td>
@@ -99,12 +104,25 @@ const FormEAlerts = (props) => {
                                 <td>
                                   <div>
                                     <button type="button" className="btn btn-sm">
-                                      <i className="fa fa-edit fa-2x"></i>
+                                      <i className="fa fa-clone fa-2x"></i>
                                     </button>
+                                    <button type="button" className="btn btn-sm">
+                                      <i className="fa fa-eye fa-2x"></i>
+                                    </button>
+
                                     <button
                                         type="button"
                                         className="btn btn-sm"
-                                        onClick={(value) => deleteTeam(e.id_team)}
+                                        onClick={addItemToCart}
+                                    >
+                                      <i className="fa fa-edit fa-2x"></i>
+                                    </button>
+
+
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm"
+                                        onClick={(value) => deleteAlerts(e.id_alerts)}
                                     >
                                       <i
                                           style={{color: "#DC143C"}}
