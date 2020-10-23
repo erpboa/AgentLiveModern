@@ -103,7 +103,11 @@ console.log('llegaform ',dataAlerts )
                                 <td></td>
                                 <td>
                                   <div>
-                                    <button type="button" className="btn btn-sm">
+                                    <button
+                                        type="button"
+                                        className="btn btn-sm"
+                                        onClick={addItemToCart}
+                                    >
                                       <i className="fa fa-clone fa-2x"></i>
                                     </button>
                                     <button type="button" className="btn btn-sm">

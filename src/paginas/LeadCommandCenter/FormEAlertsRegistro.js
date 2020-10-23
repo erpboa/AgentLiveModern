@@ -418,10 +418,16 @@ const FormEAlertsRegistro = (props) => {
         //console.log('llegaTemplate3344 ',insertar)
         insertar.then((resp) => {
             //console.log('llegaTemplateeeeee2s', resp.error)
-            if (resp.error) {
+            if (!resp.error) {
+                window.$('#chooseSavetemplate').modal('hide');
+            }else{
                 const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
                 alert(msg);
             }
+            // if (resp.error) {
+            //     const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+            //     alert(msg);
+            // }
         })
 
 
@@ -458,7 +464,7 @@ const FormEAlertsRegistro = (props) => {
 
              
 
-                    <h6 id='style_subtitulos'>Location </h6>                                                
+                    {/*<h6 id='style_subtitulos'>Location </h6>                                                */}
                     <div className="form-group row">
 
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel" onClick={buttonCancel}>Cancel</button>
