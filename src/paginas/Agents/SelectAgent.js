@@ -62,8 +62,8 @@ const SelectAgent = ({
         
           ServiceRest("agent_portal/Team/insertarTeam", obj)
             .then((resp) => {                
-              if (!resp.error) {
-                $("#modalTeam").modal("hide");
+              if (!resp.error) {                  
+                window.$("#modalTeam").modal("hide");
               } else {
                 const msg = `Report code:: ${resp.data.id_log} for review. Detail: ${resp.detail.message}`;
                 alert(msg);

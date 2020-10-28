@@ -23,7 +23,6 @@ const FormEAlerts = (props) => {
 
   const id_lead = props.match.params.id_lead;
 
-console.log('llegaform ',dataAlerts )
   // List data table
   const getData =  () => {
 
@@ -57,8 +56,14 @@ console.log('llegaform ',dataAlerts )
   const [cart, setCart] = useState(false);
 
 
-  function addItemToCart(e) {
-    setCart(true)
+  function addItemToCart(e, t=true) {
+    if(!t){
+      setCart(false)
+      getData()
+    }else{
+      setCart(true)
+    }
+    
 
   }
 
@@ -70,7 +75,7 @@ console.log('llegaform ',dataAlerts )
 
           { (cart) ?
 
-              <FormEAlertsRegistro id_lead = {id_lead} setCart = {addItemToCart}/>
+              <FormEAlertsRegistro id_lead = {id_lead} setCart = {addItemToCart} addItemToCart={addItemToCart}/>
               : <div className="cart">
 
                 <button type="button" className="btn btn-primary" id="chooseActionPlan" onClick={addItemToCart}
@@ -93,9 +98,7 @@ console.log('llegaform ',dataAlerts )
                           </tr>
                           </thead>
                           <tbody>
-                          {dataAlerts.map((e, i) => (
-                              console.log('llegadataale e', e),
-                              console.log('llegadataale i', i),
+                          {dataAlerts.map((e, i) => (                                                            
                               <tr key={i} style={{fontSize: '10pt'}}>
                                 <td>{e.subject}</td>
                                 <td>{(e.price_from !== null)? e.price_from:'Automatic'}</td>
