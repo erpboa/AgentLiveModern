@@ -203,6 +203,11 @@ const MenuPrincipal = (props) => {
               <li className="nav-item">
                 <a className="nav-link" href="/Agents" id="HoverMenu"><i id="iconos" className="fa fa-users"></i> <p>Agents</p></a>
               </li>
+
+              <li className="nav-item">
+                <a className="nav-link" href="/Listings" id="HoverMenu"><i id="iconos" className="fa fa-home"></i> <p>Listings</p></a>
+              </li>
+
               <li className="nav-item">
                 <a className="nav-link" href="/Reports" id="HoverMenu"><i id="iconos" className="fa fa-line-chart"></i> <p>Reports</p></a>
               </li>

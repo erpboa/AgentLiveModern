@@ -21,6 +21,8 @@ import {ReloadComponent} from "./contexts/ReloadComponent";
 import {Redirect} from "react-router-dom";
 import PxpConfig from './Config/DatosGenerales';
 
+import Listings from './paginas/Listings/Listings';
+
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 
 
@@ -69,6 +71,7 @@ function App() {
             <Route path="/Import" component={Import}/>
             <Route path="/Marketing" component={Marketing}/>
             <Route path="/Agents" component={Agents}/>
+            <Route path="/Listings" component={Listings}/>
             <Route path="/Reports" component={Reports}/>
             <Route path="/Settings" component={Settings}/>
             <Route path="/NotFound" component={NotFound} />
