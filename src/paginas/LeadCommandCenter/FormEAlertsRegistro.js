@@ -9,11 +9,21 @@
 import React, {useState, useEffect, useContext} from "react";
 import {ServiceRest} from "../../services/ServiceRest";
 import {ReloadComponent} from "../../contexts/ReloadComponent";
-
+import {Coordinates} from "../../contexts/Coordinates";
 import './styles/FormEAlertsStyle.css';
 import {NavLink} from "react-router-dom";
 
-const FormEAlertsRegistro = (props) => {
+
+import FormEAlerts from "./FormEAlerts";
+
+import MapGoogle from '../../components/MapGoogle';
+import {onPreviewSearchLM } from './searchFlterLivemoDern.js';
+
+const property_type=[],community_features=[],property_features=[],waterfront=[],view=[],exterior_features=[],interior_features=[],style=[],financing=[];
+let resp_estruc
+
+const FormEAlertsRegistro = (props) => {    
+    let origin = props.addItemToCart
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
     const [hasError, setErrors] = useState(false);
     const [dataTeam, setDataTeam] = useState();
@@ -63,24 +73,48 @@ const FormEAlertsRegistro = (props) => {
     });
     const [filterE, setFilter] = useState();
     const [count, setCount] = useState();
+    const {coordinates} = useContext(Coordinates);
 
     const id_lead = props.id_lead;
     const v_setCart = props.setCart;
 
-    //console.log('kllea va', id_lead)
+    
     /*******************************************************************/
     //listar email lead
     const [email, setemail] = useState();
-    console.log('llegaemail ', email)
+    
     const getDataEmail = e => {
         var params = { start: 0, limit: 50, id_lead:id_lead};
         var listado = ServiceRest('agent_portal/Lead/listarLead',params);
 
         listado.then((value) => {
             /*Enviamos el Valor a las variables para mostrar en el componente*/
-            //console.log('llegacall33445list ',value.datos)
+            
             if (value.datos.length > 0 ){
                 setemail(value.datos[0].email);
+            }
+
+        });
+    }
+
+    /*******************************************************************/
+
+    /*******************************************************************/
+    //listar Alert
+    const [dataEAlertPriceFrom, setEAlertPriceFrom] = useState();
+    const [dataEAlertPriceTo, setEAlertPriceTo] = useState();
+    
+    const ListDataEAlert = e => {
+        
+        var params = { start: 0, limit: 50, id_lead:id_lead};
+        var listado = ServiceRest('agent_portal/Alerts/listarAlerts',params);
+
+        listado.then((value) => {
+            /*Enviamos el Valor a las variables para mostrar en el componente*/            
+
+            if (value.datos.length > 0 ){
+                setEAlertPriceFrom(value.datos[0].price_from);
+                setEAlertPriceTo(value.datos[0].price_to);
             }
 
         });
@@ -118,7 +152,7 @@ const FormEAlertsRegistro = (props) => {
         llamarComboInteriorFeatures();
         llamarComboStyle();
         llamarComboFinancing();
-        getApiAlertProperty()
+        getApiAlertProperty();
     }, [reloadComponent]);
 
     /******************Lista del Combo Tipo property**********************/
@@ -126,15 +160,13 @@ const FormEAlertsRegistro = (props) => {
     const [listaComboProperty, setListaComboProperty] = useState();
 
     /*Funcion para llamar al Servicio del ERP y Listar el Combo*/
-    const llamarComboProperty = e => {
-        console.log('llega setListeee')
+    const llamarComboProperty = e => {        
         var params = { start: 0, limit: 50, codSubsistema:'AP', catalogo_tipo:'talerts_property_type'};
         var listado = ServiceRest('parametros/Catalogo/listarCatalogoCombo',params);
         /*Formateamos el Promise de resultado para mandar el dato al combo*/
 
         listado.then((value) => {
-            setListaComboProperty(value.datos)
-            console.log('llega value.datos', value.datos)
+            setListaComboProperty(value.datos)            
         });
         document.getElementById("Formulario_EAlert").reset();
     }
@@ -265,15 +297,32 @@ const FormEAlertsRegistro = (props) => {
 
     const [listaCombo, setListaCombo] = useState();
     /*******************************************************************/
+    const [listaComboTemplate, setListaTemplate] = useState();
+    const llamarTemplate = e => {
+        var params = { start: 0, limit: 50, id_lead:id_lead};
+        var listado = ServiceRest('agent_portal/AlertsTemplate/listarAlertsTemplate',params);
+        /*Formateamos el Promise de resultado para mandar el dato al combo*/
+        listado.then((value) => {
+            setListaTemplate(value.datos.map((comboLead) =>
+
+                <option key={comboLead.name_template} value = {comboLead.name_template}>
+                    {comboLead.name_template}
+                </option>
+
+            ));
+        });
+        document.getElementById("Formulario_EAlert").reset();
+    }
+    /*******************************************************************/
     /***************Insertar un nuevo Note********************/
     /*Creamos la variable que almacenara los Campos del Lead*/
     const [dataEALertInsert, setEAlertInsert] = useState();
-    //console.log('lleganote2',dataNoteInsert)
+    
 
 
     /********Llamamos a la funcion para recuperar los datos de cada Campo cuando se cambie del input*****/
     const enviarDatos = (e) => {
-        //console.log('e', e.target.value)
+        
         setEAlertInsert(e.target.value);
     };
     /****************************************************************************************************/
@@ -281,10 +330,8 @@ const FormEAlertsRegistro = (props) => {
     /*******Aqui llamamos al boton de Agregar un nuevo Lead y mandar los datos al ERP*******/
     const insertEAlerts = (e) => {
         var params = { start: 0, limit: 50, id_lead:id_lead, descripcion:dataEALertInsert};
-        var insertar = ServiceRest('agent_portal/Note/insertarNote',params);
-        console.log('lleganote3344 ',insertar)
-        insertar.then((resp) => {
-            console.log('lleganoteeeee2s', resp.error)
+        var insertar = ServiceRest('agent_portal/Note/insertarNote',params);        
+        insertar.then((resp) => {            
             if (resp.error) {
                 const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
                 alert(msg);
@@ -296,61 +343,183 @@ const FormEAlertsRegistro = (props) => {
     /*******************************************************************/
 
     /*******************************************************************/
-    const onHandleInput = (e) => {     
-        
-        setEalertInsert({...dataEalertInsert,[e.target.name]: e.target.value}) ;
-        
-        switch (e.target.name) {
-            case 'year_build_from':
-                    setFilter({...filterE, 'ffd_yearbuilt_pb': e.target.value})                  
+
+    const estructureDataInsert = (data, typeArray) => {          
+        switch (typeArray) {
+            case 'property_type':
+                const indice_1 = property_type.indexOf(`${data}`);                 
+                indice_1 === -1 ? property_type.push(data):property_type.splice(indice_1, 1);
+                resp_estruc = {data: property_type}
                 break;
-            case 'bedrooms_from':
-                    setFilter({...filterE, 'ffd_bedrooms_pb': e.target.value}) 
-                break;                 
+            case 'community_features':
+                const indice_2 = community_features.indexOf(`${data}`);                 
+                indice_2 === -1 ? community_features.push(data):community_features.splice(indice_2, 1);
+                resp_estruc = {data: community_features}
+                break;
+            case 'property_features':
+                const indice_3 = property_features.indexOf(`${data}`);                 
+                indice_3 === -1 ? property_features.push(data):property_features.splice(indice_3, 1);
+                resp_estruc = {data: property_features}
+                break;
+            case 'waterfront':
+                const indice_4 = waterfront.indexOf(`${data}`);                 
+                indice_4 === -1 ? waterfront.push(data):waterfront.splice(indice_4, 1);
+                resp_estruc = {data: waterfront}
+                break;
+            case 'exterior_features':
+                const indice_5 = exterior_features.indexOf(`${data}`);                 
+                indice_5 === -1 ? exterior_features.push(data):exterior_features.splice(indice_5, 1);
+                resp_estruc = {data: exterior_features}
+                break;
+            case 'interior_features':
+                const indice_6 = interior_features.indexOf(`${data}`);                 
+                indice_6 === -1 ? interior_features.push(data):interior_features.splice(indice_6, 1);
+                resp_estruc = {data: interior_features}
+                break;
+            case 'style':
+                const indice_7 = style.indexOf(`${data}`);                 
+                indice_7 === -1 ? style.push(data):style.splice(indice_7, 1);
+                resp_estruc = {data: style}
+                break;
+            case 'financing':
+                const indice_8 = financing.indexOf(`${data}`);                 
+                indice_8 === -1 ? financing.push(data):financing.splice(indice_8, 1);
+                resp_estruc = {data: financing}
+                break;
         }
-        console.log("data", dataEalertInsert);
+        return JSON.stringify(resp_estruc)
+    }
+    const onHandleInput = (e) => {    
+
+        let selecValuefil = null               
+        const  myarr  =  [ "property_type" , "community_features" , "property_features" , "waterfront" , "view" ,  "exterior_features" , "interior_features" , "style" , "financing" ];
+        const find_data = myarr.find(v => v === e.target.name)        
+            if(find_data!==undefined){                
+                selecValuefil = estructureDataInsert(e.target.value, find_data)                           
+            }else{
+                selecValuefil = e.target.value
+            }            
+               
+        setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil})
+
+        switch (e.target.name) {
+             
+            case 'price_from':
+                    setFilter({...filterE, 'ffd_listingprice_pb_from': selecValuefil})                  
+                break;
+            case 'price_to':
+                    setFilter({...filterE, 'ffd_listingprice_pb_to': selecValuefil})                  
+                break;                            
+            case 'property_type':
+                    setFilter({...filterE, 'ffd_propertytype': selecValuefil})
+            case 'year_build_from':
+                    setFilter({...filterE, 'ffd_yearbuilt_pb_from': selecValuefil})                  
+                break;
+            case 'year_build_to':
+                setFilter({...filterE, 'ffd_yearbuilt_pb_to': selecValuefil})                  
+            break;                
+            case 'bedrooms_from':
+                    setFilter({...filterE, 'ffd_bedrooms_pb_from': selecValuefil}) 
+                break;
+            case 'bedrooms_to':
+                setFilter({...filterE, 'ffd_bedrooms_pb_to': selecValuefil}) 
+            break;                
+            case 'bathrooms_from':
+                    setFilter({...filterE, 'ffd_fullbathrooms_pb_from': selecValuefil})                 
+            break;
+            case 'bathrooms_to':
+                    setFilter({...filterE, 'ffd_fullbathrooms_pb_to': selecValuefil})                 
+            break;
+            case 'acreage_from':
+                    setFilter({...filterE, 'ffd_acres_calc_from': selecValuefil})                 
+            break;            
+            case 'acreage_to':
+                    setFilter({...filterE, 'ffd_acres_calc_to': selecValuefil})                 
+            break;     
+            
+            // case 'stories_total_from':
+            //         setFilter({...filterE, 'ffd_stories_from': selecValuefil})                 
+            // break;     
+            // case 'stories_total_to':
+            //         setFilter({...filterE, 'ffd_stories_to': selecValuefil})                 
+            // break; 
+            // case 'garages_total_from':
+            //         setFilter({...filterE, 'ffd_garages_from': selecValuefil})                 
+            // break;     
+            // case 'garages_total_to':
+            //         setFilter({...filterE, 'ffd_garages_to': selecValuefil})                 
+            // break;                                         
+            break;            
+            case 'days_listed':
+                    setFilter({...filterE, 'ffd_days_on_market': selecValuefil})                 
+            break;                 
+                                
+        }        
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
-        .then((res) => {            
+        .then((res) => {                       
             setCount(res.datos[0].contador)            
+        })
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
         })
     }
 
+    const onPreview = () => {
+        onPreviewSearchLM(coordinates, dataEalertInsert)
+    }
+
     const onInsertEalert = (e) => {
-        e.preventDefault()
-        dataEalertInsert.id_lead= id_lead
-        
-        var insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
-        insertar.then((resp) => {
-            console.log(dataEalertInsert);
+        e.preventDefault()                         
+        dataEalertInsert.id_lead= id_lead    
+        dataEalertInsert.draw_on_map = JSON.stringify(coordinates)        
+        const insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
+        insertar.then((resp) => {            
             console.log(resp);
+            origin(e, false)
         })
     }
+
+    /***********************para cerrar el modal************************/
+
+    /*const onCanceModal = () => {
+        //chooseSavetemplate.modal('hide');
+        this.setState({modal: hide})
+    }*/
+    /**************************.*****************************************/
+
 
     /***************Insertar un nuevo Template********************/
     /*Creamos la variable que almacenara los Campos del Lead*/
     const [dataTemplateInsert, setTemplateInsert] = useState();
-    console.log('llegaTemplate2',dataTemplateInsert)
+    
 
 
     /********Llamamos a la funcion para recuperar los datos de cada Campo cuando se cambie del input*****/
-    const enviarDatosTemplate = (e) => {
-        //console.log('e', e.target.value)
+    const enviarDatosTemplate = (e) => {        
         setTemplateInsert(e.target.value);
     };
     /****************************************************************************************************/
-//console.log('llega ', dataEalertInsert)
+
     /*******Aqui llamamos al boton de Agregar un nuevo Lead y mandar los datos al ERP*******/
     const insertTemplates = async (e) => {
         var params = { start: 0, limit: 50, id_lead:id_lead, name_template:dataTemplateInsert};
         var insertar = ServiceRest('agent_portal/AlertsTemplate/insertarAlertsTemplate',params);
-        //console.log('llegaTemplate3344 ',insertar)
+        
         insertar.then((resp) => {
-            //console.log('llegaTemplateeeeee2s', resp.error)
-            if (resp.error) {
+            
+            if (!resp.error) {
+                window.$('#chooseSavetemplate').modal('hide');
+            }else{
                 const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
                 alert(msg);
             }
+            // if (resp.error) {
+            //     const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
+            //     alert(msg);
+            // }
         })
+
+
 
 
     };
@@ -358,9 +527,20 @@ const FormEAlertsRegistro = (props) => {
 
     /*******************************************************************/
     const handleDelete = e => {
-        console.log('llega delete')
+        
     };
     /*******************************************************************/
+
+    //const [btnCancel, setCancel] = useState(false);
+
+
+    function buttonCancel(e) {
+
+
+    }
+    /*******************************************************************/
+
+
 
     return (
         <div>
@@ -368,20 +548,46 @@ const FormEAlertsRegistro = (props) => {
 
             <div className="container-fluid">
 
+
                 <form id='Formulario_EAlert'>
 
-                    <div className="form-group row">
-                        <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
-                        <NavLink className="nav-link" to="#" id="btn_alert_savetem"><a href="#">Load Templates</a></NavLink>
-                        <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
-                        <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
-                    </div>
+             
 
+                    {/*<h6 id='style_subtitulos'>Location </h6>                                                */}
+                    <div className="form-group row">
+
+                        <button type="button" className="btn btn-secondary" id="btn_alert_cancel" onClick={buttonCancel}>Cancel</button>
+
+
+                            {/*<a>Load Templates</a>*/}
+                            <form onClick={llamarTemplate}>
+
+                                <select id="btn_alert_template" className="form-control" onChange={ListDataEAlert}>
+                                    <option hidden defaultValue>Select an EAlert Template</option>
+                                    {listaComboTemplate}
+                                </select>
+
+                            </form>
+
+
+                        <button type="button" className="btn btn-success" id="btn_alert_preview" onClick={onPreview}>Preview</button>
+                        <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
+
+
+                    </div>
                     <h6 className='style_subtitulos'>Location </h6>
                     <div className="form-group row">
+                    <div style={{width:'100%'}}>
+                        <input type="radio"  name="map" defaultChecked/>
+                        <label className="my-1 mr-2"> Draw On Map</label>
+                        <div>
+                            <MapGoogle />
+                        </div>
+                    </div>
                         <form className="form-inline">
-                            <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">City</label>
+                        <input type="radio"  name="city" />
+                            <div id="style-position-left">                            
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> City</label>
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
@@ -408,9 +614,9 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     <div className="form-group row">
-
+                        <input type="radio"  name="zip" />
                         <div id="style-position-left">
-                            <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">Zip</label>
+                            <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Zip</label>
                         </div>
                         <div id="style-position-right" >
                             <select  className="form-control" name="id_agent"
@@ -425,9 +631,10 @@ const FormEAlertsRegistro = (props) => {
 
                     <div className="form-group row">
                         <form className="form-inline">
+                            <input type="radio"  name="neighborhood" />
                             <div id="style-position-left">
                                 <label className="my-1 mr-2"
-                                       htmlFor="inlineFormCustomSelectPref" id="label_left">Neighborhood</label>
+                                       htmlFor="inlineFormCustomSelectPref" id="label_left"> Neighborhood</label>
                             </div>
                             <div id="style-position-right">
                                 <select  className="form-control" name="id_agent"
@@ -440,8 +647,9 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
+                        <input type="radio"  name="popular_locations" />
                             <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">Popular
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Popular
                                     Locations</label>
                             </div>
                             <div id="style-position-right">
@@ -455,8 +663,9 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
+                            <input type="radio"  name="county" />
                             <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">County</label>
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> County</label>
                             </div>
                             <div id="style-position-right">
                                 <select  className="form-control" name="id_agent"
@@ -469,8 +678,9 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
+                            <input type="radio"  name="school" />
                             <div id="style-position-left">
-                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left">School</label>
+                                <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> School</label>
                             </div>
                             <div id="style-position-right">
                                 <select  className="form-control" name="id_agent"
@@ -487,7 +697,7 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                         <form className="form-inline">
                             <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
-                            name="price_from" />
+                            name="price_from" defaultValue={dataEAlertPriceFrom}/>
 
                             <input type="text" className="form-control" placeholder="To"  onChange={onHandleInput}
                             name="price_to" />
@@ -502,8 +712,9 @@ const FormEAlertsRegistro = (props) => {
                         <form className="form-inline" id='form_reg_alert'>
 
                             { listaComboProperty && listaComboProperty.map((value, i) =>(
+                                
                                 <div className="form-check" key={i}>
-                                        <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onChange={onHandleInput} 
+                                        <input className="form-check-input" type="checkbox" value={value.descripcion} id='form_reg_alert_1' onClick={onHandleInput} 
                                         name="property_type" />
                                         <label className="form-check-label">
                                             <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
@@ -522,10 +733,17 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                         <form className="form-inline">
 
-                            { listaComboListingStatus && listaComboListingStatus.map((value, i) =>(
+                            { listaComboListingStatus && listaComboListingStatus.map((value, i) => {
+                                let listing_check = false
+                                if(value.descripcion === 'Active'|| value.descripcion === 'Coming soon'){
+                                    listing_check = true
+                                }
+
+                                return (
+                                
                                 <div className="form-check" key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id='form_reg_alert_1' onChange={onHandleInput}
-                                    name="listing_status" />
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id='form_reg_alert_1' onChange={onHandleInput}
+                                    name="listing_status" defaultChecked={listing_check}/>
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -533,7 +751,7 @@ const FormEAlertsRegistro = (props) => {
                                     </label>
                                 </div>
 
-                            ))}
+                            )})}
 
                         </form>
                     </div>
@@ -794,9 +1012,9 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboCommunityFeatures && listaComboCommunityFeatures.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                    <input className="form-check-input" type="checkbox" value={value.id_catalogo}
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion}
                                     name="community_features"
-                                    onChange={onHandleInput} />
+                                    onClick={onHandleInput} />
                                     <label className="form-check-label">
                                         <option className="form-check-label" value = {value.descripcion} id='form_reg_alert_2'>
                                             {value.descripcion}
@@ -815,7 +1033,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboPropertyFeature && listaComboPropertyFeature.map((value, i) =>(
                                 <div className="form-check" key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1" 
                                     name="property_features"
                                     onChange={onHandleInput} />
                                     <label className="form-check-label">
@@ -836,7 +1054,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboWaterfront && listaComboWaterfront.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1"
                                     name="waterfront"
                                     onChange={onHandleInput}/>
                                     <label className="form-check-label">
@@ -857,7 +1075,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboView && listaComboView.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1"
                                     name="view"
                                     onChange={onHandleInput} />
                                     <label className="form-check-label">
@@ -878,7 +1096,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboExteriorFeatures && listaComboExteriorFeatures.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1" 
                                     name="exterior_features"
                                     onChange={onHandleInput}/>
                                     <label className="form-check-label">
@@ -899,7 +1117,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboInteriorFeaturess && listaComboInteriorFeaturess.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1" 
                                     name="interior_features"
                                     onChange={onHandleInput} />
                                     <label className="form-check-label">
@@ -920,7 +1138,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboStyle && listaComboStyle.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1"
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1"
                                     name="style"
                                     onChange={onHandleInput} />
                                     <label className="form-check-label">
@@ -941,7 +1159,7 @@ const FormEAlertsRegistro = (props) => {
 
                             { listaComboFinancing && listaComboFinancing.map((value, i) =>(
                                 <div className="form-check"  key={i}>
-                                    <input className="form-check-input" type="checkbox" value="" id="form_reg_alert_1" 
+                                    <input className="form-check-input" type="checkbox" value={value.descripcion} id="form_reg_alert_1" 
                                     name="financing"
                                     onChange={onHandleInput} />
                                     <label className="form-check-label">
@@ -976,9 +1194,11 @@ const FormEAlertsRegistro = (props) => {
                                     <a>E-Alert Content Type</a>
                                     <form>
 
-                                            <select id="size_save_alert2" className="form-control" onChange={onHandleInput}>
-                                                <option selected>Buller</option>
-                                                <option value="1">Seller</option>
+                                            <select id="size_save_alert2" className="form-control" 
+                                            name="type_content" onChange={onHandleInput}>
+                                                <option hidden defaultValue>Select</option>
+                                                <option value="buller">Buller</option>
+                                                <option value="seller">Seller</option>
                                             </select>
 
                                     </form>
@@ -989,7 +1209,8 @@ const FormEAlertsRegistro = (props) => {
                                     <a>E-Alert Frequency</a>
                                     <form onClick={llamarComboEAlertFrequency}>
 
-                                            <select id="size_save_alert2" className="form-control" onChange={onHandleInput}>
+                                            <select id="size_save_alert2" className="form-control" 
+                                            name="alert_frequency" onChange={onHandleInput}>
                                                 <option hidden defaultValue>Enter any property</option>
                                                 {listaComboEAlertFrequency}
                                             </select>
@@ -1018,11 +1239,23 @@ const FormEAlertsRegistro = (props) => {
                             <input id="inputemail"
                                 //className={"input " + (this.state.error && " has-error")}
                                 //value={this.state.value}
+                                  
                                    placeholder="Type or paste email addresses and press `Enter`..."
+                                //    onChange={onHandleInput}
                                 //onKeyDown={this.handleKeyDown}
                                 //onChange={this.handleChange}
                                 //onPaste={this.handlePaste}
                             />
+                            <input id="inputemail"
+                                //className={"input " + (this.state.error && " has-error")}
+                                //value={this.state.value}
+                                   name="subject"
+                                   placeholder="Subject"
+                                   onChange={onHandleInput}
+                                //onKeyDown={this.handleKeyDown}
+                                //onChange={this.handleChange}
+                                //onPaste={this.handlePaste}
+                            />                            
 
                         </form>
                     </div>
@@ -1030,7 +1263,8 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
                         <button data-toggle="modal" type="button" className="btn btn-secondary" id="btn_alert_savetem" data-target="#chooseSavetemplate">Save As Template</button>
-                        <button type="button" className="btn btn-success" id="btn_alert_preview">Preview</button>
+                        <button type="button" className="btn btn-success" id="btn_alert_preview" onClick={onPreview}>Preview</button>
+
                         <button className="btn btn-primary" type="submit" id="btn_alert_save" onClick={onInsertEalert}>Save</button>
                     </div>
 
@@ -1069,6 +1303,7 @@ const FormEAlertsRegistro = (props) => {
                                         type="button"
                                         className="btn btn-secondary"
                                         data-dismiss="modal"
+                                        //onClick={onCanceModal}
                                     >
                                         Close
                                     </button>
