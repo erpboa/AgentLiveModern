@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react';
-import { Form, Field, Input, Select, Segment, Label, Radio, Checkbox, TextArea, Button, Message } from 'semantic-ui-react';
+import React, { useContext, useState, useEffect } from 'react';
+import { Form, Field, Input, Select, Segment, Label, Radio, Checkbox, TextArea, Button, Dropdown } from 'semantic-ui-react';
 import '../../components/styles/formLogin.css';
 import '../../components/styles/stylesMenu.css';
 import '../../components/icon/font-awesome-4.7.0/css/font-awesome.min.css';
@@ -23,28 +23,18 @@ defaultModules.set(PNotifyFontAwesome5, {});
 defaultModules.set(PNotifyMobile, {});
 /*****************************************/
 
-const SearchForm = ({ searchData, handleInputChange, searchListing }) => {  
-  console.log(handleInputChange);
+const SearchForm = ({ data, setListing }) => {  
 
-  const [dataListing, setListing] = useState({
-    architectural_style : "",
-    property_subtype : "",
-    property_type: "",
-    list_price : ""
-
-  });
-
-  const [message, setMessage] = useState(false);
-
-  const handleInputChanges = (e) => {
+  const handleInputChanges = (e, id, value) => {
+    e.preventDefault();
     setListing({
-      ...dataListing,
-      [e.target.name]: e.target.value,
+      ...data,
+      [id]: value,
     });
   };
 
   const saveListing = (e) => {
-    ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", dataListing)
+    ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", data)
         .then((resp) => { console.log('resp', resp);
           const myNotice = alert({
             text: "Master search successfully saved.",
@@ -59,97 +49,302 @@ const SearchForm = ({ searchData, handleInputChange, searchListing }) => {
         .catch((e) => console.error(e));
   }
 
+  const architecturalStyle = [
+    {
+      key: 'None',
+      text: 'None',
+      value: 'None'
+    },
+    {
+      key: 'ClusterHome',
+      text: 'Cluster Home',
+      value: 'ClusterHome'
+    },
+    {
+      key: 'Detached',
+      text: 'Detached',
+      value: 'Detached'
+    },
+    {
+      key: 'Duplex',
+      text: 'Duplex',
+      value: 'Duplex'
+    },
+    {
+      key: 'Fourplex',
+      text: 'Fourplex',
+      value: 'Fourplex'
+    },
+    {
+      key: 'GardenHome',
+      text: 'Garden Home',
+      value: 'GardenHome'
+    },
+    {
+      key: 'HighRise',
+      text: 'High Rise',
+      value: 'HighRise'
+    },
+    {
+      key: 'ManufacturedHome',
+      text: 'Manufactured Home',
+      value: 'ManufacturedHome'
+    },
+    {
+      key: 'OneStory',
+      text: 'One Story',
+      value: 'OneStory'
+    },
+    {
+      key: 'Other',
+      text: 'Other',
+      value: 'Other'
+    },
+    {
+      key: 'PatioHome',
+      text: 'Patio Home',
+      value: 'PatioHome'
+    },
+    {
+      key: 'Penthouse',
+      text: 'Penthouse',
+      value: 'Penthouse'
+    },
+    {
+      key: 'Ranch',
+      text: 'Ranch',
+      value: 'Ranch'
+    },
+    {
+      key: 'SplitLevel',
+      text: 'Split Level',
+      value: 'SplitLevel'
+    },
+    {
+      key: 'TriLevel',
+      text: 'TriLevel',
+      value: 'TriLevel'
+    },
+    {
+      key: 'TwoStory',
+      text: 'TwoStory',
+      value: 'TwoStory'
+    }
+  ];
+
+  const propertySubtype = [
+    {
+      key: 'None',
+      text: 'None',
+      value: 'None'
+    },
+    {
+      key: 'BusinessOpportunity',
+      text: 'Business Opportunity',
+      value: 'BusinessOpportunity'
+    },
+    {
+      key: 'CommercialLease',
+      text: 'Commercial Lease',
+      value: 'CommercialLease'
+    },
+    {
+      key: 'CommercialSale',
+      text: 'Commercial Sale',
+      value: 'CommercialSale'
+    },
+    {
+      key: 'Land',
+      text: 'Land',
+      value: 'Land'
+    },
+    {
+      key: 'Residential',
+      text: 'Residential',
+      value: 'Residential'
+    },
+    {
+      key: 'ResidentialIncome',
+      text: 'Residential Income',
+      value: 'ResidentialIncome'
+    },
+    {
+      key: 'ResidentialLease',
+      text: 'Residential Lease',
+      value: 'ResidentialLease'
+    }
+  ];
+
+  const propertyType =[
+    {
+      key: 'None',
+      text: 'None',
+      value: 'None'
+    },
+    {
+      key: 'Apartment',
+      text: 'Apartment',
+      value: 'Apartment'
+    },
+    {
+      key: 'BoatSlip',
+      text: 'BoatSlip',
+      value: 'BoatSlip'
+    },
+    {
+      key: 'Business',
+      text: 'Business',
+      value: 'Business'
+    },
+    {
+      key: 'Commercial',
+      text: 'Commercial',
+      value: 'Commercial'
+    },
+    {
+      key: 'Condominium',
+      text: 'Condominium',
+      value: 'Condominium'
+    },
+    {
+      key: 'Duplex',
+      text: 'Duplex',
+      value: 'Duplex'
+    },
+    {
+      key: 'HotelMotel',
+      text: 'HotelMotel',
+      value: 'HotelMotel'
+    },
+    {
+      key: 'Industrial',
+      text: 'Industrial',
+      value: 'Industrial'
+    },
+    {
+      key: 'MixedUse',
+      text: 'MixedUse',
+      value: 'MixedUse'
+    },
+    {
+      key: 'MobileHome',
+      text: 'MobileHome',
+      value: 'MobileHome'
+    },
+    {
+      key: 'MultiFamily',
+      text: 'MultiFamily',
+      value: 'MultiFamily'
+    },
+    {
+      key: 'Office',
+      text: 'Office',
+      value: 'Office'
+    },
+    {
+      key: 'Other',
+      text: 'Other',
+      value: 'Other'
+    },
+    {
+      key: 'Quadruplex',
+      text: 'Quadruplex',
+      value: 'Quadruplex'
+    },
+    {
+      key: 'Residential',
+      text: 'Residential',
+      value: 'Residential'
+    },
+    {
+      key: 'Retail',
+      text: 'Retail',
+      value: 'Retail'
+    },
+    {
+      key: 'SingleFamilyResidence',
+      text: 'SingleFamilyResidence',
+      value: 'SingleFamilyResidence'
+    },
+    {
+      key: 'SpecialPurpose',
+      text: 'SpecialPurpose',
+      value: 'SpecialPurpose'
+    },
+    {
+      key: 'StockCooperative',
+      text: 'StockCooperative',
+      value: 'StockCooperative'
+    },
+    {
+      key: 'Townhouse',
+      text: 'Townhouse',
+      value: 'Townhouse'
+    },
+    {
+      key: 'Triplex',
+      text: 'Triplex',
+      value: 'Triplex'
+    },
+    {
+      key: 'UnimprovedLand',
+      text: 'UnimprovedLand',
+      value: 'UnimprovedLand'
+    },
+    {
+      key: 'Villa',
+      text: 'Villa',
+      value: 'Villa'
+    },
+
+  ];
+
   return (
     <Segment basic empty>
       <Form>
         <Form.Field>
           <label>
-          Architectural Style
+            Architectural Style
           </label>
-          <select id= "ffd_architectural_style"
-                  name = "ffd_architectural_style"
-                  class="ui search dropdown"
-                  onChange ={handleInputChanges}>
-            <option value="None">None</option>
-            <option value="ClusterHome">Cluster Home</option>
-            <option value="Detached">Detached</option>
-            <option value="Duplex">Duplex</option>
-            <option value="Fourplex">Fourplex</option>
-            <option value="GardenHome">Garden Home</option>
-            <option value="HighRise">High Rise</option>
-            <option value="ManufacturedHome">Manufactured Home</option>
-            <option value="OneStory">One Story</option>
-            <option value="Other">Other</option>
-            <option value="PatioHome">Patio Home</option>
-            <option value="Penthouse">Penthouse</option>
-            <option value="Ranch">Ranch</option>
-            <option value="SplitLevel">Split Level</option>
-            <option value="TriLevel">TriLevel</option>
-            <option value="TwoStory">TwoStory</option>
-          </select>
+          <Dropdown
+            selection
+            placeholder = 'Select one option'
+            options={architecturalStyle}
+            value={data.ffd_architectural_style}
+            defaultValue={data.ffd_architectural_style}
+            id= "ffd_architectural_style"
+            name = "ffd_architectural_style"
+            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+          />
         </Form.Field>
         <Form.Field>
           <label>
           Property SubType
           </label>
-          <select class="ui search dropdown"
-                  id= "property_subtype"
-                  name="property_subtype"
-                  onChange ={handleInputChanges}>
-            <option value="None">None</option>
-            <option value="BusinessOpportunity">BusinessOpportunity</option>
-            <option value="CommercialLease">CommercialLease</option>
-            <option value="CommercialSale">CommercialSale</option>
-            <option value="Land">Land</option>
-            <option value="Residential">Residential</option>
-            <option value="ResidentialIncome">ResidentialIncome</option>
-            <option value="ResidentialLease">ResidentialLease</option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-          </select>
+          <Dropdown
+            selection
+            placeholder = 'Select one option'
+            options={propertySubtype}
+            value={data.ffd_property_subtype}
+            id= "ffd_property_subtype"
+            name = "ffd_property_subtype"
+            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+          />
         </Form.Field>
         <Form.Field>
           <label>
           Property Type
           </label>
-          <select class="ui search dropdown"
-                  id= "property_type"
-                  name = "property_type"
-                  onChange ={handleInputChanges}>
-            <option value="None">None</option>
-            <option value="Apartment">Apartment</option>
-            <option value="BoatSlip">BoatSlip</option>
-            <option value="Business">Business</option>
-            <option value="Commercial">Commercial</option>
-            <option value="Condominium">Condominium</option>
-            <option value="Duplex">Duplex</option>
-            <option value="HotelMotel">HotelMotel</option>
-            <option value="Industrial">Industrial</option>
-            <option value="MixedUse">MixedUse</option>
-            <option value="MobileHome">MobileHome</option>
-            <option value="MultiFamily">MultiFamily</option>
-            <option value="Office">Office</option>
-            <option value="Other">Other</option>
-            <option value="Quadruplex">Quadruplex</option>
-            <option value="Residential">Residential</option>
-            <option value="Retail">Retail</option>
-            <option value="SingleFamilyResidence">SingleFamilyResidence</option>
-            <option value="SpecialPurpose">SpecialPurpose</option>
-            <option value="StockCooperative">StockCooperative</option>
-            <option value="Townhouse">Townhouse</option>
-            <option value="Triplex">Triplex</option>
-            <option value="UnimprovedLand">UnimprovedLand</option>
-            <option value="Villa">Villa</option>
-          </select>
-
+          <Dropdown
+            selection
+            placeholder = 'Select one option'
+            options={propertyType}
+            value={data.ffd_property_type}
+            id= "ffd_property_type"
+            name = "ffd_property_type"
+            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+          />
         </Form.Field>
-
         <Form.Field>
           <label>
           List Price
@@ -158,10 +353,9 @@ const SearchForm = ({ searchData, handleInputChange, searchListing }) => {
             id= "ffd_listingprice_pb"
             name = "ffd_listingprice_pb"
             placeholder= "List Price"
-            onChange ={handleInputChanges}
-            //value= {searchData.data3}
+            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+            value= {data.ffd_listingprice_pb}
           />
-          
         </Form.Field>
 
          <Button primary onClick={saveListing}>Save</Button>
