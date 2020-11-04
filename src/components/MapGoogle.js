@@ -107,9 +107,8 @@ const MapGoogle = () => {
     <div className="App-map-google">
         <button
         style={{
-          position: "absolute",
-          top: "500px",
-          right: "400px",
+          position:'sticky',
+          top: "550px",          
           width: '80px',
           height: '40px',
           zIndex: 100

@@ -18,7 +18,7 @@ import FormEAlerts from "./FormEAlerts";
 
 import MapGoogle from '../../components/MapGoogle';
 import {onPreviewSearchLM } from './searchFlterLivemoDern.js';
-
+import $ from "jquery";
 const property_type=[],community_features=[],property_features=[],waterfront=[],view=[],exterior_features=[],interior_features=[],style=[],financing=[];
 let resp_estruc
 
@@ -28,6 +28,7 @@ const FormEAlertsRegistro = (props) => {
     const [hasError, setErrors] = useState(false);
     const [dataTeam, setDataTeam] = useState();
     const [dataProperty, setProperty] = useState();
+    const [seeMap, setSeeMap] = useState(true);
     const [dataEalertInsert, setEalertInsert] = useState(	{'id_lead': "",
     'exterior_features': "",
     'state': "",
@@ -538,6 +539,19 @@ const FormEAlertsRegistro = (props) => {
 
 
     }
+    const onlyOneChek = (e) => {   
+        
+        if(e.target.name==="map") {
+            setSeeMap(true)
+        }else{
+            setSeeMap(false)
+        }
+        window.$('.slectOne').change(function(){
+            if(this.checked){                 
+                window.$('.slectOne').not(this).prop('checked', false)                
+            }    
+        });
+    }
     /*******************************************************************/
 
 
@@ -578,20 +592,22 @@ const FormEAlertsRegistro = (props) => {
                     <h6 className='style_subtitulos'>Location </h6>
                     <div className="form-group row">
                     <div style={{width:'100%'}}>
-                        <input type="radio"  name="map" defaultChecked/>
+                        <input type="radio"  name="map" className="slectOne" defaultChecked onChange={onlyOneChek}/>
                         <label className="my-1 mr-2"> Draw On Map</label>
                         <div>
-                            <MapGoogle />
+                            {seeMap && <MapGoogle />}
                         </div>
-                    </div>
+                        <br />
+                        <br />
+                    </div>                                        
                         <form className="form-inline">
-                        <input type="radio"  name="city" />
+                        <input type="radio"  name="city" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">                            
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> City</label>
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2" id="size_city">
+                                    <select className="custom-select my-1 mr-sm-2"  name="state_city" >
                                         <option selected>Enter any city</option>
                                         <option value="1"></option>
                                         <option value="2"></option>
@@ -602,7 +618,7 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2" id="size_city">
+                                    <select className="custom-select my-1 mr-sm-2"   name="specify_city">
                                         <option selected>Specify any state</option>
                                         <option value="1"></option>
                                         <option value="2"></option>
@@ -614,12 +630,12 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     <div className="form-group row">
-                        <input type="radio"  name="zip" />
+                        <input type="radio"  name="zip" className="slectOne" onChange={onlyOneChek}/>
                         <div id="style-position-left">
                             <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Zip</label>
                         </div>
                         <div id="style-position-right" >
-                            <select  className="form-control" name="id_agent"
+                            <select  className="form-control" name="zip" 
                                 //onChange={onAddAgent}
                             >
                                 <option hidden defaultValue>Enter any zip</option>
@@ -631,13 +647,13 @@ const FormEAlertsRegistro = (props) => {
 
                     <div className="form-group row">
                         <form className="form-inline">
-                            <input type="radio"  name="neighborhood" />
+                            <input type="radio"  name="neighborhood" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">
                                 <label className="my-1 mr-2"
                                        htmlFor="inlineFormCustomSelectPref" id="label_left"> Neighborhood</label>
                             </div>
                             <div id="style-position-right">
-                                <select  className="form-control" name="id_agent"
+                                <select  id="neighborhood" className="form-control" name="neighborhood" 
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any neighborhood</option>
@@ -647,13 +663,13 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
-                        <input type="radio"  name="popular_locations" />
+                        <input type="radio"  name="popular_locations" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Popular
                                     Locations</label>
                             </div>
                             <div id="style-position-right">
-                                <select  className="form-control" name="id_agent"
+                                <select  id="popular_locations" className="form-control" name="popular_locations" 
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any location</option>
@@ -663,12 +679,12 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <input type="radio"  name="county" />
+                            <input type="radio"  name="county" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> County</label>
                             </div>
                             <div id="style-position-right">
-                                <select  className="form-control" name="id_agent"
+                                <select  id="county" className="form-control" name="county"
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any county</option>
@@ -678,12 +694,12 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     <div className="form-group row">
                         <form className="form-inline">
-                            <input type="radio"  name="school" />
+                            <input type="radio"  name="school" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> School</label>
                             </div>
                             <div id="style-position-right">
-                                <select  className="form-control" name="id_agent"
+                                <select  id="school" className="form-control" name="school" 
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any school</option>

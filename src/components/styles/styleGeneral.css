@@ -160,6 +160,7 @@ body{
   font-family: sans-serif;
   text-align: center;
   height: 50vh;
+  position: relative;
 }
 
 .App-map-google-2 {
