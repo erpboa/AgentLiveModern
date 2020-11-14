@@ -13,6 +13,8 @@ import {Coordinates} from "../../contexts/Coordinates";
 import './styles/FormEAlertsStyle.css';
 import {NavLink} from "react-router-dom";
 
+import {data_elaert} from './ealert.json';
+
 
 import FormEAlerts from "./FormEAlerts";
 
@@ -22,9 +24,11 @@ import $ from "jquery";
 const property_type=[],community_features=[],property_features=[],waterfront=[],view=[],exterior_features=[],interior_features=[],style=[],financing=[];
 let resp_estruc
 
-const FormEAlertsRegistro = (props) => {    
+const FormEAlertsRegistro = (props) => {   
+    
     let origin = props.addItemToCart
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
+    const [dataLiMo, setDataLiMo] = useState(null);
     const [hasError, setErrors] = useState(false);
     const [dataTeam, setDataTeam] = useState();
     const [dataProperty, setProperty] = useState();
@@ -70,7 +74,7 @@ const FormEAlertsRegistro = (props) => {
     'price_from': "",
     'bedrooms_to': "",
     'bathrooms_from': "",
-    'bathrooms_to': ""
+    'bathrooms_to': ""    
     });
     const [filterE, setFilter] = useState();
     const [count, setCount] = useState();
@@ -140,6 +144,15 @@ const FormEAlertsRegistro = (props) => {
         .catch((err) => setErrors(err));
     }
 
+    const getDataLiveModernToFilters = async () => {
+        const req = await fetch('http://54.227.57.214/livemodern/wp-json/agentportal/v1/alertcatalog', 
+            {method:'GET', 
+            headers: {'Authorization': 'Basic bWt0ZnJlc2g6TWFyazN0RnIzNWhAMjAyMCE='}});
+        const resp = await req.json();
+        const json_data = await JSON.parse(`${resp}`);
+        setDataLiMo(json_data);
+    }
+
     useEffect(() => {
         getData();
         getDataEmail();
@@ -154,6 +167,7 @@ const FormEAlertsRegistro = (props) => {
         llamarComboStyle();
         llamarComboFinancing();
         getApiAlertProperty();
+        getDataLiveModernToFilters();
     }, [reloadComponent]);
 
     /******************Lista del Combo Tipo property**********************/
@@ -391,71 +405,73 @@ const FormEAlertsRegistro = (props) => {
         return JSON.stringify(resp_estruc)
     }
     const onHandleInput = (e) => {    
+        
+            let selecValuefil = null               
+            const  myarr  =  [ "property_type" , "community_features" , "property_features" , "waterfront" , "view" ,  "exterior_features" , "interior_features" , "style" , "financing" ];
+            const find_data = myarr.find(v => v === e.target.name)        
+                if(find_data!==undefined){                
+                    selecValuefil = estructureDataInsert(e.target.value, find_data)                           
+                }else{
+                    selecValuefil = e.target.value
+                }            
+                
+            setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil})
 
-        let selecValuefil = null               
-        const  myarr  =  [ "property_type" , "community_features" , "property_features" , "waterfront" , "view" ,  "exterior_features" , "interior_features" , "style" , "financing" ];
-        const find_data = myarr.find(v => v === e.target.name)        
-            if(find_data!==undefined){                
-                selecValuefil = estructureDataInsert(e.target.value, find_data)                           
-            }else{
-                selecValuefil = e.target.value
-            }            
-               
-        setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil})
-
-        switch (e.target.name) {
-             
-            case 'price_from':
-                    setFilter({...filterE, 'ffd_listingprice_pb_from': selecValuefil})                  
+            switch (e.target.name) {
+                
+                case 'price_from':
+                        setFilter({...filterE, 'ffd_listingprice_pb_from': selecValuefil})                  
+                    break;
+                case 'price_to':
+                        setFilter({...filterE, 'ffd_listingprice_pb_to': selecValuefil})                  
+                    break;                            
+                case 'property_type':
+                        setFilter({...filterE, 'ffd_propertytype': selecValuefil})
+                case 'year_build_from':
+                        setFilter({...filterE, 'ffd_yearbuilt_pb_from': selecValuefil})                  
+                    break;
+                case 'year_build_to':
+                    setFilter({...filterE, 'ffd_yearbuilt_pb_to': selecValuefil})                  
+                break;                
+                case 'bedrooms_from':
+                        setFilter({...filterE, 'ffd_bedrooms_pb_from': selecValuefil}) 
+                    break;
+                case 'bedrooms_to':
+                    setFilter({...filterE, 'ffd_bedrooms_pb_to': selecValuefil}) 
+                break;                
+                case 'bathrooms_from':
+                        setFilter({...filterE, 'ffd_fullbathrooms_pb_from': selecValuefil})                 
                 break;
-            case 'price_to':
-                    setFilter({...filterE, 'ffd_listingprice_pb_to': selecValuefil})                  
-                break;                            
-            case 'property_type':
-                    setFilter({...filterE, 'ffd_propertytype': selecValuefil})
-            case 'year_build_from':
-                    setFilter({...filterE, 'ffd_yearbuilt_pb_from': selecValuefil})                  
+                case 'bathrooms_to':
+                        setFilter({...filterE, 'ffd_fullbathrooms_pb_to': selecValuefil})                 
                 break;
-            case 'year_build_to':
-                setFilter({...filterE, 'ffd_yearbuilt_pb_to': selecValuefil})                  
-            break;                
-            case 'bedrooms_from':
-                    setFilter({...filterE, 'ffd_bedrooms_pb_from': selecValuefil}) 
-                break;
-            case 'bedrooms_to':
-                setFilter({...filterE, 'ffd_bedrooms_pb_to': selecValuefil}) 
-            break;                
-            case 'bathrooms_from':
-                    setFilter({...filterE, 'ffd_fullbathrooms_pb_from': selecValuefil})                 
-            break;
-            case 'bathrooms_to':
-                    setFilter({...filterE, 'ffd_fullbathrooms_pb_to': selecValuefil})                 
-            break;
-            case 'acreage_from':
-                    setFilter({...filterE, 'ffd_acres_calc_from': selecValuefil})                 
-            break;            
-            case 'acreage_to':
-                    setFilter({...filterE, 'ffd_acres_calc_to': selecValuefil})                 
-            break;     
-            
-            // case 'stories_total_from':
-            //         setFilter({...filterE, 'ffd_stories_from': selecValuefil})                 
-            // break;     
-            // case 'stories_total_to':
-            //         setFilter({...filterE, 'ffd_stories_to': selecValuefil})                 
-            // break; 
-            // case 'garages_total_from':
-            //         setFilter({...filterE, 'ffd_garages_from': selecValuefil})                 
-            // break;     
-            // case 'garages_total_to':
-            //         setFilter({...filterE, 'ffd_garages_to': selecValuefil})                 
-            // break;                                         
-            break;            
-            case 'days_listed':
-                    setFilter({...filterE, 'ffd_days_on_market': selecValuefil})                 
-            break;                 
-                                
-        }        
+                case 'acreage_from':
+                        setFilter({...filterE, 'ffd_acres_calc_from': selecValuefil})                 
+                break;            
+                case 'acreage_to':
+                        setFilter({...filterE, 'ffd_acres_calc_to': selecValuefil})                 
+                break;     
+                
+                // case 'stories_total_from':
+                //         setFilter({...filterE, 'ffd_stories_from': selecValuefil})                 
+                // break;     
+                // case 'stories_total_to':
+                //         setFilter({...filterE, 'ffd_stories_to': selecValuefil})                 
+                // break; 
+                // case 'garages_total_from':
+                //         setFilter({...filterE, 'ffd_garages_from': selecValuefil})                 
+                // break;     
+                // case 'garages_total_to':
+                //         setFilter({...filterE, 'ffd_garages_to': selecValuefil})                 
+                // break;                                         
+                // break;            
+                case 'days_listed':
+                        setFilter({...filterE, 'ffd_days_on_market': selecValuefil})                 
+                break;                 
+                                    
+            }        
+        
+        
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {                       
             setCount(res.datos[0].contador)            
@@ -465,7 +481,17 @@ const FormEAlertsRegistro = (props) => {
         })
     }
 
-    const onPreview = () => {
+    const onFilterMap = (e) => {                              
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", e)
+        .then((res) => {                        
+            setCount(res.data.live_modern)            
+        })
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
+        })
+    }
+
+    const onPreview = () => {        
         onPreviewSearchLM(coordinates, dataEalertInsert)
     }
 
@@ -514,10 +540,6 @@ const FormEAlertsRegistro = (props) => {
                 const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
                 alert(msg);
             }
-            // if (resp.error) {
-            //     const msg = `Reporte el codigo: ${resp.data.id_log} para revision. Detalle: ${resp.detail.message}`;
-            //     alert(msg);
-            // }
         })
 
 
@@ -593,9 +615,11 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                     <div style={{width:'100%'}}>
                         <input type="radio"  name="map" className="slectOne" defaultChecked onChange={onlyOneChek}/>
+                        <label className="count_alert">Properties {count}</label>
+                        <br></br>
                         <label className="my-1 mr-2"> Draw On Map</label>
                         <div>
-                            {seeMap && <MapGoogle />}
+                            {seeMap && <MapGoogle onFilterMap={onFilterMap}/>}
                         </div>
                         <br />
                         <br />
@@ -608,10 +632,10 @@ const FormEAlertsRegistro = (props) => {
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"  name="state_city" >
-                                        <option selected>Enter any city</option>
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
+                                        <option hidden defaultValue>Enter any city</option>
+                                        { dataLiMo &&  dataLiMo.talerts_city.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))}
                                     </select>
 
                                 </div>
@@ -619,7 +643,7 @@ const FormEAlertsRegistro = (props) => {
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"   name="specify_city">
-                                        <option selected>Specify any state</option>
+                                        <option hidden defaultValue>Specify any state</option>
                                         <option value="1"></option>
                                         <option value="2"></option>
                                         <option value="3"></option>
@@ -639,7 +663,9 @@ const FormEAlertsRegistro = (props) => {
                                 //onChange={onAddAgent}
                             >
                                 <option hidden defaultValue>Enter any zip</option>
-
+                                { dataLiMo &&  dataLiMo.talerts_postalcode.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))}
                             </select>
                         </div>
 
@@ -657,6 +683,9 @@ const FormEAlertsRegistro = (props) => {
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any neighborhood</option>
+                                    { dataLiMo &&  dataLiMo.talerts_lotfeatures.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))}                                    
                                 </select>
                             </div>
                         </form>
@@ -687,7 +716,10 @@ const FormEAlertsRegistro = (props) => {
                                 <select  id="county" className="form-control" name="county"
                                     //onChange={onAddAgent}
                                 >
-                                    <option hidden defaultValue>Enter any county</option>
+                                    <option hidden defaultValue>Enter any county</option>                                    
+                                        { dataLiMo &&  dataLiMo.talerts_country.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))}
                                 </select>
                             </div>
                         </form>
@@ -703,6 +735,9 @@ const FormEAlertsRegistro = (props) => {
                                     //onChange={onAddAgent}
                                 >
                                     <option hidden defaultValue>Enter any school</option>
+                                    { dataLiMo &&  dataLiMo.talerts_highschool.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))}
                                 </select>
                             </div>
                         </form>
@@ -711,12 +746,29 @@ const FormEAlertsRegistro = (props) => {
                     
                     <h6 id='style_subtitulos'>Price Range <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
-                        <form className="form-inline">
-                            <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
+                        <form className="form-inline">                                
+                                    <select className="custom-select my-1 mr-sm-2" name="price_from"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>Min price</option>
+                                        <option value="any">Any</option>
+                                        {data_elaert.price.min_price.map((data,i) => (
+                                            <option value={data.id} key={i}>${data.label}</option>
+                                        ))}
+                                    </select>
+                                
+                                    <select className="custom-select my-1 mr-sm-2" name="price_to"
+                                            onChange={onHandleInput}>
+                                        <option hidden defaultValue>Max price</option>
+                                        {data_elaert.price.max_price.map((data,i) => (
+                                            <option value={data.id} key={i}>${data.label}</option>
+                                        ))}
+                                    </select>
+                                                                                  
+                            {/* <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
                             name="price_from" defaultValue={dataEAlertPriceFrom}/>
 
                             <input type="text" className="form-control" placeholder="To"  onChange={onHandleInput}
-                            name="price_to" />
+                            name="price_to" /> */}
                         </form>
                     </div>
 
@@ -781,14 +833,14 @@ const FormEAlertsRegistro = (props) => {
                                             onChange={onHandleInput}>
                                         <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
-                                        {dataProperty && dataProperty.value_data[0].bedroom.map((data,i) => (
-                                            <option value={data} key={i}>{data}</option>
+                                        {data_elaert.bedroom.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label} +</option>
                                         ))}
                                     </select>
 
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            {/* <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="bedrooms_to"
                                             onChange={onHandleInput}>
@@ -799,7 +851,7 @@ const FormEAlertsRegistro = (props) => {
                                         ))}
                                     </select>
                                 </div>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                     
@@ -810,16 +862,16 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="bathrooms_from"
                                             onChange={onHandleInput} >
-                                        <option hidden defaultValue>From</option>
-                                        <option value="1">Any</option>
-                                        {dataProperty && dataProperty.value_data[0].bathroom.map((data,i) => (
-                                            <option value={data} key={i}>{data}</option>
+                                        <option hidden defaultValue>From</option>                                        
+                                        <option value="any">Any</option>
+                                        {data_elaert.bathroom.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label} +</option>
                                         ))}
                                     </select>
 
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            {/* <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"
                                             onChange={onHandleInput} name="bathrooms_to">
@@ -830,7 +882,7 @@ const FormEAlertsRegistro = (props) => {
                                         ))}
                                     </select>
                                 </div>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                     
@@ -842,14 +894,11 @@ const FormEAlertsRegistro = (props) => {
                                     <select className="custom-select my-1 mr-sm-2"
                                     onChange={onHandleInput} name="square_footage_from"
                                             >
-                                        <option selected>From</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">500</option>
-                                        <option value="3">550</option>
-                                        <option value="3">600</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
+                                        <option hidden defaultValue>Any</option>
+                                        <option value="any">Any</option>
+                                        {data_elaert.square_footage.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
+                                        ))}
                                     </select>
 
                                 </div>
@@ -859,14 +908,11 @@ const FormEAlertsRegistro = (props) => {
                                     <select className="custom-select my-1 mr-sm-2"
                                         onChange={onHandleInput} name="square_footage_to"
                                             >
-                                        <option selected>to</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">500</option>
-                                        <option value="3">550</option>
-                                        <option value="3">600</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
+                                        <option hidden defaultValue>Any</option>
+                                        <option value="any">Any</option>
+                                        {data_elaert.square_footage.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -880,10 +926,10 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="year_build_from"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>From</option>
+                                        <option hidden defaultValue>Any</option>
                                         <option value="any">Any</option>
-                                        {dataProperty && dataProperty.value_data[0].yearbuilt.map((data,i) => (
-                                            <option value={data} key={i}>{data}</option>
+                                        {data_elaert.year_build.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
 
@@ -893,10 +939,10 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="year_build_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>to</option>
+                                        <option hidden defaultValue>Any</option>
                                         <option value="any">Any</option>
-                                        {dataProperty && dataProperty.value_data[0].yearbuilt.map((data,i) => (
-                                            <option value={data} key={i}>{data}</option>
+                                        {data_elaert.year_build.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -911,10 +957,10 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10"> 
                                     <select className="custom-select my-1 mr-sm-2" name="acreage_from"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>From</option>
+                                        <option hidden defaultValue>Any</option>
                                         <option value="any">Any</option>
-                                        {dataProperty && dataProperty.value_data[0].ffd_acres_calc.map((data,i) => (
-                                            <option value={data} key={i}>{data}</option>
+                                        {data_elaert.acreage.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
 
@@ -924,9 +970,10 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="acreage_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>to</option>
-                                        {dataProperty && dataProperty.value_data[0].ffd_acres_calc.map((data,i) => (
-                                            <option value={data} key={i}>{data}</option>
+                                        <option hidden defaultValue>Any</option>
+                                        <option value="any">Any</option>
+                                        {data_elaert.acreage.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -941,19 +988,16 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="stories_total_from"
                                             onChange={onHandleInput}>
-                                        <option selected>From</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1900</option>
-                                        <option value="3">1930</option>
-                                        <option value="3">1940</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
+                                        <option hidden defaultValue>Any</option>
+                                        <option value="any">Any</option>
+                                        {data_elaert.stories_total.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
+                                        ))}
                                     </select>
 
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            {/* <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="stories_total_to"
                                             onChange={onHandleInput}>
@@ -967,7 +1011,7 @@ const FormEAlertsRegistro = (props) => {
                                         <option value="3">750</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                     
@@ -978,19 +1022,16 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="garages_total_from"
                                             onChange={onHandleInput}>
-                                        <option selected>From</option>
-                                        <option value="1">Any</option>
-                                        <option value="2">1900</option>
-                                        <option value="3">1930</option>
-                                        <option value="3">1940</option>
-                                        <option value="3">650</option>
-                                        <option value="3">700</option>
-                                        <option value="3">750</option>
+                                        <option hidden defaultValue>Any</option>
+                                        <option value="any">Any</option>
+                                        {data_elaert.garages_total.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
+                                        ))}
                                     </select>
 
                                 </div>
                             </div>
-                            <div className="form-group row">
+                            {/* <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="garages_total_to"
                                             onChange={onHandleInput}>
@@ -1004,19 +1045,26 @@ const FormEAlertsRegistro = (props) => {
                                         <option value="3">750</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> */}
                         </form>
                     </div>
                     
                     <h6 id='style_subtitulos'>Days Listed <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
-                        <form className="form-inline" onClick={llamarComboDaysListed}>
+                        {/* <form className="form-inline" onClick={llamarComboDaysListed}> */}
+                        <form className="form-inline">
                             <div>
                                 <select  className="form-control" name="days_listed"
                                     onChange={onHandleInput} //onChange={onAddAgent}
                                 >
-                                    <option hidden defaultValue>Enter any property</option>
-                                    {listaComboDaysListed}
+                                    
+                                    <option hidden defaultValue>Any</option>
+                                    <option value="any">Any</option>                                    
+                                    {data_elaert.days_listed.map((data,i) => (
+                                            <option value={data.id} key={i}>{data.label}</option>
+                                    ))}
+                                    {/* <option hidden defaultValue>Enter any property</option>
+                                    {listaComboDaysListed} */}
                                 </select>
                             </div>
                         </form>

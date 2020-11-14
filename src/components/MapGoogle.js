@@ -15,7 +15,8 @@ import {
 
 import './styles/styleGeneral.css'
 import {Coordinates} from "../contexts/Coordinates";
-// const API_KEY = "AIzaSyBphb5bMbCtAusDt1nlkgDkWqldcJK5OsE";
+import { map } from "jquery";
+
 const API_KEY = "AIzaSyCYke1oESLVfrWEeYf-1K2SZTYoq1Z-CWw";
 
 const center = {
@@ -42,13 +43,62 @@ const options = {
   }
 };
 
-const MapGoogle = () => {
+let urlGeocodeGoogle = 'https://maps.googleapis.com/maps/api/geocode/json?latlng='
+let data_google = null
+// let data_google = {"postal_code":[], "street_number": [], "street_name": [], "locality": [], "state": []}
+let data_g = {"zc": [], "st": [], "sn": [], "sl": [], "ss": []}
+
+const MapGoogle = ({onFilterMap}) => {
   const {coordinates, setCoordinates} = useContext(Coordinates)  
   const [path, setPath] = useState([]);  
   const [state, setState] = useState({
     drawingMode: "polygon"
   });
+  
+  const onGetGeocode = async (lt, lg) => {
+    const resp = await fetch(`${urlGeocodeGoogle}${lt}, ${lg}&key=${API_KEY}`)
+    const re = await resp.json()
+    const value = re.results
+    
+    value.map(e => {       
+      e.address_components.map(d => {
+          if(d.types[0] == 'postal_code') {            
+            data_g.zc.push(d.long_name)
+          }else if(d.types[0] == 'street_number') {
+            data_g.st.push(`"${d.long_name}"`)
+          }else if(d.types[0] == 'route') {
+            data_g.sn.push(`"${d.long_name}"`)
+          }else if(d.types[0] == 'locality') {
+            data_g.sl.push(`"${d.long_name}"`)
+          }else if(d.types[0] == 'administrative_area_level_1') {
+            data_g.ss.push(`"${d.short_name}"`)
+          }      
+      })      
+      // data_google.push(`"${e.formatted_address}"`);
+    })
+    
+  }
+  
+  const onQuitSimilar = (d) => {
+      const pc = d.zc.filter(function(item, index, array) {
+          return array.indexOf(item) === index;
+      })
+      const st = d.st.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })
+      const sn = d.sn.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })
+      const sl = d.sl.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })
+      const ss = d.ss.filter(function(item, index, array) {
+        return array.indexOf(item) === index;
+      })      
 
+      data_google = {"postal_code": pc, "street_number": st, "street_name": sn, "locality": sl, "state": ss}
+      
+  }
   const noDraw = () => {
     setState(function set(prevState) {
       return Object.assign({}, prevState, {
@@ -59,15 +109,26 @@ const MapGoogle = () => {
 
   const onPolygonComplete = React.useCallback(function onPolygonComplete(poly) {
     const polyArray = poly.getPath().getArray();
-    let paths = [];
+    let paths = [];    
+    data_g.sl.length = 0
+    data_g.sn.length = 0
+    data_g.ss.length = 0
+    data_g.st.length = 0
+    data_g.zc.length = 0
+    
     polyArray.forEach(function(path) {
       paths.push({ lat: path.lat(), lng: path.lng() });
+      onGetGeocode(path.lat(), path.lng())
     });
-    setPath(paths);   
-    console.log("onPolygonComplete", paths);
-    setCoordinates(paths); 
+    setPath(paths);             
+    setCoordinates(data_g);         
     noDraw();
     poly.setMap(null);
+    setTimeout(() => {
+      onQuitSimilar(data_g);
+      onFilterMap(data_google)
+     }, 1000);
+    
   }, []);
 
   const polygonRef = useRef(null);
@@ -85,7 +146,7 @@ const MapGoogle = () => {
     }
   }, [setPath]);
   
-  const onLoad = useCallback(
+  const onLoad = useCallback(    
     polygon => {
       polygonRef.current = polygon;
       const path = polygon.getPath();
@@ -114,7 +175,7 @@ const MapGoogle = () => {
           zIndex: 100
         }}
         onClick={(e) => { e.preventDefault()
-           setPath([])
+           setPath([])            
           }}
       >
         Clear
