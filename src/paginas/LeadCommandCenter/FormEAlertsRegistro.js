@@ -770,7 +770,7 @@ const FormEAlertsRegistro = (props) => {
                     <h6 id='style_subtitulos'>Price Range <label className="count_alert">Properties {count}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">                                
-                                    <select className="custom-select my-1 mr-sm-2" name="price_from"
+                                    {/* <select className="custom-select my-1 mr-sm-2" name="price_from"
                                             onChange={onHandleInput}>
                                         <option hidden defaultValue>Min price</option>
                                         <option value="any">Any</option>
@@ -785,13 +785,13 @@ const FormEAlertsRegistro = (props) => {
                                         {data_elaert.price.max_price.map((data,i) => (
                                             <option value={data.id} key={i}>${data.label}</option>
                                         ))}
-                                    </select>
+                                    </select> */}
                                                                                   
-                            {/* <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
+                            <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
                             name="price_from" defaultValue={dataEAlertPriceFrom}/>
 
                             <input type="text" className="form-control" placeholder="To"  onChange={onHandleInput}
-                            name="price_to" /> */}
+                            name="price_to" /> 
                         </form>
                     </div>
 
