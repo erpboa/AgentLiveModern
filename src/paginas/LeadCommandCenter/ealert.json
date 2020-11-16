@@ -50,16 +50,20 @@
             ]
         },
         "bedroom": [
+            {"id": "1", "label": "1"},
             {"id": "2", "label": "2"},
             {"id": "3", "label": "3"},
             {"id": "4", "label": "4"},
-            {"id": "5", "label":"5"}
+            {"id": "5", "label": "5"},
+            {"id": "6", "label": "6"}
         ],
         "bathroom": [
+            {"id": "1", "label": "1"},
             {"id": "2", "label": "2"},
             {"id": "3", "label": "3"},
             {"id": "4", "label": "4"},
-            {"id": "5", "label":"5"}
+            {"id": "5", "label": "5"},
+            {"id": "6", "label": "6"}
         ],
         "square_footage": [
             {"id": "500", "label": "500"},
@@ -166,14 +170,13 @@
             {"id": "10", "label": "10"}
         ],
         "days_listed": [
-            {"id": "last_day", "label": "In the last day"},
-            {"id": "last_3_day", "label": "In the last 3 days"},
-            {"id": "last_7_day", "label": "In the last 7 days"},
-            {"id": "last_14_day", "label": "In the last 14 days"},
-            {"id": "last_30_day", "label": "In the last 30 days"},
-            {"id": "more_30_day", "label": "More than 30 days"},
-            {"id": "more_60_day", "label": "More than 60 days"},
-            {"id": "more_120_day", "label": "More than 120 days"}
+            {"id": "new_listing", "label": "New Listings(Since Yesterday)"},            
+            {"id": "less_3_day", "label": "Less than 3 days"},
+            {"id": "less_7_day", "label": "Less than 7 days"},
+            {"id": "less_14_day", "label": "Less than 14 days"},
+            {"id": "less_30_day", "label": "Less than 30 days"},
+            {"id": "less_45_day", "label": "Less than 45 days"},
+            {"id": "less_60_day", "label": "Less than 60 days"}
         ]
     }
 

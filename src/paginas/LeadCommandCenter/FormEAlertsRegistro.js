@@ -857,7 +857,7 @@ const FormEAlertsRegistro = (props) => {
                                         <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
                                         {data_elaert.bedroom.map((data,i) => (
-                                            <option value={data.id} key={i}>{data.label} +</option>
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
 
@@ -870,7 +870,7 @@ const FormEAlertsRegistro = (props) => {
                                         <option hidden defaultValue>to</option>
                                         <option value="any">Any</option>
                                         {data_elaert.bedroom.map((data,i) => (
-                                            <option value={data.id} key={i}>{data.label} +</option>
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -888,7 +888,7 @@ const FormEAlertsRegistro = (props) => {
                                         <option hidden defaultValue>From</option>                                        
                                         <option value="any">Any</option>
                                         {data_elaert.bathroom.map((data,i) => (
-                                            <option value={data.id} key={i}>{data.label} +</option>
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
 
@@ -901,7 +901,7 @@ const FormEAlertsRegistro = (props) => {
                                         <option hidden defaultValue>to</option>
                                         <option value="any">Any</option>
                                         {data_elaert.bathroom.map((data,i) => (
-                                            <option value={data.id} key={i}>{data.label} +</option>
+                                            <option value={data.id} key={i}>{data.label}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -1024,7 +1024,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="stories_total_to"
                                             onChange={onHandleInput}>
-                                        <option selected>to</option>
+                                        <option hidden defaultValue>to</option>
                                         <option value="any">Any</option>
                                         {data_elaert.stories_total.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
