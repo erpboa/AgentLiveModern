@@ -401,6 +401,11 @@ const FormEAlertsRegistro = (props) => {
                 indice_8 === -1 ? financing.push(data):financing.splice(indice_8, 1);
                 resp_estruc = {data: financing}
                 break;
+            case 'view':
+                const indice_9 = view.indexOf(`${data}`);
+                indice_9 === -1 ? view.push(data):view.splice(indice_9, 1);
+                resp_estruc = {data: view}
+                break;
         }
         return JSON.stringify(resp_estruc)
     }
@@ -417,64 +422,81 @@ const FormEAlertsRegistro = (props) => {
                 
             setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil})
 
-            switch (e.target.name) {
-                
-                case 'price_from':
-                        setFilter({...filterE, 'ffd_listingprice_pb_from': selecValuefil})                  
-                    break;
-                case 'price_to':
-                        setFilter({...filterE, 'ffd_listingprice_pb_to': selecValuefil})                  
-                    break;                            
-                case 'property_type':
-                        setFilter({...filterE, 'ffd_propertytype': selecValuefil})
-                case 'year_build_from':
-                        setFilter({...filterE, 'ffd_yearbuilt_pb_from': selecValuefil})                  
-                    break;
-                case 'year_build_to':
-                    setFilter({...filterE, 'ffd_yearbuilt_pb_to': selecValuefil})                  
-                break;                
-                case 'bedrooms_from':
-                        setFilter({...filterE, 'ffd_bedrooms_pb_from': selecValuefil}) 
-                    break;
-                case 'bedrooms_to':
-                    setFilter({...filterE, 'ffd_bedrooms_pb_to': selecValuefil}) 
-                break;                
-                case 'bathrooms_from':
-                        setFilter({...filterE, 'ffd_fullbathrooms_pb_from': selecValuefil})                 
+        switch (e.target.name) {
+
+            case 'price_from':
+                setFilter({...filterE, 'ffd_listingprice_pb_from': selecValuefil})
                 break;
-                case 'bathrooms_to':
-                        setFilter({...filterE, 'ffd_fullbathrooms_pb_to': selecValuefil})                 
+            case 'price_to':
+                setFilter({...filterE, 'ffd_listingprice_pb_to': selecValuefil})
                 break;
-                case 'acreage_from':
-                        setFilter({...filterE, 'ffd_acres_calc_from': selecValuefil})                 
-                break;            
-                case 'acreage_to':
-                        setFilter({...filterE, 'ffd_acres_calc_to': selecValuefil})                 
-                break;     
-                
-                // case 'stories_total_from':
-                //         setFilter({...filterE, 'ffd_stories_from': selecValuefil})                 
-                // break;     
-                // case 'stories_total_to':
-                //         setFilter({...filterE, 'ffd_stories_to': selecValuefil})                 
-                // break; 
-                // case 'garages_total_from':
-                //         setFilter({...filterE, 'ffd_garages_from': selecValuefil})                 
-                // break;     
-                // case 'garages_total_to':
-                //         setFilter({...filterE, 'ffd_garages_to': selecValuefil})                 
-                // break;                                         
-                // break;            
-                case 'days_listed':
-                        setFilter({...filterE, 'ffd_days_on_market': selecValuefil})                 
-                break;                 
-                                    
-            }        
-        
-        
+            case 'property_type':
+                setFilter({...filterE, 'ffd_propertytype': selecValuefil});
+                break;
+            case 'year_build_from':
+                setFilter({...filterE, 'ffd_yearbuilt_pb_from': selecValuefil})
+                break;
+            case 'year_build_to':
+                setFilter({...filterE, 'ffd_yearbuilt_pb_to': selecValuefil})
+                break;
+            case 'bedrooms_from':
+                setFilter({...filterE, 'ffd_bedrooms_pb_from': selecValuefil})
+                break;
+            case 'bedrooms_to':
+                setFilter({...filterE, 'ffd_bedrooms_pb_to': selecValuefil})
+                break;
+            case 'bathrooms_from':
+                setFilter({...filterE, 'ffd_fullbathrooms_pb_from': selecValuefil})
+                break;
+            case 'bathrooms_to':
+                setFilter({...filterE, 'ffd_fullbathrooms_pb_to': selecValuefil})
+                break;
+            case 'acreage_from':
+                setFilter({...filterE, 'ffd_acres_calc_from': selecValuefil})
+                break;
+            case 'acreage_to':
+                setFilter({...filterE, 'ffd_acres_calc_to': selecValuefil})
+                break;
+            case 'garages_total_from':
+                setFilter({...filterE, 'ffd_garages_from': selecValuefil})
+                break;
+            case 'garages_total_to':
+                setFilter({...filterE, 'ffd_garages_to': selecValuefil})
+                break;
+            case 'days_listed':
+                setFilter({...filterE, 'ffd_days_on_market': selecValuefil})
+                break;
+            case 'community_features':
+                setFilter({...filterE, 'ffd_community_features': selecValuefil});
+                break;
+            /*case 'stories_total_from':
+                setFilter({...filterE, 'ffd_stories_from': selecValuefil})
+                break;
+            case 'stories_total_to':
+                setFilter({...filterE, 'ffd_stories_to': selecValuefil})
+                break;*/
+            /*case 'property_features':
+                setFilter({...filterE, 'ffd_community_features': selecValuefil});
+                break;*/
+            case 'waterfront':
+                setFilter({...filterE, 'ffd_waterfront': selecValuefil});
+                break;
+            case 'view':
+                setFilter({...filterE, 'ffd_view': selecValuefil});
+                break;
+            case 'exterior_features':
+                setFilter({...filterE, 'ffd_exterior_features': selecValuefil});
+                break;
+            case 'interior_features':
+                setFilter({...filterE, 'ffd_interior_features': selecValuefil});
+                break;
+        }
+
+
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {                       
-            setCount(res.datos[0].contador)            
+            //setCount(res.datos[0].contador)
+            setCount(res.data.live_modern)
         })
         .catch(e => {            
             console.log('An issue occurred Contact the IT department')

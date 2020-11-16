@@ -4,10 +4,10 @@ import '../../components/styles/stylesMenu.css';
 import '../../components/icon/font-awesome-4.7.0/css/font-awesome.min.css';
 import Footer from '../../components/Footer';
 
-const Results = ({ searchData, setData }) => {
+const Results = () => {
   return (
     <div>           
-      {searchData.data1}
+
     </div>
   );
 }
