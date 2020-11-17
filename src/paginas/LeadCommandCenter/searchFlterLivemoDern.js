@@ -127,7 +127,7 @@ export const onPreviewSearchLM = (c = [], d) => {
   if (d.property_type !== '') {
     let property_type_data = "";
     for (var i = 0; i < (JSON.parse(d.property_type).data).length; i++) {
-      property_type_data = property_type_data + `\'${(JSON.parse(d.property_type).data)[i]}\'`;
+      property_type_data = property_type_data + `${(JSON.parse(d.property_type).data)[i]};`;
     }
     url_preview = `${url_preview}ffd_propertytype=${property_type_data}&`
   } if (d.price_from !=='' && d.price_to !== '') {
@@ -142,6 +142,9 @@ export const onPreviewSearchLM = (c = [], d) => {
     url_preview = `${url_preview}ffd_acres_calc=${d.acreage_from} ${d.acreage_to}&`
   } if (d.days_listed != '') {
     url_preview = `${url_preview}ffd_days_on_market=${d.days_listed}`
+  } if(d.filterMap){
+    console.log('filterMap: ',d.filterMap);
+    url_preview = `${url_preview}ffd_city_pb=${d.filterMap.locality.join(';')}&ffd_postalcode_pb=${d.filterMap.postal_code.join(';')}&ffd_state_pb=${d.filterMap.state.join(';')}`
   }
 
   window.open(url_preview);

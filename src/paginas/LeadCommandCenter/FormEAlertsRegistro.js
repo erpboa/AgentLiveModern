@@ -21,6 +21,8 @@ import FormEAlerts from "./FormEAlerts";
 import MapGoogle from '../../components/MapGoogle';
 import {onPreviewSearchLM } from './searchFlterLivemoDern.js';
 import $ from "jquery";
+import { Loader } from 'semantic-ui-react';
+
 const property_type=[],community_features=[],property_features=[],waterfront=[],view=[],exterior_features=[],interior_features=[],style=[],financing=[];
 let resp_estruc
 
@@ -80,6 +82,8 @@ const FormEAlertsRegistro = (props) => {
     const [count, setCount] = useState();
     const {coordinates} = useContext(Coordinates);
 
+    const [load, setLoad] = useState(true);
+
     const id_lead = props.id_lead;
     const v_setCart = props.setCart;
 
@@ -138,8 +142,9 @@ const FormEAlertsRegistro = (props) => {
     const getApiAlertProperty = () => {
         ServiceRest("agent_portal/Alerts/apiAlertsProperty")
         .then((res) => {
+            setLoad(false);
             setProperty(JSON.parse(res.datos[0].jsondata))
-            setCount(res.total)            
+            setCount(res.total)
         })
         .catch((err) => setErrors(err));
     }
@@ -409,8 +414,8 @@ const FormEAlertsRegistro = (props) => {
         }
         return JSON.stringify(resp_estruc)
     }
-    const onHandleInput = (e) => {    
-        
+    const onHandleInput = (e) => {
+            setLoad(true);
             let selecValuefil = null               
             const  myarr  =  [ "property_type" , "community_features" , "property_features" , "waterfront" , "view" ,  "exterior_features" , "interior_features" , "style" , "financing" ];
             const find_data = myarr.find(v => v === e.target.name) 
@@ -493,9 +498,10 @@ const FormEAlertsRegistro = (props) => {
                 setFilter({...filterE, 'ffd_interior_features': selecValuefil});
                 break;
         }
-        
+
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
-        .then((res) => {                                   
+        .then((res) => {
+            setLoad(false);
             setCount(res.data.live_modern)
         })
         .catch(e => {            
@@ -504,10 +510,13 @@ const FormEAlertsRegistro = (props) => {
         
     }
 
-    const onFilterMap = (e) => {                              
+    const onFilterMap = (e) => {
+        setLoad(true);
+        setEalertInsert({...dataEalertInsert,'filterMap': e})
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", e)
-        .then((res) => {                        
-            setCount(res.data.live_modern)            
+        .then((res) => {
+            setLoad(false);
+            setCount(res.data.live_modern);
         })
         .catch(e => {            
             console.log('An issue occurred Contact the IT department')
@@ -638,7 +647,7 @@ const FormEAlertsRegistro = (props) => {
                     <div className="form-group row">
                     <div style={{width:'100%'}}>
                         <input type="radio"  name="map" className="slectOne" defaultChecked onChange={onlyOneChek}/>
-                        <label className="count_alert">Properties {count}</label>
+                        <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label>
                         <br></br>
                         <label className="my-1 mr-2"> Draw On Map</label>
                         <div>
@@ -767,7 +776,7 @@ const FormEAlertsRegistro = (props) => {
                     </div>
 
                     
-                    <h6 id='style_subtitulos'>Price Range <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Price Range <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">                                
                                     {/* <select className="custom-select my-1 mr-sm-2" name="price_from"
@@ -796,7 +805,7 @@ const FormEAlertsRegistro = (props) => {
                     </div>
 
                     
-                    <h6 id='style_subtitulos'>Property Type <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Property Type <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
 
                     <div className="form-group row">
 
@@ -820,7 +829,7 @@ const FormEAlertsRegistro = (props) => {
 
                     </div>
                     
-                    <h6 id='style_subtitulos'>Listing Status <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Listing Status <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -847,7 +856,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Bedrooms <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Bedrooms <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -878,7 +887,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Bathrooms <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Bathrooms <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -909,7 +918,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Square Footage <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Square Footage <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -942,7 +951,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Year Build <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Year Build <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -973,7 +982,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Acreage <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Acreage <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -1004,7 +1013,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Stories total <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Stories total <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -1035,7 +1044,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Garages total <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Garages total <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div>
                         <form className="form-inline">
                             <div className="form-group row">
@@ -1066,7 +1075,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Days Listed <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Days Listed <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         {/* <form className="form-inline" onClick={llamarComboDaysListed}> */}
                         <form className="form-inline">
@@ -1087,7 +1096,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Community Features <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Community Features <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1108,7 +1117,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Property Features <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Property Features <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1129,7 +1138,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Waterfront <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Waterfront <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1150,7 +1159,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>View <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>View <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1171,7 +1180,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Exterior features <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Exterior features <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1192,7 +1201,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Interior Features <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Interior Features <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1213,7 +1222,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Style <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Style <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1234,7 +1243,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Financing <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Financing <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
 
@@ -1255,7 +1264,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Keywords <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Keywords <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
                             <input type="text" className="form-control" placeholder="Keywords" 
@@ -1267,7 +1276,7 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 id='style_subtitulos'>Save This e-Alert <label className="count_alert">Properties {count}</label></h6>
+                    <h6 id='style_subtitulos'>Save This e-Alert <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form className="form-inline">
                             <div className="form-group row">

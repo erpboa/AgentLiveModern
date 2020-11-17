@@ -65,13 +65,13 @@ const MapGoogle = ({onFilterMap}) => {
           if(d.types[0] == 'postal_code') {            
             data_g.zc.push(d.long_name)
           }else if(d.types[0] == 'street_number') {
-            data_g.st.push(`"${d.long_name}"`)
+            data_g.st.push(`${d.long_name}`)
           }else if(d.types[0] == 'route') {
-            data_g.sn.push(`"${d.long_name}"`)
+            data_g.sn.push(`${d.long_name}`)
           }else if(d.types[0] == 'locality') {
-            data_g.sl.push(`"${d.long_name}"`)
+            data_g.sl.push(`${d.long_name}`)
           }else if(d.types[0] == 'administrative_area_level_1') {
-            data_g.ss.push(`"${d.short_name}"`)
+            data_g.ss.push(`${d.short_name}`)
           }      
       })      
       // data_google.push(`"${e.formatted_address}"`);
