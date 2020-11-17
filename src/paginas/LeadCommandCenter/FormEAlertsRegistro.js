@@ -23,7 +23,7 @@ import {onPreviewSearchLM } from './searchFlterLivemoDern.js';
 import $ from "jquery";
 import { Loader } from 'semantic-ui-react';
 
-const property_type=[],community_features=[],property_features=[],waterfront=[],view=[],exterior_features=[],interior_features=[],style=[],financing=[];
+const property_type=[],community_features=[],property_features=[],waterfront=[],view=[],exterior_features=[],interior_features=[],style=[],financing=[], listing_status=["Active", "Coming soon"];
 let resp_estruc
 
 const FormEAlertsRegistro = (props) => {   
@@ -78,7 +78,30 @@ const FormEAlertsRegistro = (props) => {
     'bathrooms_from': "",
     'bathrooms_to': ""    
     });
-    const [filterE, setFilter] = useState();
+    const [filterE, setFilter] = useState({
+    'ffd_listingprice_pb_from': "",
+    'ffd_listingprice_pb_to': "",
+    'ffd_propertytype': "",
+    'ffd_listing_status': JSON.stringify({data: listing_status}),
+    'ffd_yearbuilt_pb_from': "",
+    'ffd_yearbuilt_pb_to': "",
+    'ffd_bedrooms_pb_from': "",
+    'ffd_bedrooms_pb_to': "",
+    'ffd_fullbathrooms_pb_from': "",
+    'ffd_fullbathrooms_pb_to': "",
+    'ffd_acres_calc_from': "",
+    'ffd_acres_calc_to': "",
+    'ffd_garages_from': "",
+    'ffd_garages_to': "",
+    'ffd_days_on_market': "",
+    'ffd_community_features': "",
+    'ffd_stories_from': "",
+    'ffd_stories_to': "",
+    'ffd_waterfront': "",
+    'ffd_view': "",
+    'ffd_exterior_features': "",
+    'ffd_interior_features': ""        
+    });
     const [count, setCount] = useState();
     const {coordinates} = useContext(Coordinates);
 
@@ -140,22 +163,24 @@ const FormEAlertsRegistro = (props) => {
     };
 
     const getApiAlertProperty = () => {
-        ServiceRest("agent_portal/Alerts/apiAlertsProperty")
-        .then((res) => {
-            setLoad(false);
-            setProperty(JSON.parse(res.datos[0].jsondata))
-            setCount(res.total)
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
+        .then((res) => {      
+            setLoad(false);                             
+            setCount(res.data.live_modern)
         })
-        .catch((err) => setErrors(err));
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
+        })
     }
 
     const getDataLiveModernToFilters = async () => {
-        const req = await fetch('http://54.227.57.214/livemodern/wp-json/agentportal/v1/alertcatalog', 
-            {method:'GET', 
-            headers: {'Authorization': 'Basic bWt0ZnJlc2g6TWFyazN0RnIzNWhAMjAyMCE='}});
-        const resp = await req.json();
-        const json_data = await JSON.parse(`${resp}`);
-        setDataLiMo(json_data);
+        ServiceRest("agent_portal/Alerts/combosFilterEalert")
+        .then((res) => {                                   
+            setDataLiMo(JSON.parse(res.data.live_modern));                      
+        })
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
+        })
     }
 
     useEffect(() => {
@@ -366,6 +391,11 @@ const FormEAlertsRegistro = (props) => {
 
     const estructureDataInsert = (data, typeArray) => {          
         switch (typeArray) {
+            case 'listing_status': 
+                const indice_0 = listing_status.indexOf(`${data}`);                 
+                indice_0 === -1 ? listing_status.push(data):listing_status.splice(indice_0, 1);
+                resp_estruc = {data: listing_status}
+                break;
             case 'property_type':
                 const indice_1 = property_type.indexOf(`${data}`);                 
                 indice_1 === -1 ? property_type.push(data):property_type.splice(indice_1, 1);
@@ -417,7 +447,7 @@ const FormEAlertsRegistro = (props) => {
     const onHandleInput = (e) => {
             setLoad(true);
             let selecValuefil = null               
-            const  myarr  =  [ "property_type" , "community_features" , "property_features" , "waterfront" , "view" ,  "exterior_features" , "interior_features" , "style" , "financing" ];
+            const  myarr  =  ["listing_status", "property_type" , "community_features" , "property_features" , "waterfront" , "view" ,  "exterior_features" , "interior_features" , "style" , "financing" ];
             const find_data = myarr.find(v => v === e.target.name) 
                   
                 if(find_data!==undefined){                
@@ -428,74 +458,76 @@ const FormEAlertsRegistro = (props) => {
                 
             setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil})
             
-        let namFilter = e.target.name
-        switch (namFilter) {
-
-            case 'price_from':
-                setFilter({...filterE, 'ffd_listingprice_pb_from': selecValuefil})
+        let namFilter = e.target.name        
+        switch (e.target.name) {
+            case 'price_from':                
+                filterE.ffd_listingprice_pb_from= selecValuefil 
                 break;
             case 'price_to':
-                setFilter({...filterE, 'ffd_listingprice_pb_to': selecValuefil})
+                filterE.ffd_listingprice_pb_to= selecValuefil 
                 break;
             case 'property_type':
-                setFilter({...filterE, 'ffd_propertytype': selecValuefil});
+                filterE.ffd_propertytype= selecValuefil 
                 break;
+            case 'listing_status': 
+                filterE.ffd_listing_status= selecValuefil 
+                    break;
             case 'year_build_from':
-                setFilter({...filterE, 'ffd_yearbuilt_pb_from': selecValuefil})
+                filterE.ffd_yearbuilt_pb_from= selecValuefil 
                 break;
             case 'year_build_to':
-                setFilter({...filterE, 'ffd_yearbuilt_pb_to': selecValuefil})
+                filterE.ffd_yearbuilt_pb_to= selecValuefil 
                 break;
             case 'bedrooms_from':
-                setFilter({...filterE, 'ffd_bedrooms_pb_from': selecValuefil})
+                filterE.ffd_bedrooms_pb_from= selecValuefil 
                 break;
             case 'bedrooms_to':                
-                setFilter({...filterE, 'ffd_bedrooms_pb_to': selecValuefil})
+                filterE.ffd_bedrooms_pb_to= selecValuefil 
                 break;
             case 'bathrooms_from':
-                setFilter({...filterE, 'ffd_fullbathrooms_pb_from': selecValuefil})
+                filterE.ffd_fullbathrooms_pb_from= selecValuefil 
                 break;
             case 'bathrooms_to':
-                setFilter({...filterE, 'ffd_fullbathrooms_pb_to': selecValuefil})
+                filterE.ffd_fullbathrooms_pb_to= selecValuefil 
                 break;
             case 'acreage_from':
-                setFilter({...filterE, 'ffd_acres_calc_from': selecValuefil})
+                filterE.ffd_acres_calc_from= selecValuefil 
                 break;
             case 'acreage_to':
-                setFilter({...filterE, 'ffd_acres_calc_to': selecValuefil})
+                filterE.ffd_acres_calc_to= selecValuefil 
                 break;
             case 'garages_total_from':
-                setFilter({...filterE, 'ffd_garages_from': selecValuefil})
+                filterE.ffd_garages_from= selecValuefil 
                 break;
             case 'garages_total_to':
-                setFilter({...filterE, 'ffd_garages_to': selecValuefil})
+                filterE.ffd_garages_to= selecValuefil 
                 break;
             case 'days_listed':
-                setFilter({...filterE, 'ffd_days_on_market': selecValuefil})
+                filterE.ffd_days_on_market= selecValuefil 
                 break;
             case 'community_features':
-                setFilter({...filterE, 'ffd_community_features': selecValuefil});
+                filterE.ffd_community_features= selecValuefil 
                 break;
             case 'stories_total_from':
-                setFilter({...filterE, 'ffd_stories_from': selecValuefil})
+                filterE.ffd_stories_from= selecValuefil 
                 break;
             case 'stories_total_to':
-                setFilter({...filterE, 'ffd_stories_to': selecValuefil})
+                filterE.ffd_stories_to= selecValuefil 
                 break;
             /*case 'property_features':
-                setFilter({...filterE, 'ffd_community_features': selecValuefil});
+                filterE.ffd_community_features= selecValuefil 
                 break;*/
             case 'waterfront':
-                setFilter({...filterE, 'ffd_waterfront': selecValuefil});
+                filterE.ffd_waterfront= selecValuefil 
                 break;
             case 'view':
-                setFilter({...filterE, 'ffd_view': selecValuefil});
+                filterE.ffd_view= selecValuefil 
                 break;
             case 'exterior_features':
-                setFilter({...filterE, 'ffd_exterior_features': selecValuefil});
+                filterE.ffd_exterior_features= selecValuefil 
                 break;
             case 'interior_features':
-                setFilter({...filterE, 'ffd_interior_features': selecValuefil});
+                filterE.ffd_interior_features= selecValuefil 
                 break;
         }
 
@@ -796,10 +828,10 @@ const FormEAlertsRegistro = (props) => {
                                         ))}
                                     </select> */}
                                                                                   
-                            <input type="text" className="form-control" placeholder="From" onChange={onHandleInput}
+                            <input type="text" className="form-control" placeholder="From" onBlur={onHandleInput}
                             name="price_from" defaultValue={dataEAlertPriceFrom}/>
 
-                            <input type="text" className="form-control" placeholder="To"  onChange={onHandleInput}
+                            <input type="text" className="form-control" placeholder="To"  onBlur={onHandleInput}
                             name="price_to" /> 
                         </form>
                     </div>
@@ -876,7 +908,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="bedrooms_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>to</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.bedroom.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -907,7 +939,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2"
                                             onChange={onHandleInput} name="bathrooms_to">
-                                        <option hidden defaultValue>to</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.bathroom.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -926,7 +958,7 @@ const FormEAlertsRegistro = (props) => {
                                     <select className="custom-select my-1 mr-sm-2"
                                     onChange={onHandleInput} name="square_footage_from"
                                             >
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
                                         {data_elaert.square_footage.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -940,7 +972,7 @@ const FormEAlertsRegistro = (props) => {
                                     <select className="custom-select my-1 mr-sm-2"
                                         onChange={onHandleInput} name="square_footage_to"
                                             >
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.square_footage.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -958,7 +990,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="year_build_from"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
                                         {data_elaert.year_build.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -971,7 +1003,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="year_build_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.year_build.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -989,7 +1021,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10"> 
                                     <select className="custom-select my-1 mr-sm-2" name="acreage_from"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
                                         {data_elaert.acreage.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -1002,7 +1034,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="acreage_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.acreage.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -1020,7 +1052,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="stories_total_from"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
                                         {data_elaert.stories_total.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -1033,7 +1065,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="stories_total_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>to</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.stories_total.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -1051,7 +1083,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="garages_total_from"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>Any</option>
+                                        <option hidden defaultValue>From</option>
                                         <option value="any">Any</option>
                                         {data_elaert.garages_total.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
@@ -1064,7 +1096,7 @@ const FormEAlertsRegistro = (props) => {
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="garages_total_to"
                                             onChange={onHandleInput}>
-                                        <option hidden defaultValue>to</option>
+                                        <option hidden defaultValue>To</option>
                                         <option value="any">Any</option>
                                         {data_elaert.garages_total.map((data,i) => (
                                             <option value={data.id} key={i}>{data.label}</option>
