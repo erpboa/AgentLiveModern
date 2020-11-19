@@ -48,7 +48,7 @@ let data_google = null
 // let data_google = {"postal_code":[], "street_number": [], "street_name": [], "locality": [], "state": []}
 let data_g = {"zc": [], "st": [], "sn": [], "sl": [], "ss": []}
 
-const MapGoogle = ({onFilterMap}) => {
+const MapGoogle = ({onFilterMap, onFilterMapClear}) => {
   const {coordinates, setCoordinates} = useContext(Coordinates)  
   const [path, setPath] = useState([]);  
   const [state, setState] = useState({
@@ -176,7 +176,7 @@ const MapGoogle = ({onFilterMap}) => {
         }}
         onClick={(e) => { e.preventDefault()
            setPath([])
-           onFilterMap(data_google = {"postal_code": [], "street_number": [], "street_name": [], "locality": [], "state": []})            
+           onFilterMapClear()            
           }}
       >
         Clear

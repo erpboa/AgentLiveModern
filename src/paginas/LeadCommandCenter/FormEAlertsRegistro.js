@@ -612,7 +612,7 @@ const FormEAlertsRegistro = (props) => {
         filterE.locality = e.locality;
         filterE.state = e.state;
         setEalertInsert({...dataEalertInsert,'filterMap': e})
-        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", e)
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {
             setLoad(false);
             setCount(res.data.live_modern);
@@ -723,6 +723,20 @@ const FormEAlertsRegistro = (props) => {
             console.log('An issue occurred Contact the IT department')
         })
     }
+    const onFilterMapClear = () => {
+        setLoad(true)
+        filterE.postal_code	= ""
+        filterE.locality = ""
+        filterE.state = ""
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
+        .then((res) => {
+            setLoad(false);
+            setCount(res.data.live_modern)
+        })
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
+        })
+    }
     /*******************************************************************/
 
 
@@ -768,7 +782,7 @@ const FormEAlertsRegistro = (props) => {
                         <br></br>
                         <label className="my-1 mr-2"> Draw On Map</label>
                         <div>
-                            {seeMap && <MapGoogle onFilterMap={onFilterMap}/>}
+                            {seeMap && <MapGoogle onFilterMap={onFilterMap} onFilterMapClear={onFilterMapClear} />}
                         </div>
                         <br />
                         <br />
