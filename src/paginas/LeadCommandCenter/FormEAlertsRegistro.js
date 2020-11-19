@@ -41,12 +41,13 @@ const FormEAlertsRegistro = (props) => {
     'stories_total_to': "",
     'neighborhood': "",
     'garages_total_from': "",
-    'listing_status': "",
+    'listing_status': JSON.stringify({data: listing_status}),
     'interior_features': "",
     'alert_frequency': "",
     'property_type': "",
     'style': "",
     'subject': "",
+    'email_addresses': "",
     'view': "",
     'square_footage_to': "",
     'waterfront': "",
@@ -76,7 +77,9 @@ const FormEAlertsRegistro = (props) => {
     'price_from': "",
     'bedrooms_to': "",
     'bathrooms_from': "",
-    'bathrooms_to': ""    
+    'bathrooms_to': "",
+    'specify_city': "",
+    'county': ""    
     });
     const [filterE, setFilter] = useState({
     'ffd_listingprice_pb_from': "",
@@ -103,7 +106,13 @@ const FormEAlertsRegistro = (props) => {
     'ffd_interior_features': "",
     'postal_code' : "",
     'locality' : "",
-    'state' : ""
+    'state' : "",
+    'ffd_zip': "",
+    'ffd_specify_city': "",
+    'ffd_neighborhood': "",
+    'ffd_popular_locations': "",
+    'ffd_county': "",
+    'ffd_school': ""    
     });
     const [count, setCount] = useState();
     const {coordinates} = useContext(Coordinates);
@@ -461,8 +470,7 @@ const FormEAlertsRegistro = (props) => {
                 }            
                 
             setEalertInsert({...dataEalertInsert,[e.target.name]: selecValuefil})
-            
-        let namFilter = e.target.name        
+                    
         switch (e.target.name) {
             case 'price_from':                
                 filterE.ffd_listingprice_pb_from= selecValuefil 
@@ -533,16 +541,67 @@ const FormEAlertsRegistro = (props) => {
             case 'interior_features':
                 filterE.ffd_interior_features= selecValuefil 
                 break;
+            case 'zip':
+                filterE.ffd_zip = selecValuefil
+                filterE.ffd_specify_city = ""
+                filterE.ffd_neighborhood = ""
+                filterE.ffd_popular_locations = ""
+                filterE.ffd_county = ""
+                filterE.ffd_school = ""
+                break;
+            case 'specify_city':
+                filterE.ffd_specify_city = selecValuefil
+                filterE.ffd_zip = ""
+                filterE.ffd_neighborhood = ""
+                filterE.ffd_popular_locations = ""
+                filterE.ffd_county = ""
+                filterE.ffd_school = ""
+                break;
+            case 'neighborhood':
+                filterE.ffd_neighborhood = selecValuefil
+                filterE.ffd_specify_city = ""
+                filterE.ffd_zip = ""
+                filterE.ffd_popular_locations = ""
+                filterE.ffd_county = ""
+                filterE.ffd_school = ""
+                break;
+            case 'popular_locations':
+                filterE.ffd_popular_locations = selecValuefil
+                filterE.ffd_specify_city = ""
+                filterE.ffd_zip = ""                
+                filterE.ffd_neighborhood = ""                
+                filterE.ffd_county = ""
+                filterE.ffd_school = ""                
+                break;
+            case 'county':
+                filterE.ffd_county = selecValuefil
+                filterE.ffd_specify_city = ""
+                filterE.ffd_zip = ""
+                filterE.ffd_popular_locations = ""
+                filterE.ffd_neighborhood = ""
+                filterE.ffd_school = ""
+            case 'school':
+                filterE.ffd_school = selecValuefil
+                filterE.ffd_specify_city = ""
+                filterE.ffd_zip = ""
+                filterE.ffd_popular_locations = ""
+                filterE.ffd_county = ""
+                filterE.ffd_neighborhood = ""
+                break;                
         }
         console.log('filterE onHandleInput', filterE);
-        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
-        .then((res) => {
+            if(e.target.name!=='subject' || e.target.name !== 'email_addresses'){
+            ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
+            .then((res) => {
+                setLoad(false);
+                setCount(res.data.live_modern)
+            })
+            .catch(e => {            
+                console.log('An issue occurred Contact the IT department')
+            })
+        }else{
             setLoad(false);
-            setCount(res.data.live_modern)
-        })
-        .catch(e => {            
-            console.log('An issue occurred Contact the IT department')
-        })
+        }
         
     }
 
@@ -635,17 +694,34 @@ const FormEAlertsRegistro = (props) => {
 
     }
     const onlyOneChek = (e) => {   
-        
+        setLoad(true);
         if(e.target.name==="map") {
             setSeeMap(true)
+            filterE.ffd_zip = ""                    
+            filterE.ffd_specify_city = ""
+            filterE.ffd_neighborhood = ""
+            filterE.ffd_popular_locations = ""
+            filterE.ffd_county = ""
+            filterE.ffd_school = ""
         }else{
             setSeeMap(false)
-        }
+            filterE.postal_code = "";
+            filterE.locality = "";
+            filterE.state = "";                
+        }        
         window.$('.slectOne').change(function(){
             if(this.checked){                 
                 window.$('.slectOne').not(this).prop('checked', false)                
             }    
         });
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
+        .then((res) => {
+            setLoad(false);
+            setCount(res.data.live_modern)
+        })
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
+        })
     }
     /*******************************************************************/
 
@@ -704,7 +780,8 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"  name="state_city" >
+                                    <select className="custom-select my-1 mr-sm-2" name="specify_city" onChange={onHandleInput}
+                                    id="specify_city" >
                                         <option hidden defaultValue>Enter any city</option>
                                         { dataLiMo &&  dataLiMo.talerts_city.map((e,i) => (
                                             <option key={i} value={e}> {e}</option>
@@ -715,11 +792,12 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
-                                    <select className="custom-select my-1 mr-sm-2"   name="specify_city">
+                                    <select className="custom-select my-1 mr-sm-2" name="state_city" id="state_city"  
+                                    onChange={onHandleInput}>
                                         <option hidden defaultValue>Specify any state</option>
-                                        <option value="1"></option>
-                                        <option value="2"></option>
-                                        <option value="3"></option>
+                                        { dataLiMo &&  dataLiMo.talerts_stateorprovince.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))}
                                     </select>
                                 </div>
                             </div>
@@ -732,8 +810,8 @@ const FormEAlertsRegistro = (props) => {
                             <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> Zip</label>
                         </div>
                         <div id="style-position-right" >
-                            <select  className="form-control" name="zip" 
-                                //onChange={onAddAgent}
+                            <select  className="form-control" name="zip" id="zip"  
+                                onChange={onHandleInput}
                             >
                                 <option hidden defaultValue>Enter any zip</option>
                                 { dataLiMo &&  dataLiMo.talerts_postalcode.map((e,i) => (
@@ -753,7 +831,8 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="neighborhood" className="form-control" name="neighborhood" 
-                                    //onChange={onAddAgent}
+                                   id="neighborhood"
+                                   onChange={onHandleInput}
                                 >
                                     <option hidden defaultValue>Enter any neighborhood</option>
                                     { dataLiMo &&  dataLiMo.talerts_lotfeatures.map((e,i) => (
@@ -772,9 +851,12 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="popular_locations" className="form-control" name="popular_locations" 
-                                    //onChange={onAddAgent}
+                                    onChange={onHandleInput}  id="popular_locations"
                                 >
                                     <option hidden defaultValue>Enter any location</option>
+                                    { dataLiMo &&  dataLiMo.talerts_subdivisionname.map((e,i) => (
+                                            <option key={i} value={e}> {e}</option>
+                                        ))} 
                                 </select>
                             </div>
                         </form>
@@ -787,7 +869,7 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="county" className="form-control" name="county"
-                                    //onChange={onAddAgent}
+                                     onChange={onHandleInput}  id="county"
                                 >
                                     <option hidden defaultValue>Enter any county</option>                                    
                                         { dataLiMo &&  dataLiMo.talerts_country.map((e,i) => (
@@ -805,7 +887,7 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="school" className="form-control" name="school" 
-                                    //onChange={onAddAgent}
+                                    onChange={onHandleInput}  id="school"
                                 >
                                     <option hidden defaultValue>Enter any school</option>
                                     { dataLiMo &&  dataLiMo.talerts_highschool.map((e,i) => (
@@ -1367,25 +1449,15 @@ const FormEAlertsRegistro = (props) => {
                                 </button>
                             </div>
 
-                            <input id="inputemail"
-                                //className={"input " + (this.state.error && " has-error")}
-                                //value={this.state.value}
-                                  
-                                   placeholder="Type or paste email addresses and press `Enter`..."
-                                //    onChange={onHandleInput}
-                                //onKeyDown={this.handleKeyDown}
-                                //onChange={this.handleChange}
-                                //onPaste={this.handlePaste}
+                            <input id="inputemail"                                                                  
+                                   placeholder="Type or paste email addresses and press `Enter`..."                                
+                                   name="email_addresses"                                   
+                                   onChange={onHandleInput}
                             />
                             <input id="inputemail"
-                                //className={"input " + (this.state.error && " has-error")}
-                                //value={this.state.value}
                                    name="subject"
                                    placeholder="Subject"
                                    onChange={onHandleInput}
-                                //onKeyDown={this.handleKeyDown}
-                                //onChange={this.handleChange}
-                                //onPaste={this.handlePaste}
                             />                            
 
                         </form>

@@ -175,7 +175,8 @@ const MapGoogle = ({onFilterMap}) => {
           zIndex: 100
         }}
         onClick={(e) => { e.preventDefault()
-           setPath([])            
+           setPath([])
+           onFilterMap(data_google = {"postal_code": [], "street_number": [], "street_name": [], "locality": [], "state": []})            
           }}
       >
         Clear
