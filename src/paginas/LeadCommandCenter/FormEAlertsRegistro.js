@@ -100,7 +100,10 @@ const FormEAlertsRegistro = (props) => {
     'ffd_waterfront': "",
     'ffd_view': "",
     'ffd_exterior_features': "",
-    'ffd_interior_features': ""        
+    'ffd_interior_features': "",
+    'postal_code' : "",
+    'locality' : "",
+    'state' : ""
     });
     const [count, setCount] = useState();
     const {coordinates} = useContext(Coordinates);
@@ -163,6 +166,7 @@ const FormEAlertsRegistro = (props) => {
     };
 
     const getApiAlertProperty = () => {
+        setEalertInsert({...dataEalertInsert,'listing_status': filterE.ffd_listing_status});
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {      
             setLoad(false);                             
@@ -530,7 +534,7 @@ const FormEAlertsRegistro = (props) => {
                 filterE.ffd_interior_features= selecValuefil 
                 break;
         }
-
+        console.log('filterE onHandleInput', filterE);
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {
             setLoad(false);
@@ -543,7 +547,11 @@ const FormEAlertsRegistro = (props) => {
     }
 
     const onFilterMap = (e) => {
-        setLoad(true);
+        setLoad(true);console.log('filterE onFilterMap', filterE);
+        //setEalertInsert({...dataEalertInsert,'listing_status': filterE.ffd_listing_status});
+        filterE.postal_code = e.postal_code;
+        filterE.locality = e.locality;
+        filterE.state = e.state;
         setEalertInsert({...dataEalertInsert,'filterMap': e})
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", e)
         .then((res) => {
@@ -555,7 +563,8 @@ const FormEAlertsRegistro = (props) => {
         })
     }
 
-    const onPreview = () => {        
+    const onPreview = () => {
+        console.log('filterE onPreview', filterE, 'dataEalertInsert', dataEalertInsert);
         onPreviewSearchLM(coordinates, dataEalertInsert)
     }
 
