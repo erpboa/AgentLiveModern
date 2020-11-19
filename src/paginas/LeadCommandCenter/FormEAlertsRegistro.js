@@ -590,7 +590,10 @@ const FormEAlertsRegistro = (props) => {
                 break;                
         }
         console.log('filterE onHandleInput', filterE);
-            if(e.target.name!=='subject' || e.target.name !== 'email_addresses'){
+        if((e.target.name==='subject') || (e.target.name === 'email_addresses')){
+            setLoad(false);
+        }else{
+            console.log("ddd",e.target.name);
             ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
             .then((res) => {
                 setLoad(false);
@@ -598,9 +601,7 @@ const FormEAlertsRegistro = (props) => {
             })
             .catch(e => {            
                 console.log('An issue occurred Contact the IT department')
-            })
-        }else{
-            setLoad(false);
+            })            
         }
         
     }
@@ -695,6 +696,19 @@ const FormEAlertsRegistro = (props) => {
     }
     const onlyOneChek = (e) => {   
         setLoad(true);
+        const arrDisabled = ["zip", "specify_city", "neighborhood", "popular_locations", "county", "school"]
+        if(e.target.name==='specify_city'){            
+            document.getElementById('state_city').disabled = false            
+        }else{
+            document.getElementById('state_city').disabled = true
+        }
+        arrDisabled.map(val => {            
+            if(val === e.target.name){                
+                document.getElementById(`${val}`).disabled = false            
+            }else{
+                document.getElementById(`${val}`).disabled = true
+            }
+        })        
         if(e.target.name==="map") {
             setSeeMap(true)
             filterE.ffd_zip = ""                    
@@ -788,14 +802,14 @@ const FormEAlertsRegistro = (props) => {
                         <br />
                     </div>                                        
                         <form className="form-inline">
-                        <input type="radio"  name="city" className="slectOne" onChange={onlyOneChek}/>
+                        <input type="radio"  name="specify_city" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">                            
                                 <label className="my-1 mr-2" htmlFor="inlineFormCustomSelectPref" id="label_left"> City</label>
                             </div>
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="specify_city" onChange={onHandleInput}
-                                    id="specify_city" >
+                                    id="specify_city" disabled>
                                         <option hidden defaultValue>Enter any city</option>
                                         { dataLiMo &&  dataLiMo.talerts_city.map((e,i) => (
                                             <option key={i} value={e}> {e}</option>
@@ -807,7 +821,7 @@ const FormEAlertsRegistro = (props) => {
                             <div className="form-group row">
                                 <div className="col-sm-10">
                                     <select className="custom-select my-1 mr-sm-2" name="state_city" id="state_city"  
-                                    onChange={onHandleInput}>
+                                    onChange={onHandleInput} disabled>
                                         <option hidden defaultValue>Specify any state</option>
                                         { dataLiMo &&  dataLiMo.talerts_stateorprovince.map((e,i) => (
                                             <option key={i} value={e}> {e}</option>
@@ -825,7 +839,7 @@ const FormEAlertsRegistro = (props) => {
                         </div>
                         <div id="style-position-right" >
                             <select  className="form-control" name="zip" id="zip"  
-                                onChange={onHandleInput}
+                                onChange={onHandleInput} disabled
                             >
                                 <option hidden defaultValue>Enter any zip</option>
                                 { dataLiMo &&  dataLiMo.talerts_postalcode.map((e,i) => (
@@ -846,7 +860,7 @@ const FormEAlertsRegistro = (props) => {
                             <div id="style-position-right">
                                 <select  id="neighborhood" className="form-control" name="neighborhood" 
                                    id="neighborhood"
-                                   onChange={onHandleInput}
+                                   onChange={onHandleInput} disabled
                                 >
                                     <option hidden defaultValue>Enter any neighborhood</option>
                                     { dataLiMo &&  dataLiMo.talerts_lotfeatures.map((e,i) => (
@@ -865,7 +879,7 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="popular_locations" className="form-control" name="popular_locations" 
-                                    onChange={onHandleInput}  id="popular_locations"
+                                    onChange={onHandleInput}  id="popular_locations" disabled
                                 >
                                     <option hidden defaultValue>Enter any location</option>
                                     { dataLiMo &&  dataLiMo.talerts_subdivisionname.map((e,i) => (
@@ -883,7 +897,7 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="county" className="form-control" name="county"
-                                     onChange={onHandleInput}  id="county"
+                                     onChange={onHandleInput}  id="county" disabled
                                 >
                                     <option hidden defaultValue>Enter any county</option>                                    
                                         { dataLiMo &&  dataLiMo.talerts_country.map((e,i) => (
@@ -901,7 +915,7 @@ const FormEAlertsRegistro = (props) => {
                             </div>
                             <div id="style-position-right">
                                 <select  id="school" className="form-control" name="school" 
-                                    onChange={onHandleInput}  id="school"
+                                    onChange={onHandleInput}  id="school" disabled
                                 >
                                     <option hidden defaultValue>Enter any school</option>
                                     { dataLiMo &&  dataLiMo.talerts_highschool.map((e,i) => (
