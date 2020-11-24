@@ -3,8 +3,17 @@ import { Accordion, Divider, Icon } from 'semantic-ui-react'
 import "semantic-ui-css/semantic.min.css";
 import './styles/activity.css';
 
-
-const Property = ({property, lead_name}) => {
+const Property = ({property, lead_name}) => {      
+  let urlMapIframe = `https://maps.google.com/maps?q=${encodeURIComponent(property.ffd_address_pb)}&t=&z=15&ie=UTF8&iwloc=&output=embed`
+  const MapIframe = () => {
+    return(
+      <iframe width="100%" height="250"
+      frameBorder="0" scrolling="no"
+      marginHeight="0" marginWidth="0"
+      src={urlMapIframe}>
+      </iframe>
+    )
+  }
 
   const panel = [
     {
@@ -115,11 +124,7 @@ const Property = ({property, lead_name}) => {
                 <div class="image">
                   <div class="image-wrapper">
                     <div className="bold pointer map-placeholder-wrapper map-placeholder-wrapper--with-background">
-                      <iframe width="100%" height="250"
-                              frameBorder="0" scrolling="no"
-                              marginHeight="0" marginWidth="0"
-                              src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=es&amp;q=Les%20Rambles,%201%20Barcelona,%20Spain+(Mi%20nombre%20de%20egocios)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
-                      </iframe>
+                        < MapIframe />
                     </div>
                   </div>
                 </div>
