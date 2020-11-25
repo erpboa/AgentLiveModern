@@ -136,6 +136,8 @@ const FormEAlertsRegistro = (props) => {
             
             if (value.datos.length > 0 ){
                 setemail(value.datos[0].email);
+                dataEalertInsert.email_addresses = value.datos[0].email
+                dataEalertInsert.subject = 'Newest Listings Matching Your Home Search'
             }
 
         });
@@ -589,11 +591,10 @@ const FormEAlertsRegistro = (props) => {
                 filterE.ffd_neighborhood = ""
                 break;                
         }
-        console.log('filterE onHandleInput', filterE);
+        
         if((e.target.name==='subject') || (e.target.name === 'email_addresses')){
             setLoad(false);
-        }else{
-            console.log("ddd",e.target.name);
+        }else{            
             ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
             .then((res) => {
                 setLoad(false);
@@ -607,8 +608,7 @@ const FormEAlertsRegistro = (props) => {
     }
 
     const onFilterMap = (e) => {
-        setLoad(true);console.log('filterE onFilterMap', filterE);
-        //setEalertInsert({...dataEalertInsert,'listing_status': filterE.ffd_listing_status});
+        setLoad(true);console.log('filterE onFilterMap', filterE);        
         filterE.postal_code = e.postal_code;
         filterE.locality = e.locality;
         filterE.state = e.state;
@@ -628,10 +628,16 @@ const FormEAlertsRegistro = (props) => {
         onPreviewSearchLM(coordinates, dataEalertInsert)
     }
 
+    const onFormatEmail = e => {
+        e.preventDefault() 
+        setEalertInsert({...dataEalertInsert,[e.target.name]: e.target.value})
+    }
     const onInsertEalert = (e) => {
         e.preventDefault()                         
         dataEalertInsert.id_lead= id_lead    
-        dataEalertInsert.draw_on_map = JSON.stringify(coordinates)        
+        dataEalertInsert.draw_on_map = JSON.stringify(coordinates)         
+        dataEalertInsert.email_addresses = dataEalertInsert.email_addresses === ''?email:dataEalertInsert.email_addresses
+        dataEalertInsert.subject = dataEalertInsert.subject === ''?'Newest Listings Matching Your Home Search':dataEalertInsert.subject
         const insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
         insertar.then((resp) => {            
             console.log(resp);
@@ -1462,11 +1468,11 @@ const FormEAlertsRegistro = (props) => {
                         </form>
                     </div>
                     
-                    <h6 className='style_subtitulos'>Sending Settings </h6>
+                    <h6 className='style_subtitulos'>Sending Settings <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
                     <div className="form-group row">
                         <form>
 
-                            <div className="tag-item" >
+                            {/* <div className="tag-item" >
                                 {email}
                                 <button
                                     type="button"
@@ -1475,19 +1481,21 @@ const FormEAlertsRegistro = (props) => {
                                 >
 
                                 </button>
-                            </div>
-
+                            </div> */}
+                            <label>To: </label>
                             <input id="inputemail"                                                                  
                                    placeholder="Type or paste email addresses and press `Enter`..."                                
                                    name="email_addresses"                                   
-                                   onChange={onHandleInput}
-                            />
+                                   onChange={onFormatEmail}
+                                   defaultValue={email}
+                            />                                                                                        
+                            <label>Subject: </label>
                             <input id="inputemail"
                                    name="subject"
                                    placeholder="Subject"
-                                   onChange={onHandleInput}
-                            />                            
-
+                                   onChange={onFormatEmail}
+                                   defaultValue='Newest Listings Matching Your Home Search'
+                            />                                                    
                         </form>
                     </div>
 
