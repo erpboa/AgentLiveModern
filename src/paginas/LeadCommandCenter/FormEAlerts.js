@@ -66,6 +66,11 @@ const FormEAlerts = (props) => {
     
 
   }
+  const onSeePreview = e => {
+    if(e!==''){
+      window.open(e)
+    }
+  }
 
   return (
       <div>
@@ -98,7 +103,7 @@ const FormEAlerts = (props) => {
                           </tr>
                           </thead>
                           <tbody>
-                          {dataAlerts.map((e, i) => (                                                            
+                          {dataAlerts.map((e, i) => (                                                                                        
                               <tr key={i} style={{fontSize: '10pt'}}>
                                 <td>{e.subject}</td>
                                 <td>{(e.price_from !== null)? e.price_from:'Automatic'}</td>
@@ -113,7 +118,8 @@ const FormEAlerts = (props) => {
                                     >
                                       <i className="fa fa-clone fa-2x"></i>
                                     </button>
-                                    <button type="button" className="btn btn-sm">
+                                    <button type="button" className="btn btn-sm"
+                                    onClick={(value) => onSeePreview(e.url_preview)}>
                                       <i className="fa fa-eye fa-2x"></i>
                                     </button>
 

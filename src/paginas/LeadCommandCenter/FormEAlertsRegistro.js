@@ -79,7 +79,8 @@ const FormEAlertsRegistro = (props) => {
     'bathrooms_from': "",
     'bathrooms_to': "",
     'specify_city': "",
-    'county': ""    
+    'county': "",
+    'url_preview': ""    
     });
     const [filterE, setFilter] = useState({
     'ffd_listingprice_pb_from': "",
@@ -591,20 +592,15 @@ const FormEAlertsRegistro = (props) => {
                 filterE.ffd_neighborhood = ""
                 break;                
         }
-        
-        if((e.target.name==='subject') || (e.target.name === 'email_addresses')){
+                   
+        ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
+        .then((res) => {
             setLoad(false);
-        }else{            
-            ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
-            .then((res) => {
-                setLoad(false);
-                setCount(res.data.live_modern)
-            })
-            .catch(e => {            
-                console.log('An issue occurred Contact the IT department')
-            })            
-        }
-        
+            setCount(res.data.live_modern)
+        })
+        .catch(e => {            
+            console.log('An issue occurred Contact the IT department')
+        })                            
     }
 
     const onFilterMap = (e) => {
@@ -625,12 +621,16 @@ const FormEAlertsRegistro = (props) => {
 
     const onPreview = () => {
         console.log('filterE onPreview', filterE, 'dataEalertInsert', dataEalertInsert);
-        onPreviewSearchLM(coordinates, dataEalertInsert)
+        onPreviewSearchLM(coordinates, dataEalertInsert, 'preview')
     }
 
     const onFormatEmail = e => {
         e.preventDefault() 
-        setEalertInsert({...dataEalertInsert,[e.target.name]: e.target.value})
+        if(e.target.name == 'email_addresses'){
+            dataEalertInsert.email_addresses = e.target.value
+        }else{
+            dataEalertInsert.subject = e.target.value
+        }               
     }
     const onInsertEalert = (e) => {
         e.preventDefault()                         
@@ -638,6 +638,7 @@ const FormEAlertsRegistro = (props) => {
         dataEalertInsert.draw_on_map = JSON.stringify(coordinates)         
         dataEalertInsert.email_addresses = dataEalertInsert.email_addresses === ''?email:dataEalertInsert.email_addresses
         dataEalertInsert.subject = dataEalertInsert.subject === ''?'Newest Listings Matching Your Home Search':dataEalertInsert.subject
+        dataEalertInsert.url_preview = onPreviewSearchLM(coordinates, dataEalertInsert, 'save')        
         const insertar = ServiceRest('agent_portal/Alerts/insertarAlerts', dataEalertInsert);
         insertar.then((resp) => {            
             console.log(resp);
@@ -1469,35 +1470,30 @@ const FormEAlertsRegistro = (props) => {
                     </div>
                     
                     <h6 className='style_subtitulos'>Sending Settings <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label></h6>
+                    <form>
                     <div className="form-group row">
-                        <form>
-
-                            {/* <div className="tag-item" >
-                                {email}
-                                <button
-                                    type="button"
-                                    className="button"
-                                    onClick={handleDelete()}
-                                >
-
-                                </button>
-                            </div> */}
-                            <label>To: </label>
-                            <input id="inputemail"                                                                  
-                                   placeholder="Type or paste email addresses and press `Enter`..."                                
-                                   name="email_addresses"                                   
-                                   onChange={onFormatEmail}
-                                   defaultValue={email}
-                            />                                                                                        
-                            <label>Subject: </label>
-                            <input id="inputemail"
-                                   name="subject"
-                                   placeholder="Subject"
-                                   onChange={onFormatEmail}
-                                   defaultValue='Newest Listings Matching Your Home Search'
-                            />                                                    
-                        </form>
+                        <label for="email_addresses" className="col-sm-2 col-form-label">To</label>
+                        <div className="col-sm-10">
+                        <input type="text" className="form-control" 
+                        name="email_addresses" 
+                        defaultValue={email}
+                        onChange={onFormatEmail}
+                        placeholder="Type or paste email addresses and press `Enter`..."
+                         />
+                        </div>
                     </div>
+                    <div className="form-group row">
+                        <label for="subject" className="col-sm-2 col-form-label">Subject</label>
+                        <div className="col-sm-10">
+                        <input type="text" className="form-control" 
+                           name="subject"
+                           placeholder="Subject"
+                           onChange={onFormatEmail}
+                           defaultValue='Newest Listings Matching Your Home Search'
+                        />
+                        </div>
+                    </div>
+                    </form>                    
 
                     <div className="form-group row">
                         <button type="button" className="btn btn-secondary" id="btn_alert_cancel">Cancel</button>
