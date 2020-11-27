@@ -795,19 +795,19 @@ const FormEAlertsRegistro = (props) => {
 
 
                     </div>
-                    <h6 className='style_subtitulos'>Location </h6>
+                    <h6 className='style_subtitulos'>Location <label className="count_alert">{load?<Loader size='mini' active inline />:<span>{count} properties found</span>}</label> </h6>
                     <div className="form-group row">
                     <div style={{width:'100%'}}>
                         <input type="radio"  name="map" className="slectOne" defaultChecked onChange={onlyOneChek}/>
-                        <label className="count_alert">Properties {load?<Loader size='mini' active inline />:<span>{count}</span>}</label>
-                        <br></br>
+
+
                         <label className="my-1 mr-2"> Draw On Map</label>
                         <div>
                             {seeMap && <MapGoogle onFilterMap={onFilterMap} onFilterMapClear={onFilterMapClear} />}
                         </div>
                         <br />
                         <br />
-                    </div>                                        
+                    </div>
                         <form className="form-inline">
                         <input type="radio"  name="specify_city" className="slectOne" onChange={onlyOneChek}/>
                             <div id="style-position-left">                            

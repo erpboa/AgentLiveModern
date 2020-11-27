@@ -13,6 +13,7 @@ export const onPreviewSearchLM = (c = [], d, type=null) => {
     url_preview = `${url_preview}properties?${coordi_lat_lng}&fh=999999`;
 
   }
+
   //NEW CODE
   url_preview = `${url_preview}?`;
 
@@ -58,22 +59,56 @@ export const onPreviewSearchLM = (c = [], d, type=null) => {
       property_type_data = property_type_data + `${(JSON.parse(d.property_type).data)[i]};`;
     }
     url_preview = `${url_preview}ffd_propertytype=${JSON.parse(d.property_type).data.join(';')}&`
-  } if (d.price_from !=='' && d.price_to !== '') {
+  }
+
+  if (d.price_from !=='' && d.price_to !== '') {
     url_preview = `${url_preview}ffd_listingprice_pb=${d.price_from} ${d.price_to}&`
-  } if (d.year_build_from !== '' && d.year_build_to !== '' && d.year_build_from) {
+  }
+
+  if (d.year_build_from !== '' && d.year_build_to !== '' && d.year_build_from) {
     url_preview = `${url_preview}ffd_yearbuilt_pb=${d.year_build_from} ${d.year_build_to}&`
-  } if (d.bedrooms_from !== '' && d.bedrooms_to !== '') {
+  }
+
+  if (d.bedrooms_from !== '' && d.bedrooms_to !== '') {
     url_preview = `${url_preview}ffd_bedrooms_pb=${d.bedrooms_from} ${d.bedrooms_to}&`
-  } if (d.bathrooms_from !== '' && d.bathrooms_to !== '') {
+  }
+
+  if (d.bathrooms_from !== '' && d.bathrooms_to !== '') {
     url_preview = `${url_preview}ffd_bathrooms_pb=${d.bathrooms_from} ${d.bathrooms_to}&`
-  } if (d.acreage_from !== '' && d.acreage_to !== '') {
+  }
+
+  if (d.acreage_from !== '' && d.acreage_to !== '') {
     url_preview = `${url_preview}ffd_acres_calc=${d.acreage_from} ${d.acreage_to}&`
-  } if (d.days_listed !== '') {
+  }
+
+  if (d.garages_total_from !== '' && d.garages_total_to !== '') {
+    url_preview = `${url_preview}ffd_parkingspaces=${d.garages_total_from} ${d.garages_total_to}&`
+  }
+
+  if (d.days_listed !== '') {
     url_preview = `${url_preview}ffd_days_on_market=${d.days_listed}`
-  } if(d.filterMap){
-    console.log('filterMap: ',d.filterMap);
+  }
+
+  if(d.filterMap){
     url_preview = `${url_preview}ffd_city_pb=${d.filterMap.locality.join(';')}&ffd_postalcode_pb=${d.filterMap.postal_code.join(';')}&ffd_state_pb=${d.filterMap.state.join(';')}`
   }
+  /*********************************************************************************************************************/
+  if (d.specify_city !== '') {
+    url_preview = `${url_preview}ffd_city_rb=${d.specify_city}&`
+  }
+
+  /*if (d.ffd_state_pb !== '') {
+    url_preview = `${url_preview}ffd_state_rb=${d.ffd_state_pb}&`
+  }*/
+
+  if (d.zip !== '') {
+    url_preview = `${url_preview}ffd_postalcode_rb=${d.zip}&`
+  }
+
+  if (d.popular_locations !== '') {
+    url_preview = `${url_preview}ffd_subdivision=${d.popular_locations}&`
+  }
+  /*********************************************************************************************************************/
 
   if (type==='preview'){
     window.open(url_preview);
