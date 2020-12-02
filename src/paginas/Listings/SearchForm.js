@@ -23,14 +23,38 @@ defaultModules.set(PNotifyFontAwesome5, {});
 defaultModules.set(PNotifyMobile, {});
 /*****************************************/
 
-const SearchForm = ({ data, setListing }) => {  
+const SearchForm = ({ data, setListing }) => {
+
+  const valuesType = (data.ffd_property_type).split(',') || [];
+  const architecturalType = (data.ffd_architectural_style).split(',') || [];
 
   const handleInputChanges = (e, id, value) => {
     e.preventDefault();
-    setListing({
-      ...data,
-      [id]: value,
-    });
+
+    if(id === 'ffd_property_type') {
+      setListing({
+        ...data,
+        [id]: value.join(','),
+      });
+    } else {
+      setListing({
+        ...data,
+        [id]: value,
+      });
+    }
+
+    if(id === 'ffd_architectural_style') {
+      setListing({
+        ...data,
+        [id]: value.join(','),
+      });
+    } else {
+      setListing({
+        ...data,
+        [id]: value,
+      });
+    }
+
   };
 
   const saveListing = (e) => {
@@ -300,67 +324,55 @@ const SearchForm = ({ data, setListing }) => {
   ];
 
   return (
-    <Segment basic empty>
-      <Form>
-        <Form.Field>
-          <label>
-            Architectural Style
-          </label>
-          <Dropdown
-            selection
-            placeholder = 'Select one option'
-            options={architecturalStyle}
-            value={data.ffd_architectural_style}
-            defaultValue={data.ffd_architectural_style}
-            id= "ffd_architectural_style"
-            name = "ffd_architectural_style"
-            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>
-          Property SubType
-          </label>
-          <Dropdown
-            selection
-            placeholder = 'Select one option'
-            options={propertySubtype}
-            value={data.ffd_property_subtype}
-            id= "ffd_property_subtype"
-            name = "ffd_property_subtype"
-            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>
-          Property Type
-          </label>
-          <Dropdown
-            selection
-            placeholder = 'Select one option'
-            options={propertyType}
-            value={data.ffd_property_type}
-            id= "ffd_property_type"
-            name = "ffd_property_type"
-            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-          />
-        </Form.Field>
-        <Form.Field>
-          <label>
-          List Price
-          </label>
-          <Input
-            id= "ffd_listingprice_pb"
-            name = "ffd_listingprice_pb"
-            placeholder= "List Price"
-            onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-            value= {data.ffd_listingprice_pb}
-          />
-        </Form.Field>
+      <Segment basic empty>
+  <Form>
+  <Form.Field>
+  <label>
+  Architectural Style
+  </label>
+  <Dropdown
+  selection
+  multiple
+  placeholder = 'Select one option'
+  options={architecturalStyle}
+  value={architecturalType || []}
 
-         <Button primary onClick={saveListing}>Save</Button>
+  id= "ffd_architectural_style"
+  name = "ffd_architectural_style"
+  onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+  />
+  </Form.Field>
+  <Form.Field>
+  <label>
+  Property Type
+  </label>
+  <Dropdown
+  selection
+  multiple
+  placeholder = 'Select one option'
+  options={propertyType}
+  value={valuesType || []}
+  id= "ffd_property_type"
+  name = "ffd_property_type"
+  onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+  />
+  </Form.Field>
+  <Form.Field>
+  <label>
+  List Price
+  </label>
+  <Input
+  id= "ffd_listingprice_pb"
+  name = "ffd_listingprice_pb"
+  placeholder= "List Price"
+  onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+  value= {data.ffd_listingprice_pb}
+  />
+  </Form.Field>
+
+  <Button primary onClick={saveListing}>Save</Button>
       </Form>
-    </Segment>
-  );
+      </Segment>
+);
 }
 export default SearchForm;
