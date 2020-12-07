@@ -10,6 +10,7 @@ import $ from "jquery";
 import PxpClient from 'pxp-client';
 import {UserContext} from "../contexts/UserContext";
 import {useHistory} from "react-router-dom";
+import { Form, Field, Input, Select, Segment, Label, Radio, Checkbox, TextArea, Button, Dropdown } from 'semantic-ui-react';
 
 const MenuPrincipal = (props) => {
 
@@ -85,6 +86,7 @@ const MenuPrincipal = (props) => {
       });
       document.getElementById("formularioLead").reset();
     }
+
     /****************************************************************/
 
     /****************Cerrar Sesion*****************/
@@ -117,8 +119,10 @@ const MenuPrincipal = (props) => {
             <i id="iconos" className="fas fa-search" />
           </button>
         </div>
-        <button id="BotonesMenuDerechaSuperior" className="btn btn-primary" data-toggle="modal" data-target="#modalLead" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconos"></i> Add Lead</button>
-      </div>
+        <Button.Group>
+            <button id="BotonesMenuDerechaSuperior" className="btn btn-primary" data-toggle="modal" data-target="#modalLead" type="button" onClick={llamarComboLead}><i className="fa fa-user" id="iconos"></i> Add Lead</button>
+        </Button.Group>
+    </div>
     </form>
     {/* Boton Opciones Usuario */}
 
@@ -246,60 +250,60 @@ const MenuPrincipal = (props) => {
          {/* Modal Formulario para agregar el Lad */}
 
          <div className="modal fade" id="modalLead" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div className="modal-dialog">
-        <div className="modal-content" id="ColoresPaneles">
-          <div className="modal-header">
-            <h5 className="modal-title" id="Letras">Add New Lead</h5>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true" id="Letras">&times;</span>
-            </button>
-          </div>
-          <div className="modal-body">
-          <form id="formularioLead" onSubmit={insertLead} className="was-validated" validate="true">
-          <div className="form-row">
-             <div className="col">
-               <label id="Letras">First Name <strong className="text-danger" title="This is required">*</strong></label>
-               <input type="text" className="form-control" id="formGroupExampleInput" name="first_name" onChange={enviarDatos} required/>
-               <div className="invalid-feedback">Please fill out this field.</div>
-             </div>
-             <div className="col">
-               <label id="Letras">Last Name <strong className="text-danger" title="This is required">*</strong></label>
-               <input type="text" className="form-control" id="formGroupExampleInput2" name="last_name" onChange={enviarDatos} required/>
-               <div className="invalid-feedback">Please fill out this field.</div>
-             </div>
-          </div>
-          <div className="form-row">
-             <div className="col">
-               <label id="Letras">Code Country <strong className="text-danger" title="This is required">*</strong></label>
-               <input type="number" className="form-control" id="formGroupExampleInput2" name="code_country" onChange={enviarDatos} required/>
-               <div className="invalid-feedback">Please fill out this field.</div>
-             </div>
-             <div className="col">
-               <label id="Letras">Phone Number <strong className="text-danger" title="This is required">*</strong></label>
-               <input type="number" className="form-control" id="formGroupExampleInput2" name="phone" onChange={enviarDatos} required/>
-               <div className="invalid-feedback">Please fill out this field.</div>
-             </div>
-          </div>
-          <label id="Letras">Email Address <strong className="text-danger" title="This is required">*</strong></label>
-          <input type="email" className="form-control" id="formGroupExampleInput2" name="email" onChange={enviarDatos} required/>
-          <div className="invalid-feedback">Please fill out this field.</div>
-          <label id="Letras">State <strong className="text-danger" title="This is required">*</strong></label>
-            <select id="inputState" className="form-control" name="type_lead" onChange={enviarDatos}>
-            <option hidden defaultValue>Select type lead</option>
-            {listaCombo}
-            </select>
-              <div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" type="submit" className="btn btn-primary">Save changes</button>
+            <div className="modal-dialog">
+                <div className="modal-content" id="ColoresPaneles">
+                    <div className="modal-header">
+                        <h5 className="modal-title" id="Letras">Add New Lead</h5>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" id="Letras">&times;</span>
+                        </button>
+                    </div>
+                    <div className="modal-body">
+                        <form id="formularioLead" onSubmit={insertLead} className="was-validated" validate="true">
+                            <div className="form-row">
+                                <div className="col">
+                                    <label id="Letras">First Name <strong className="text-danger" title="This is required">*</strong></label>
+                                    <input type="text" className="form-control" id="formGroupExampleInput" name="first_name" onChange={enviarDatos} required/>
+                                    <div className="invalid-feedback">Please fill out this field.</div>
+                                </div>
+                                <div className="col">
+                                    <label id="Letras">Last Name <strong className="text-danger" title="This is required">*</strong></label>
+                                    <input type="text" className="form-control" id="formGroupExampleInput2" name="last_name" onChange={enviarDatos} required/>
+                                    <div className="invalid-feedback">Please fill out this field.</div>
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="col">
+                                <label id="Letras">Code Country <strong className="text-danger" title="This is required">*</strong></label>
+                                <input type="number" className="form-control" id="formGroupExampleInput2" name="code_country" onChange={enviarDatos} required/>
+                                <div className="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                            <div className="col">
+                                <label id="Letras">Phone Number <strong className="text-danger" title="This is required">*</strong></label>
+                                <input type="number" className="form-control" id="formGroupExampleInput2" name="phone" onChange={enviarDatos} required/>
+                                <div className="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                            </div>
+                            <label id="Letras">Email Address <strong className="text-danger" title="This is required">*</strong></label>
+                            <input type="email" className="form-control" id="formGroupExampleInput2" name="email" onChange={enviarDatos} required/>
+                            <div className="invalid-feedback">Please fill out this field.</div>
+                            <label id="Letras">State <strong className="text-danger" title="This is required">*</strong></label>
+                            <select id="inputState" className="form-control" name="type_lead" onChange={enviarDatos}>
+                                <option hidden defaultValue>Select type lead</option>
+                                {listaCombo}
+                            </select>
+                              <div>
+                                <div className="modal-footer">
+                                  <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="button" type="submit" className="btn btn-primary">Save changes</button>
+                                </div>
+                              </div>
+                        </form>
+                    </div>
                 </div>
-              </div>
-          </form>
-          </div>
+            </div>
+         </div>
 
-        </div>
-      </div>
-    </div>
 
 
 </div>

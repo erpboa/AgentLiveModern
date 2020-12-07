@@ -10277,6 +10277,7 @@ body {
   width: 100%;
 }
 
+/*
 .form-control.input-file {
   padding: 0;
 }
@@ -10285,7 +10286,7 @@ body {
   padding: 6px 12px;
 }
 
-/*CUSTOM TABLE*/
+!*CUSTOM TABLE*!
 
 .container-excel-table .custom-table {
   width: 100%;
@@ -10298,4 +10299,69 @@ body {
   border-bottom: 1px solid #e8e8e8;
   -webkit-transition: background 0.3s ease;
   transition: background 0.3s ease;
+}*/
+
+/*Master Search Settings*/
+
+.master-search-container .form-container {
+  width: 70%;
+}
+
+.master-search-container .form-container .ui.input {
+  padding: 0;
+}
+
+.master-search-container .form-container button {
+  margin-right: 10px ;
+}
+
+.master-search-container .listingID-conteiner .ui.input {
+  padding: 0;
+  width: 70%;
+}
+
+/*CUSTOM TABLE*/
+
+.container-excel-table {
+  margin-top: 20px;
+}
+
+.container-excel-table table {
+  width: 90%;
+  margin: 20px auto;
+}
+
+.container-excel-table .custom-table {
+  width: 100%;
+}
+
+.container-excel-table .custom-table tbody tr th {
+  font-weight: 500;
+  text-align: left;
+  background: #fafafa;
+  border-bottom: 1px solid #e8e8e8;
+  -webkit-transition: background 0.3s ease;
+  transition: background 0.3s ease;
+}
+
+/* Community */
+
+.master-search-container .Community-container {
+  text-align: center;
+}
+
+.master-search-container .Community-container .ui.input {
+  padding: 0;
+}
+
+.master-search-container .Community-container table button {
+  background: transparent;
+}
+
+.master-search-container .Community-container table button:hover {
+  background: #cacbcd;
+}
+
+.listing-card-modal .modal-dialog {
+  max-width: 90%;
 }
