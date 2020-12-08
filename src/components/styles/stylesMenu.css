@@ -10365,3 +10365,220 @@ body {
 .listing-card-modal .modal-dialog {
   max-width: 90%;
 }
+
+/*PREVIEW LISTING CARD*/
+
+.listing-card-modal .modal-dialog {
+  max-width: 90%;
+}
+
+.section.card-container {
+  position: relative;
+  margin: 0 0 1.313em;
+  padding: 45px 0;
+}
+
+.section.card-container:before, .section.card-container:after {
+  content: " ";
+  display: table;
+  width: 0;
+}
+
+.section.card-container .row {
+  max-width: 1300px;
+}
+.section.card-container .row {
+  position: relative;
+  z-index: 1;
+}
+.section.card-container .row {
+  max-width: 1200px;
+}
+.section.card-container .row {
+  margin: 0 auto;
+}
+.section.card-container .row {
+  display: flex;
+  position: relative;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.section.card-container .row .ffd-search-listing-items {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.section.card-container .row .ffd-search-listing-items {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  min-width: 0;
+  min-height: 0;
+}
+
+
+.section.card-container .row .ffd-search-listing-items>* {
+  margin: calc(1rem / 2) calc(1rem / 2);
+}
+.x-col.listing.property  {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  display: block;
+  position: relative;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 0;
+}
+
+.x-container.max .listing.property a {
+  padding: 0;
+}
+.property a {
+  width: 100%;
+  display: block;
+  padding: 15px;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.property a>div {
+  border: 1px solid #d9dcde;
+}
+
+
+.property a .img-wrapper {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  height: 250px;
+  background-color: #cdcdcd;
+}
+
+.listing .status {
+  z-index: 10;
+  top: 6%;
+  left: 0;
+  right: auto;
+  bottom: auto;
+}
+
+.listing .content {
+  height: 100%;
+  padding: 5% 6% 5% 6%;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+
+a .listing-overlay {
+  -moz-transition: .5s;
+  -ms-transition: .5s;
+  -o-transition: .5s;
+  -webkit-transition: .5s;
+  height: 100%;
+  position: absolute;
+  transition: .5s;
+  width: 100%;
+}
+
+.listing .details-wrapper {
+  padding: 10px;
+  overflow: auto;
+  text-align: left;
+}
+
+.listing .location, .listing .price {
+  color: #fff;
+  display: block;
+  float: left;
+  font-family: "Lato";
+  font-size: calc(1vw + 9px);
+  letter-spacing: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35);
+  white-space: nowrap;
+  width: 85%;
+}
+
+.listing .price {
+  margin-top: -8px;
+}
+
+.listing .price {
+  margin-top: 0;
+  width: auto;
+}
+
+.listing .location {
+  font-size: 13px;
+}
+
+.listing .price, .listing .location, .listing .stats {
+  color: #000;
+  text-shadow: none;
+  width: 100%;
+}
+
+.listing a .stats {
+  background-color: transparent;
+  border: none;
+  bottom: 11px;
+  display: block;
+  margin-left: -4px;
+  padding: 0;
+  position: absolute;
+  width: 66%;
+}
+
+.listing a .stats {
+  position: relative;
+  width: 100%;
+  display: inline-block;
+  bottom: 0;
+  margin-left: 0;
+}
+
+.listing .stats .beds, .listing .stats .baths, .listing .stats .sqft {
+  display: inline-block;
+  text-align: center;
+  font-size: calc(1.3em);
+  font-family: "Lato";
+  color: #fff;
+  letter-spacing: 0;
+  text-align: center;
+  text-shadow: 0 1px 2px rgba(0,0,0,.35);
+  width: 22%;
+}
+
+.listing .stats .beds, .listing .stats .baths, .listing .stats .sqft {
+  color: #000;
+  text-shadow: none;
+  width: auto;
+}
+
+.listing a .stats .count {
+  display: block;
+  text-align: center;
+  margin: 0;
+  white-space: normal;
+}
+
+@media (min-width: 1200px) {
+  .section.card-container .row .ffd-search-listing-items > :nth-child(4n - 3), .section.card-container .row .ffd-search-listing-items > :nth-child(4n - 2), .section.card-container .row .ffd-search-listing-items > :nth-child(4n - 1), .section.card-container .row .ffd-search-listing-items > :nth-child(4n - 0) {
+    flex-basis: calc(25% - 1rem);
+  }
+}
+
+@media (max-width: 1199.98px) and (min-width: 979px) {
+  .section.card-container .row .ffd-search-listing-items > :nth-child(3n - 2), .section.card-container .row .ffd-search-listing-items > :nth-child(3n - 1), .section.card-container .row .ffd-search-listing-items > *:nth-child(3n - 0) {
+    flex-basis: calc(33.33% - 1rem);
+  }
+}
