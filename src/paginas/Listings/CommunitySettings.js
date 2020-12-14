@@ -17,35 +17,178 @@ import * as PNotifyBootstrap4 from '@pnotify/bootstrap4';
 import '@pnotify/core/dist/BrightTheme.css';
 import * as PNotifyFontAwesome5 from '@pnotify/font-awesome5';
 import * as PNotifyAnimate from '@pnotify/animate';
+
+import CommunityForm from './CommunityForm';
+
+
 defaultModules.set(PNotifyBootstrap4, {});
 defaultModules.set(PNotifyFontAwesome5, {});
 defaultModules.set(PNotifyMobile, {});
 /*****************************************/
 
-const CommunitySettings = ({ data, setListing }) => {
-
-
-    const [firstOpen, setFirstOpen] = useState(false)
-    const [secondOpen, setSecondOpen] = useState(false)
-    const [community, setCommunity] = useState({name_community: "", parcel_number: ""});
-    const [listCommunity, setListCommunity] = useState([]);
-    const [listingPreview, setListingPreview] = useState([]);
+const CommunitySettings = () => {
 
     const {reloadComponent, setReloadComponent} = useContext(ReloadComponent);
 
-    useEffect(() => {
-        ServiceRest('agent_portal/GreatSheet/listarCommunity').then((resp) => {
-            setListCommunity(resp.datos);
+    const [masterSearch, setMasterSearch] = useState({
+        ffd_architectural_style : "",
+        ffd_property_type: "",
+        ffd_listingprice_pb : "",
+        ffd_listings: "",
+        ffd_community: []
+    });
+
+
+    const [ editItem, setEditItem ] = useState(false);
+    const [ selectedItem, setSelectedItem ] = useState("");
+
+    const [showForm, setShowForm] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
+
+    const [arrayCommunity, setArrayCommunity] = useState([]);
+    const [tableCommunity, setTableCommunity] = useState([]);
+    const [listingPreview, setListingPreview] = useState([]);
+
+
+    const loadMasterSearch = async () => {
+        var params = { start: 0, limit: 50 };
+        ServiceRest('agent_portal/GreatSheet/getMasterSearch',params).then((response) => {
+            setMasterSearch({
+                ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
+                ffd_property_type: response.data.ap_master_search.ffd_property_type,
+                ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+                ffd_listings: response.data.ap_master_search.ffd_listings,
+                ffd_community: response.data.ap_master_search.ffd_community
+            });
         });
+    };
+
+    useEffect(() => {
+        var params = { start: 0, limit: 50 };
+        ServiceRest('agent_portal/GreatSheet/getMasterSearch',params).then((response) => {
+            setArrayCommunity(response.data.ap_master_search.ffd_community);
+            setMasterSearch({
+                ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
+                ffd_property_type: response.data.ap_master_search.ffd_property_type,
+                ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+                ffd_listings: response.data.ap_master_search.ffd_listings,
+                ffd_community: response.data.ap_master_search.ffd_community
+            });
+        });
+
     }, []);
 
-    const saveCommunity = () => {
-        document.getElementById("formularioListing").reset();
+    const editCommunity = (c) => {
+        setEditItem(true);
+        setSelectedItem(c);
+    };
 
-        ServiceRest("agent_portal/GreatSheet/saveCommunity", community)
+    const updateCommunity = (listCommunity, c) => {
+        const inputNameComunity = document.getElementById("communityName");
+        const inputParcelNumber = document.getElementById("parcelNumber");
+        const newNameCommunity = inputNameComunity.value;
+        const newParcelNumber = inputParcelNumber.value;
+        (listCommunity[listCommunity.indexOf(c)]).name_community = newNameCommunity;
+        (listCommunity[listCommunity.indexOf(c)]).parcel_number = newParcelNumber;
+
+        const params = {
+            ...masterSearch,
+            ffd_community: JSON.stringify(listCommunity)
+        }
+
+        ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
+            .then((resp) => {
+                const myNotice = alert({
+                    text: "Update Community Successfully.",
+                    type: 'success',
+                    textTrusted: true,
+                    closerHover: true,
+                    modules: new Map([
+                        ...defaultModules,
+                    ])
+                });
+
+                setEditItem(false);
+                setSelectedItem("");
+                const newCommunities = JSON.parse(resp.data.live_modern);
+                setMasterSearch({...masterSearch, ffd_community: newCommunities });
+
+            })
+            .catch((e) => {
+                const myNotice = alert({
+                    text: "Error update Community.",
+                    type: 'failed',
+                    textTrusted: true,
+                    closerHover: true,
+                    modules: new Map([
+                        ...defaultModules,
+                    ])
+                });
+                setEditItem(false);
+                setSelectedItem("");
+            });
+    };
+
+    const createCommunity = async (comunity) => {
+
+        setArrayCommunity([ ...arrayCommunity, comunity ]);
+
+        const newArrayCommunity = [
+            ...arrayCommunity, comunity
+        ];
+        setMasterSearch({
+            ...masterSearch,
+            ffd_community : newArrayCommunity
+        });
+
+        const params = {
+            ...masterSearch,
+            ffd_community: JSON.stringify(newArrayCommunity)
+        };
+
+        setTableCommunity(masterSearch.ffd_community);
+        ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
+            .then((resp) => { console.log("resp", resp);
+                const myNotice = alert({
+                    text: "Save Community Successfully.",
+                    type: 'success',
+                    textTrusted: true,
+                    closerHover: true,
+                    modules: new Map([
+                        ...defaultModules,
+                    ])
+                });
+
+            })
+            .catch((e) => {
+                const myNotice = alert({
+                    text: "Error Save Community.",
+                    type: 'failed',
+                    textTrusted: true,
+                    closerHover: true,
+                    modules: new Map([
+                        ...defaultModules,
+                    ])
+                });
+            });
+    };
+
+    const deleteCommunity = (listCommunity, c) => {
+
+        setSelectedItem(c);
+        const itemPosition = listCommunity.indexOf(c);
+        listCommunity.splice(itemPosition, 1);
+
+        const params = {
+            ...masterSearch,
+            ffd_community: JSON.stringify(listCommunity)
+        }
+
+
+        ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
             .then((resp) => { console.log('resp', resp);
                 const myNotice = alert({
-                    text: "Save Community.",
+                    text: "Delete Listing ID Successfully",
                     type: 'success',
                     textTrusted: true,
                     closerHover: true,
@@ -53,50 +196,25 @@ const CommunitySettings = ({ data, setListing }) => {
                         ...defaultModules,
                     ])
                 });
-
-                ServiceRest('agent_portal/GreatSheet/listarCommunity').then((resp) => {
-                    setListCommunity(resp.datos);
-                });
+                setSelectedItem("");
+                const newCommunities = JSON.parse(resp.data.live_modern);
+                setMasterSearch({...masterSearch, ffd_community: newCommunities.ffd_community });
             })
-            .catch((e) => console.error(e));
-    };
-
-    const editCommunity = (e) => {
-    };
-
-    const previewCommunity = (e) => {
-        ServiceRest("agent_portal/GreatSheet/previewCommunity", community)
-            .then((resp) => {
-                const listings = resp.data.live_modern;
-                setListingPreview(listings.listing);
-            })
-            .catch((e) => console.error(e));
-    };
-
-    const deleteCommunity = (id_community) => {
-        ServiceRest("agent_portal/GreatSheet/deleteCommunity", { id_community: id_community})
-            .then((resp) => {
+            .catch((e) => {
+                console.error(e)
                 const myNotice = alert({
-                    text: "Delete Community.",
-                    type: 'success',
+                    text: "Error in delete listing ID.",
+                    type: 'failed',
                     textTrusted: true,
                     closerHover: true,
                     modules: new Map([
                         ...defaultModules,
                     ])
                 });
-
-                ServiceRest('agent_portal/GreatSheet/listarCommunity').then((resp) => {
-                    setListCommunity(resp.datos);
-                });
-
-            })
-            .catch((e) => console.error(e));
+                setSelectedItem("");
+            });
     };
 
-    const loadCommunity = (e) => {
-        setCommunity({...community,[e.target.name]: e.target.value});
-    };
 
     const acceptConfiguration = async (e) => {
         if (reloadComponent == undefined || reloadComponent == false) {
@@ -104,176 +222,53 @@ const CommunitySettings = ({ data, setListing }) => {
         } else {
             setReloadComponent(false);
         }
-
         e.preventDefault();
-        console.log("ACCEP CONFIGURATION!!!");
         const modal1 = document.querySelectorAll("[id]", "modalCommunity");
         console.log(modal1);
     };
 
+    const showFormSegement = e => {
+        if (showForm)
+            setShowForm(false);
+        else
+            setShowForm(true);
+    };
+
     return (
         <Segment className="Community-container">
-        <button
-    id="BotonNewCommunity"
-    className="btn btn-primary"
-    data-toggle="modal"
-    data-target="#modalCommunity"
-    type="button">
-        Add Community
-    </button>
-    {/**MODAL 1: Add Community**/}
-<div className="modal fade" id="modalCommunity" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-        <div className="modal-content">
-        <div className="modal-header">
-        <h5 className="modal-title">Add New Community</h5>
-    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div className="modal-body">
-        <form id="formularioListing" className="was-validated" validate="true">
-        <div className="form-row">
-        <label>Name Community</label>
-    <Input name="name_community" onChange={loadCommunity}/>
-    </div>
-    <div className="form-row">
-        <label>Parcel Number</label>
-    <Input name="parcel_number" onChange={loadCommunity}/>
-    </div>
-    <div>
-    <div className="modal-footer">
-        <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={saveCommunity}>Save Community</button>
-    <button
-    type="button"
-    className="btn btn-primary"
-    id="BotonPreview"
-    data-toggle="modal"
-    data-target="#modalCommunityPreview"
-    type="button"
-    onClick={previewCommunity}
-        >
-        > Preview
-        </button>
-        </div>
-        </div>
-        </form>
-        </div>
-        </div>
-        </div>
-        </div>
 
-    {/**MODAL 2: Preview**/}
-<div className="modal fade listing-card-modal" id="modalCommunityPreview" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div className="modal-dialog">
-        <div className="modal-content">
-        <div className="modal-header">
-        <h5 className="modal-title">Community Settings Preview</h5>
-    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div className="modal-body">
-        <form id="formularioListing" onSubmit={acceptConfiguration} className="was-validated" validate="true">
-        <div class="section card-container">
-        <div class="row">
-        <div class="ffd-search-listing-items">
-        {
-            listingPreview.map(li => (
-                <div class="x-col listing property">
-            <a data-fieldtype="ffdsearch_link" id="">
-            <div class="img_overlay_wrap">
-            <div class="after"></div>
-            <div class="img-wrapper">
-
-            {/*<div class="status Active">
-                                <span>Active</span>
-                    </div>*/}
-            <div
-            class="content"
-            style={{
-        "background" : `url(${li.ffd_media[0]})`,
-            "backgroundSize": "cover",
-            "backgroundRepeat" : "no-repeat",
-            "backgroundPosition" : "center"
-    }}>
-</div>
-    <div class="listing-overlay"></div>
-        </div>
-        <div class="details-wrapper">
-        <span class="price">
-        {li.ffd_listingprice_pb}
-        </span>
-        <span class="location">
-        {li.ffd_address_pb}
-        </span>
-        <div class="stats">
-        <div class="beds">
-        <span class="count">{li.ffd_bedrooms_pb} bed | </span>
-    </div>
-    <div class="baths">
-        <span class="count">{li.ffd_fullbathrooms_pb} bath | </span>
-    </div>
-    <div class="sqft">
-        <span class="count" data-test="Condominium,1,373,">
-        {li.ffd_propertytype === 'Land' ? li.ffd_lotsize_pb : li.ffd_living_sq_ft} sqft
-    </span>
-    </div>
-    </div>
-    </div>
-    </div>
-    </a>
-    </div>
-))
-}
-</div>
-    </div>
-    </div>
-    <div>
-    <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button
-    type="button"
-    /*type="submit"*/
-    onClick={acceptConfiguration}
-    data-dismiss="modal"
-    className="btn btn-primary">
-        OK
-        </button>
-        </div>
-        </div>
-        </form>
-        </div>
-        </div>
-        </div>
-        </div>
-        <Segment>
-        <Table celled selectable>
-    <Table.Header>
-    <Table.Row>
-    <Table.HeaderCell>Name Community</Table.HeaderCell>
-    <Table.HeaderCell>Parcel Number</Table.HeaderCell>
-    <Table.HeaderCell>Actions</Table.HeaderCell>
-    </Table.Row>
-    </Table.Header>
-    <Table.Body>
-    {
-        listCommunity.map(listC => (
-            <Table.Row id={listC.id_community}>
-        <Table.Cell>{listC.name_community}</Table.Cell>
-        <Table.Cell>{listC.parcel_number}</Table.Cell>
-        <Table.Cell>
-        <Button icon onClick={(value) => editCommunity(listC.id_community)}><Icon name='edit' /></Button>
-        <Button icon onClick={(value) => deleteCommunity(listC.id_community)}><Icon name='trash' /></Button>
-        </Table.Cell>
-        </Table.Row>
-))
-}
-</Table.Body>
-    </Table>
-    </Segment>
-    </Segment>
-);
+            {/**MODAL 1: Add Community**/}
+            <Segment basic empty className="form-container">
+                <CommunityForm createCommunity = {createCommunity}/>
+            </Segment>
+            <Segment>
+                <Table celled selectable>
+                    <Table.Header>
+                        <Table.Row>
+                            <Table.HeaderCell>Name Community</Table.HeaderCell>
+                            <Table.HeaderCell>Parcel Number</Table.HeaderCell>
+                            <Table.HeaderCell>Actions</Table.HeaderCell>
+                        </Table.Row>
+                    </Table.Header>
+                    <Table.Body>
+                        {
+                            arrayCommunity.map(listC => (
+                                <Table.Row>
+                                    <Table.Cell>{editItem && selectedItem === listC ? <Input  required name = "communityName" id= "communityName" defaultValue={listC.name_community}/> : listC.name_community}</Table.Cell>
+                                    <Table.Cell>{editItem && selectedItem === listC ? <Input  required name = "parcelNumber" id= "parcelNumber" defaultValue={listC.parcel_number}/> : listC.parcel_number}</Table.Cell>
+                                    <Table.Cell>
+                                        <Button icon onClick={(value) => editCommunity(listC)}><Icon name='edit' /></Button>
+                                        <Button icon onClick={(value) => deleteCommunity(arrayCommunity,listC)}><Icon name='trash' /></Button>
+                                        { editItem && selectedItem === listC ? <Button icon onClick={() => updateCommunity(arrayCommunity,listC)}><Icon name='check' /></Button> : null }
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))
+                        }
+                    </Table.Body>
+                </Table>
+            </Segment>
+        </Segment>
+    );
 }
 
 export default CommunitySettings;

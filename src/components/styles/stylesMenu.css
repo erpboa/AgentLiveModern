@@ -10277,29 +10277,6 @@ body {
   width: 100%;
 }
 
-/*
-.form-control.input-file {
-  padding: 0;
-}
-
-.ui.input.form-control.input-file input {
-  padding: 6px 12px;
-}
-
-!*CUSTOM TABLE*!
-
-.container-excel-table .custom-table {
-  width: 100%;
-}
-
-.container-excel-table .custom-table tbody tr th {
-  font-weight: 500;
-  text-align: left;
-  background: #fafafa;
-  border-bottom: 1px solid #e8e8e8;
-  -webkit-transition: background 0.3s ease;
-  transition: background 0.3s ease;
-}*/
 
 /*Master Search Settings*/
 
@@ -10315,12 +10292,18 @@ body {
   margin-right: 10px ;
 }
 
+.master-search-container .listingID-conteiner .form-row {
+  display: block;
+}
+
 .master-search-container .listingID-conteiner .ui.input {
   padding: 0;
   width: 70%;
 }
 
-/*CUSTOM TABLE*/
+.master-search-container .listingID-conteiner .form-row button {
+  margin-left: 10px;
+}
 
 .container-excel-table {
   margin-top: 20px;
@@ -10331,20 +10314,17 @@ body {
   margin: 20px auto;
 }
 
-.container-excel-table .custom-table {
-  width: 100%;
+.listingID-conteiner .container-excel-table table button,
+.listingID-conteiner .container-excel-table table button:active,
+.listingID-conteiner .container-excel-table table button:focus {
+  background: transparent;
 }
 
-.container-excel-table .custom-table tbody tr th {
-  font-weight: 500;
-  text-align: left;
-  background: #fafafa;
-  border-bottom: 1px solid #e8e8e8;
-  -webkit-transition: background 0.3s ease;
-  transition: background 0.3s ease;
+.listingID-conteiner .container-excel-table table button:hover {
+  background: #cacbcd;
 }
 
-/* Community */
+/ Community /
 
 .master-search-container .Community-container {
   text-align: center;
@@ -10360,10 +10340,6 @@ body {
 
 .master-search-container .Community-container table button:hover {
   background: #cacbcd;
-}
-
-.listing-card-modal .modal-dialog {
-  max-width: 90%;
 }
 
 /*PREVIEW LISTING CARD*/
@@ -10549,7 +10525,7 @@ a .listing-overlay {
 .listing .stats .beds, .listing .stats .baths, .listing .stats .sqft {
   display: inline-block;
   text-align: center;
-  font-size: calc(1.3em);
+  font-size: 1.3em;
   font-family: "Lato";
   color: #fff;
   letter-spacing: 0;

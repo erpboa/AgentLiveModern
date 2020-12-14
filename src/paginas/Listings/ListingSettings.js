@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../../components/styles/formLogin.css';
 import '../../components/styles/stylesMenu.css';
 import '../../components/icon/font-awesome-4.7.0/css/font-awesome.min.css';
 
-import { Input, Button, Header } from 'semantic-ui-react';
-import { OutTable, ExcelRenderer } from 'react-excel-renderer';
+import { Input, Button, Header, Icon } from 'semantic-ui-react';
 
 import * as XLSX from 'xlsx';
 import {ServiceRest} from "../../services/ServiceRest";
@@ -19,80 +18,133 @@ import * as PNotifyBootstrap4 from '@pnotify/bootstrap4';
 import '@pnotify/core/dist/BrightTheme.css';
 import * as PNotifyFontAwesome5 from '@pnotify/font-awesome5';
 import * as PNotifyAnimate from '@pnotify/animate';
+import { useContext } from 'react';
+import { ReloadComponent } from '../../contexts/ReloadComponent';
 defaultModules.set(PNotifyBootstrap4, {});
 defaultModules.set(PNotifyFontAwesome5, {});
 defaultModules.set(PNotifyMobile, {});
 /*****************************************/
 
-const ListingSettings = ({ data, setListing }) => {
+const ListingSettings = () => {
 
-    //const [items, setItems] = useState([]);
+    const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
 
-    const [fileData, setfileData] = useState({ rows: "", cols: ""});
-    const [ fileInfo, setFileInfo ] = useState("");
+    const [masterSearch, setMasterSearch] = useState({
+        ffd_architectural_style : "",
+        ffd_property_type: "",
+        ffd_listingprice_pb : "",
+        ffd_listings: "",
+        ffd_community: []
+    });
 
-    console.log("RESULTS DATA",data);
+    const [ editItem, setEditItem ] = useState(false);
+    const [ selectedItem, setSelectedItem ] = useState("");
 
-    const ffd_listings = (data.ffd_listings).split(',') || [];
+    const ffd_listings = (masterSearch.ffd_listings).split(',') || [];
+    console.log("ffd_listings0", ffd_listings);
 
-    const fileHandler = (e) => {
-        let fileObj = e.target.files[0];
-        console.log("e.target.files[0]", e.target.files[0]);
-        e.stopPropagation();
-
-        if (e.target.files.length > 0) {
-            try {
-                let file = e.target.files[0];
-                let reader = new FileReader();
-
-                reader.onload = function (e) {
-                    let data = new Uint8Array(e.target.result);
-
-                    let workbook = XLSX.read(data, { type: "array" });
-
-                    let worksheet = workbook.Sheets[workbook.SheetNames[0]];
-
-                    let sheet = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-
-                    setFileInfo(sheet.join(','));
-
-                    console.log("sheet",fileInfo);
-                }.bind(this);
-                reader.readAsArrayBuffer(file);
-            } catch (exception) {
-                console.log(exception);
-            }
-        }
-
-        ExcelRenderer(fileObj,(err,resp) => {
-            console.log("RESP:", resp);
-            if(err) {
-                console.log(err);
-            } else {
-                setfileData(
-                    {
-                        cols: resp.cols,
-                        rows: resp.rows
-                    }
-                );
-            }
+    const loadMasterSearch = async () => {
+        var params = { start: 0, limit: 50 };
+        ServiceRest('agent_portal/GreatSheet/getMasterSearch',params).then((response) => {
+            setMasterSearch({
+                ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
+                ffd_property_type: response.data.ap_master_search.ffd_property_type,
+                ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+                ffd_listings: response.data.ap_master_search.ffd_listings,
+                ffd_community: response.data.ap_master_search.ffd_community
+            });
         });
-        console.log("FILEDATA", fileData);
     };
 
-    const saveFile = (e) => {
 
-        e.preventDefault();
-        setListing({
-            ...data,
-            ffd_listings : fileInfo,
-        });
-        console.log("SAVEFILE DATE",data);
-        ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", data)
+    console.log('SETMASTERSEARCH>>>PROPERTY', masterSearch);
+
+    useEffect(() => {
+        loadMasterSearch();
+    }, []);
+
+    const saveFile = async (e) => {
+
+
+        const fileUpload = document.getElementById("fileUpload");
+
+        let file = fileUpload.files[0];
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            let fileData = new Uint8Array(e.target.result);
+
+            let workbook = XLSX.read(fileData, { type: "array" });
+
+            let worksheet = workbook.Sheets[workbook.SheetNames[0]];
+
+            let sheet = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+            const params = {
+                ...masterSearch,
+                ffd_listings : sheet.join(','),
+                ffd_community: JSON.stringify(masterSearch.ffd_community)
+            };
+
+            console.log('params',params);
+            ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
+                .then((resp) => { console.log('resp', resp);
+                    const myNotice = alert({
+                        text: "Upload File Successfully",
+                        type: 'success',
+                        textTrusted: true,
+                        closerHover: true,
+                        modules: new Map([
+                            ...defaultModules,
+                        ])
+                    });
+                    const newListingIds = JSON.parse(resp.data.live_modern);
+                    console.log("newListingIds", newListingIds);
+                    setMasterSearch({...masterSearch, ffd_listings: newListingIds.ffd_listings});
+                    console.log("saveFile, setLsiting mastersearch",masterSearch);
+                })
+                .catch((e) => {
+                    console.error(e)
+                    const myNotice = alert({
+                        text: "Error in the file",
+                        type: 'failed',
+                        textTrusted: true,
+                        closerHover: true,
+                        modules: new Map([
+                            ...defaultModules,
+                        ])
+                    });
+                });
+        };
+        reader.readAsArrayBuffer(file);
+    };
+
+    const editListingId = (l) => {
+        setEditItem(true);
+        setSelectedItem(l);
+    };
+    const deleteListingId = async (list, l) => {
+
+        if (reloadComponent == undefined || reloadComponent == false) {
+            setReloadComponent(true);
+        } else {
+            setReloadComponent(false);
+        }
+        //e.preventDefault();
+
+        setSelectedItem(l);
+        const itemPosition = list.indexOf(l);
+        list.splice(itemPosition, 1);
+
+        const params = {
+            ...masterSearch, ffd_listings : list.join(','),
+            ffd_community: JSON.stringify(masterSearch.ffd_community)
+        }
+
+        ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
             .then((resp) => { console.log('resp', resp);
                 const myNotice = alert({
-                    text: "Upload File Successfully",
+                    text: "Delete Listing ID Successfully",
                     type: 'success',
                     textTrusted: true,
                     closerHover: true,
@@ -100,11 +152,15 @@ const ListingSettings = ({ data, setListing }) => {
                         ...defaultModules,
                     ])
                 });
+                setSelectedItem("");
+                const newListingIds = JSON.parse(resp.data.live_modern);
+                setMasterSearch({...masterSearch, ffd_listings: newListingIds.ffd_listings });
+                console.log("deleteListingId, setLsiting mastersearch",masterSearch);
             })
             .catch((e) => {
                 console.error(e)
                 const myNotice = alert({
-                    text: "Error in the file",
+                    text: "Error in delete listing ID.",
                     type: 'failed',
                     textTrusted: true,
                     closerHover: true,
@@ -112,92 +168,102 @@ const ListingSettings = ({ data, setListing }) => {
                         ...defaultModules,
                     ])
                 });
+                setSelectedItem("");
             });
     };
 
-    /*const readExcel = (file) => {
-      const promise = new Promise((resolve, reject)=> {
-        const fileReader = new FileReader();
+    const updateListing = async (list, l) => {
 
-        fileReader.readAsArrayBuffer(file);
+        if (reloadComponent == undefined || reloadComponent == false) {
+            setReloadComponent(true);
+        } else {
+            setReloadComponent(false);
+        }
 
-        fileReader.onload = (e) => {
-          const bufferArray = e.target.result;
+        const input = document.getElementById("listingId");
+        const newListingId = input.value;
+        list[list.indexOf(l)] = newListingId;
 
-          const wb = XLSX.read(bufferArray, { type: 'buffer'});
+        const params = {
+            ...masterSearch, ffd_listings : list.join(','),
+            ffd_community: JSON.stringify(masterSearch.ffd_community)
+        }
 
-          const wsname = wb.SheetNames[0];
-          const ws = wb.Sheets[wsname];
-          const data = XLSX.utils.sheet_to_json(ws);
+        ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
+            .then((resp) => { console.log('resp', resp);
+                const myNotice = alert({
+                    text: "Update File Successfully",
+                    type: 'success',
+                    textTrusted: true,
+                    closerHover: true,
+                    modules: new Map([
+                        ...defaultModules,
+                    ])
+                });
+                setEditItem(false);
+                setSelectedItem("");
+                const newListingIds = JSON.parse(resp.data.live_modern);
+                setMasterSearch({...masterSearch, ffd_listings: newListingIds.ffd_listings });
 
-          resolve(data);
-        };
-      });
-
-      promise.then((d)=> {
-        setItems(d);
-      });
-    };*/
+                console.log("updateListingId, setLsiting mastersearch",masterSearch);
+            })
+            .catch((e) => {
+                console.error(e)
+                const myNotice = alert({
+                    text: "Error in update the file.",
+                    type: 'failed',
+                    textTrusted: true,
+                    closerHover: true,
+                    modules: new Map([
+                        ...defaultModules,
+                    ])
+                });
+                setEditItem(false);
+                setSelectedItem("");
+            });
+    };
 
     return (
-        <div class="listingID-conteiner">
-    <div>
-    <Header as="H3">Add Listing IDs</Header>
-    <p>Select Excel File: </p>
-    <Input
-    required
-    type = "file"
-    name = "listingIDsFile"
-    onChange={fileHandler}
-        >
-        </Input>
-        </div>
-        <div class="container-excel-table">
-        <p>File Preview:</p>
-    { fileData.rows && <OutTable data={fileData.rows} columns={fileData.cols} tableClassName="custom-table table table-bordered" tableHeaderRowClass="heading"></OutTable>}
-        { ffd_listings && fileData.rows === '' &&
-        <table class="table table-bordered">
-            <thead>
-            <tr>
-            <th>A</th>
-            </tr>
-            </thead>
-            <tbody>
-            { ffd_listings.map(lId => (
-                    <tr>
-                    <th scope="row">{lId}</th>
-                </tr>
-        ))
-        }
-        </tbody>
-        </table> }
-        </div>
-        <div>
-        { fileData.rows && <Button primary onClick={saveFile}>Save Listing IDs</Button>}
-                </div>
-                </div>
-            /*<div>
-              <input type="file" onChange={(e) => {
-                const file= e.target.files[0];
-                readExcel(file);
-              }}/>
+        <div className= "listingID-conteiner">
+            <div className="form-row">
+                <Header as="h3">Add Listing IDs</Header>
+                <p>Select Excel File: </p>
+                <Input
+                    required
+                    type = "file"
+                    name = "listingIDsFile"
+                    id= "fileUpload"
+                >
+                </Input>
+                <Button primary id="upload" onClick={saveFile}>Save Listing IDs</Button>
+            </div>
 
-                  <table class="table table-bordered">
+            <div className="container-excel-table">
+                { ffd_listings != "" &&
+                <table className="table table-bordered">
                     <thead>
-                      <tr>
+                    <tr>
                         <th>Listing IDs</th>
-                      </tr>
+                        <th>Actions</th>
+                    </tr>
                     </thead>
                     <tbody>
-                      { items.map(i => (
-                          <tr>
-                            <th scope="row">{i}</th>
-                          </tr>
-                        ))
-                      }
+                    { ffd_listings.map(f => (
+                        <tr key={f}>
+                            <td scope="row">{ editItem && selectedItem === f ? <Input  required name = "listingId" id= "listingId" defaultValue={f}/> : f }</td>
+                            <td scope="row">
+                                <Button icon onClick={() => editListingId(f)}><Icon name='edit' /></Button>
+                                <Button icon onClick={() => deleteListingId(ffd_listings, f)}><Icon name='trash' /></Button>
+                                { editItem && selectedItem === f ? <Button icon onClick={() => updateListing(ffd_listings, f)}><Icon name='check' /></Button> : null }
+                            </td>
+                        </tr>
+                    ))
+                    }
                     </tbody>
-                  </table>
-            </div>*/
-        );
+                </table>
+                }
+            </div>
+        </div>
+    );
 }
 export default ListingSettings;

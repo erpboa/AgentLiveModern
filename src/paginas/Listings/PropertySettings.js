@@ -3,7 +3,6 @@ import { Form, Field, Input, Select, Segment, Label, Radio, Checkbox, TextArea, 
 import '../../components/styles/formLogin.css';
 import '../../components/styles/stylesMenu.css';
 import '../../components/icon/font-awesome-4.7.0/css/font-awesome.min.css';
-import Footer from '../../components/Footer';
 import "semantic-ui-css/semantic.min.css";
 import { ReloadComponent } from '../../contexts/ReloadComponent';
 import {ServiceRest} from "../../services/ServiceRest";
@@ -23,43 +22,68 @@ defaultModules.set(PNotifyFontAwesome5, {});
 defaultModules.set(PNotifyMobile, {});
 /*****************************************/
 
-const SearchForm = ({ data, setListing }) => {
+const PropertySettings = () => {
 
-  const valuesType = (data.ffd_property_type).split(',') || [];
-  const architecturalType = (data.ffd_architectural_style).split(',') || [];
+  const { reloadComponent, setReloadComponent } = useContext(ReloadComponent);
 
-  const handleInputChanges = (e, id, value) => {
+  const [masterSearch, setMasterSearch] = useState({
+    ffd_architectural_style : "",
+    ffd_property_type: "",
+    ffd_listingprice_pb : "",
+    ffd_listings: "",
+    ffd_community: []
+  });
+
+  const loadMasterSearch = async () => {
+    var params = { start: 0, limit: 50 };
+    ServiceRest('agent_portal/GreatSheet/getMasterSearch',params).then((response) => {
+      setMasterSearch({
+        ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
+        ffd_property_type: response.data.ap_master_search.ffd_property_type,
+        ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+        ffd_listings: response.data.ap_master_search.ffd_listings,
+        ffd_community: response.data.ap_master_search.ffd_community
+      });
+    });
+  };
+
+  useEffect(() => {
+    loadMasterSearch();
+  }, []);
+
+  const valuesType = (masterSearch.ffd_property_type).split(',') || [];
+  const architecturalType = (masterSearch.ffd_architectural_style).split(',') || [];
+
+  const handleInputChanges = async (e, id, value) => {
     e.preventDefault();
 
     if(id === 'ffd_property_type' || id === 'ffd_architectural_style') {
-      setListing({
-        ...data,
+      setMasterSearch({
+        ...masterSearch,
         [id]: value.join(','),
       });
     } else {
-      setListing({
-        ...data,
+      setMasterSearch({
+        ...masterSearch,
         [id]: value,
       });
     }
-
-    /*if(id === 'ffd_architectural_style') {
-      setListing({
-        ...data,
-        [id]: value.join(','),
-      });
-    } else {
-      setListing({
-        ...data,
-        [id]: value,
-      });
-    }*/
-
   };
 
   const saveListing = (e) => {
-    ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", data)
-        .then((resp) => { console.log('resp', resp);
+
+    const params = {
+      ...masterSearch,
+      ffd_community: JSON.stringify(masterSearch.ffd_community)
+    };
+
+    setMasterSearch({
+      ...masterSearch,
+      ffd_community : masterSearch.ffd_community
+    })
+
+    ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
+        .then((resp) => {
           const myNotice = alert({
             text: "Master search successfully saved.",
             type: 'success',
@@ -282,54 +306,54 @@ const SearchForm = ({ data, setListing }) => {
 
   return (
       <Segment basic empty className="form-container">
-  <Form>
-  <Form.Field>
-  <label>
-  Architectural Style
-  </label>
-  <Dropdown
-  selection
-  multiple
-  placeholder = 'Select one option'
-  options={architecturalStyle}
-  value={architecturalType || []}
+        <Form>
+          <Form.Field>
+            <label>
+              Architectural Style
+            </label>
+            <Dropdown
+                selection
+                multiple
+                placeholder = 'Select one option'
+                options={architecturalStyle}
+                value={architecturalType || []}
 
-  id= "ffd_architectural_style"
-  name = "ffd_architectural_style"
-  onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-  />
-  </Form.Field>
-  <Form.Field>
-  <label>
-  Property Type
-  </label>
-  <Dropdown
-  selection
-  multiple
-  placeholder = 'Select one option'
-  options={propertyType}
-  value={valuesType || []}
-  id= "ffd_property_type"
-  name = "ffd_property_type"
-  onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-  />
-  </Form.Field>
-  <Form.Field>
-  <label>
-  Min. Price
-  </label>
-  <Input
-  id= "ffd_listingprice_pb"
-  name = "ffd_listingprice_pb"
-  placeholder= "List Price"
-  onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
-  value= {data.ffd_listingprice_pb}
-  />
-  </Form.Field>
+                id= "ffd_architectural_style"
+                name = "ffd_architectural_style"
+                onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>
+              Property Type
+            </label>
+            <Dropdown
+                selection
+                multiple
+                placeholder = 'Select one option'
+                options={propertyType}
+                value={valuesType || []}
+                id= "ffd_property_type"
+                name = "ffd_property_type"
+                onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>
+              Min. Price
+            </label>
+            <Input
+                id= "ffd_listingprice_pb"
+                name = "ffd_listingprice_pb"
+                placeholder= "List Price"
+                onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+                value= {masterSearch.ffd_listingprice_pb}
+            />
+          </Form.Field>
 
-  <Button primary onClick={saveListing}>Save</Button>
-      </Form>
+          <Button primary onClick={saveListing}>Save</Button>
+        </Form>
       </Segment>
-);
+  );
 }
-export default SearchForm;
+export default PropertySettings;
