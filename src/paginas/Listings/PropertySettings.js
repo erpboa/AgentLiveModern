@@ -30,6 +30,7 @@ const PropertySettings = () => {
     ffd_architectural_style : "",
     ffd_property_type: "",
     ffd_listingprice_pb : "",
+    ffd_yearbuilt : "",
     ffd_listings: "",
     ffd_community: []
   });
@@ -41,11 +42,14 @@ const PropertySettings = () => {
         ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
         ffd_property_type: response.data.ap_master_search.ffd_property_type,
         ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+        ffd_yearbuilt : response.data.ap_master_search.ffd_yearbuilt_pb,
         ffd_listings: response.data.ap_master_search.ffd_listings,
         ffd_community: response.data.ap_master_search.ffd_community
       });
     });
   };
+
+  console.log('SETMASTERSEARCH>>>PROPERTY', masterSearch);
 
   useEffect(() => {
     loadMasterSearch();
@@ -70,8 +74,7 @@ const PropertySettings = () => {
     }
   };
 
-  const saveListing = (e) => {
-
+  const saveListing = async (e) => {
     const params = {
       ...masterSearch,
       ffd_community: JSON.stringify(masterSearch.ffd_community)
@@ -82,8 +85,9 @@ const PropertySettings = () => {
       ffd_community : masterSearch.ffd_community
     })
 
+    console.log("masterSearch>>before save", masterSearch);
     ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
-        .then((resp) => {
+        .then((resp) => { console.log('resp', resp);
           const myNotice = alert({
             text: "Master search successfully saved.",
             type: 'success',
@@ -96,6 +100,8 @@ const PropertySettings = () => {
         })
         .catch((e) => console.error(e));
   }
+
+  console.log("saveFile, setLsiting data",masterSearch);
 
   const architecturalStyle = [
     {
@@ -300,8 +306,7 @@ const PropertySettings = () => {
       key: 'Villa',
       text: 'Villa',
       value: 'Villa'
-    },
-
+    }
   ];
 
   return (
@@ -336,6 +341,17 @@ const PropertySettings = () => {
                 id= "ffd_property_type"
                 name = "ffd_property_type"
                 onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+            />
+          </Form.Field>
+          <Form.Field>
+            <label>
+              Year Built
+            </label>
+            <Input
+                id= "ffd_yearbuilt"
+                name = "ffd_yearbuilt"
+                onChange ={(e, { id, value }) => handleInputChanges(e, id, value)}
+                value= {masterSearch.ffd_yearbuilt}
             />
           </Form.Field>
           <Form.Field>

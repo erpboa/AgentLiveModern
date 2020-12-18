@@ -33,6 +33,7 @@ const ListingSettings = () => {
         ffd_architectural_style : "",
         ffd_property_type: "",
         ffd_listingprice_pb : "",
+        ffd_yearbuilt : "",
         ffd_listings: "",
         ffd_community: []
     });
@@ -41,7 +42,6 @@ const ListingSettings = () => {
     const [ selectedItem, setSelectedItem ] = useState("");
 
     const ffd_listings = (masterSearch.ffd_listings).split(',') || [];
-    console.log("ffd_listings0", ffd_listings);
 
     const loadMasterSearch = async () => {
         var params = { start: 0, limit: 50 };
@@ -50,14 +50,12 @@ const ListingSettings = () => {
                 ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
                 ffd_property_type: response.data.ap_master_search.ffd_property_type,
                 ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+                ffd_yearbuilt : response.data.ap_master_search.ffd_yearbuilt_pb,
                 ffd_listings: response.data.ap_master_search.ffd_listings,
                 ffd_community: response.data.ap_master_search.ffd_community
             });
         });
     };
-
-
-    console.log('SETMASTERSEARCH>>>PROPERTY', masterSearch);
 
     useEffect(() => {
         loadMasterSearch();
@@ -86,9 +84,8 @@ const ListingSettings = () => {
                 ffd_community: JSON.stringify(masterSearch.ffd_community)
             };
 
-            console.log('params',params);
             ServiceRest("agent_portal/GreatSheet/setupLiveModernListing", params)
-                .then((resp) => { console.log('resp', resp);
+                .then((resp) => {
                     const myNotice = alert({
                         text: "Upload File Successfully",
                         type: 'success',
@@ -99,9 +96,8 @@ const ListingSettings = () => {
                         ])
                     });
                     const newListingIds = JSON.parse(resp.data.live_modern);
-                    console.log("newListingIds", newListingIds);
                     setMasterSearch({...masterSearch, ffd_listings: newListingIds.ffd_listings});
-                    console.log("saveFile, setLsiting mastersearch",masterSearch);
+
                 })
                 .catch((e) => {
                     console.error(e)

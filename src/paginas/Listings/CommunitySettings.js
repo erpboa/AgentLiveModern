@@ -34,6 +34,7 @@ const CommunitySettings = () => {
         ffd_architectural_style : "",
         ffd_property_type: "",
         ffd_listingprice_pb : "",
+        ffd_yearbuilt : "",
         ffd_listings: "",
         ffd_community: []
     });
@@ -57,6 +58,7 @@ const CommunitySettings = () => {
                 ffd_architectural_style : response.data.ap_master_search.ffd_architectural_style,
                 ffd_property_type: response.data.ap_master_search.ffd_property_type,
                 ffd_listingprice_pb : response.data.ap_master_search.ffd_listingprice_pb,
+                ffd_yearbuilt : response.data.ap_master_search.ffd_yearbuilt_pb,
                 ffd_listings: response.data.ap_master_search.ffd_listings,
                 ffd_community: response.data.ap_master_search.ffd_community
             });
