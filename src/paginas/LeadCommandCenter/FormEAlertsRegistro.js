@@ -106,6 +106,7 @@ const FormEAlertsRegistro = (props) => {
     'ffd_exterior_features': "",
     'ffd_interior_features': "",
     'postal_code' : "",
+    'street_number':"",
     'locality' : "",
     'state' : "",
     'ffd_zip': "",
@@ -608,6 +609,7 @@ const FormEAlertsRegistro = (props) => {
         filterE.postal_code = e.postal_code;
         filterE.locality = e.locality;
         filterE.state = e.state;
+        filterE.street_number = e.street_number;
         setEalertInsert({...dataEalertInsert,'filterMap': e})
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {
@@ -729,6 +731,7 @@ const FormEAlertsRegistro = (props) => {
             filterE.postal_code = "";
             filterE.locality = "";
             filterE.state = "";                
+            filterE.street_number = "";                
         }        
         window.$('.slectOne').change(function(){
             if(this.checked){                 
@@ -749,6 +752,7 @@ const FormEAlertsRegistro = (props) => {
         filterE.postal_code	= ""
         filterE.locality = ""
         filterE.state = ""
+        filterE.street_number = ""
         ServiceRest("agent_portal/Alerts/apiAlertsPropertyCount", filterE)
         .then((res) => {
             setLoad(false);

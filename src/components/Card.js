@@ -393,7 +393,7 @@ const Card = props => {
                         </div>
                         <div className="activity-content">
                           <PropertyProvider>
-                            <ActivitiesContainer id_lead={props.id_lead} name={props.nombre} />
+                            <ActivitiesContainer key={props.id_lead} id_lead={props.id_lead} name={props.nombre} />
                           </PropertyProvider>
                         </div>
                       </div>
