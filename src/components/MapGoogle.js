@@ -62,7 +62,9 @@ const MapGoogle = ({onFilterMap, onFilterMapClear}) => {
     const value = await resp.results     
       value.map(e => {             
         data_g.zc.push(e.address_components.zip)
-        data_g.st.push(e.address_components.number)
+        if(e.address_components.number!== undefined){
+            data_g.st.push(e.address_components.number)
+        }
         data_g.sn.push(e.address_components.formatted_street)
         data_g.sl.push(e.address_components.city)
         data_g.ss.push(e.address_components.state) 
@@ -109,9 +111,11 @@ const MapGoogle = ({onFilterMap, onFilterMapClear}) => {
     const re = await resp.json()
     const value = await re.results          
     value.map(e => {
-      e.response.results.map( d => {        
+      e.response.results.map( d => {                
         data_g.zc.push(d.address_components.zip)
-        data_g.st.push(d.address_components.number)
+        if(d.address_components.number!== undefined){
+          data_g.st.push(d.address_components.number)
+        }        
         data_g.sn.push(d.address_components.formatted_street)
         data_g.sl.push(d.address_components.city)
         data_g.ss.push(d.address_components.state) 
@@ -162,13 +166,14 @@ const MapGoogle = ({onFilterMap, onFilterMapClear}) => {
       markersp.push(`${path.lat()}, ${path.lng()}`)
     });
     
-    // paths.map(e => {
-    //   markersp.push(`${e.lat}, ${e.lng}`)
-    // })
-    onSfetch(paths)
-    onGetGeocode(markersp) 
-    setPath(paths);             
-    setCoordinates(data_g);         
+    try {
+      onSfetch(paths)
+      onGetGeocode(markersp) 
+      setPath(paths);             
+      setCoordinates(data_g); 
+    } catch (error) {
+      console.log(error);
+    }             
     noDraw();
     poly.setMap(null);
     setTimeout(() => {      
